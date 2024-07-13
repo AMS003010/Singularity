@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub struct Glance {
+pub struct Config {
     pub pages: Vec<Page>,
 }
 
@@ -21,25 +21,12 @@ pub struct Column {
 pub struct Widget {
     #[serde(rename = "type")]
     pub widget_type: String,
-    pub limit: Option<u32>,
-    #[serde(rename = "collapse-after")]
-    pub collapse_after: Option<u32>,
-    pub cache: Option<String>,
-    pub feeds: Option<Vec<Feed>>,
-    pub channels: Option<Vec<String>>,
-    pub subreddit: Option<String>,
     pub location: Option<String>,
-    pub stocks: Option<Vec<Stock>>,
+    pub feeds: Option<Vec<Feed>>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Feed {
     pub url: String,
-    pub title: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Stock {
-    pub symbol: String,
-    pub name: String,
+    pub name: Option<String>,
 }
