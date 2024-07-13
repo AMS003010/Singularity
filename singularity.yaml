@@ -1,0 +1,37 @@
+pages:
+  - name: Home
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+
+          - type: weather
+            location: London, United Kingdom
+
+          - type: rss
+            feeds:
+              - url: https://ciechanow.ski/atom.xml
+              - url: https://www.joshwcomeau.com/rss.xml
+                title: Josh Comeau
+              - url: https://samwho.dev/rss.xml
+              - url: https://awesomekling.github.io/feed.xml
+              - url: https://ishadeed.com/feed.xml
+                title: Ahmad Shadeed
+  - name: Stuff
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+
+          - type: weather
+            location: London, United Kingdom
+
+          - type: rss
+            feeds:
+              - url: https://ciechanow.ski/atom.xml
+              - url: https://www.joshwcomeau.com/rss.xml
+                title: Josh Comeau
+              - url: https://samwho.dev/rss.xml
+              - url: https://awesomekling.github.io/feed.xml
+              - url: https://ishadeed.com/feed.xml
+                title: Ahmad Shadeed
