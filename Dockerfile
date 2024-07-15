@@ -63,6 +63,8 @@ USER appuser
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
+COPY singularity.yaml /app/
+COPY src/assets/templates /app/src/assets/templates
 
 # Expose the port that the application listens on.
 EXPOSE 8080
