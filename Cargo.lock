@@ -1403,6 +1403,7 @@ name = "singularity"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "regex",
  "reqwest",
  "serde",
  "serde_yaml",
