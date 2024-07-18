@@ -1,9 +1,21 @@
-use crate::feed::weather_data::fetch_weather;
+use crate::feed::weather_data::{fetch_weather, WeatherError};
 
-pub async fn weather_widget_handler(loc: String) {
-    if let Err(e) = fetch_weather(loc).await {
-        eprintln!("Error in fetching weather: {}",e);
+enum WeatherCode {
+    // TODO: Add the weather codes like 3:Mainly clear
+}
+
+pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError> {
+    match fetch_weather(loc.clone()).await {
+        Ok(data) => {
+            let html_content = format!(
+                "<html><body><h1>Weather Data for {}</h1><p>{:#?}</p></body></html>",
+                loc, data
+            );
+            Ok(html_content)
+        }
+        Err(e) => {
+            eprintln!("Error in fetching weather: {}", e);
+            Err(e)
+        }
     }
-
-    
 }

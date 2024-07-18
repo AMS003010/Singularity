@@ -19,7 +19,10 @@ use internals::singularity::Config;
 use widgets::weather::weather_widget_handler;
 
 async fn landerpage() -> impl Responder {
-    HttpResponse::Ok().body("Hello world")
+    match weather_widget_handler("Bengaluru".to_string()).await {
+        Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
+        Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
+    }
 }
 
 async fn run_actix_server(port: u16) -> std::io::Result<()> {
