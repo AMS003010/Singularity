@@ -13,6 +13,7 @@ mod feed {
 
 mod internals {
     pub mod singularity;
+    pub mod render;
 }
 
 use internals::singularity::Config;
@@ -43,6 +44,9 @@ async fn run_actix_server(port: u16) -> std::io::Result<()> {
 #[actix_web::main]
 async fn main() -> Result<(),IOError> {
     weather_widget_handler("Bengaluru".to_string()).await;
+
+    //TODO: Parse the singularity.yaml outside the container
+
     let yaml_data = match fs::read_to_string("singularity.yaml") {
         Ok(data) => data,
         Err(_) => {
