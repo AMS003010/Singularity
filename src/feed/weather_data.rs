@@ -36,17 +36,17 @@ struct GeoResponse {
 }
 
 #[derive(Debug, Deserialize)]
-struct DailyUnits {
+struct HourlyUnits {
     time: String,
+    temperature_2m: String,
     weather_code: String,
-    temperature_2m_max: String,
 }
 
 #[derive(Debug, Deserialize)]
-struct DailyDataUnit {
+struct HourlyDataUnit {
     time: Vec<String>,
+    temperature_2m: Vec<f64>,
     weather_code: Vec<u64>,
-    temperature_2m_max: Vec<f64>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -58,8 +58,8 @@ pub struct WeatherForecast {
     timezone: String,
     timezone_abbreviation: String,
     elevation: f64,
-    daily_units: DailyUnits,
-    daily: DailyDataUnit,
+    hourly_units: HourlyUnits,
+    hourly: HourlyDataUnit,
 }
 
 async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
@@ -69,7 +69,7 @@ async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
 }
 
 async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WeatherError> {
-    let url = format!("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&daily=weather_code,temperature_2m_max", lat, long);
+    let url = format!("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1", lat, long);
     let response = reqwest::get(&url).await?.json::<WeatherForecast>().await?;
     Ok(response)
 }
