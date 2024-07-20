@@ -1,5 +1,6 @@
 use regex::{Regex, Captures};
-use std::{fmt, collections::HashMap};
+use std::{fs, fmt, collections::HashMap};
+use std::io::{self, Read};
 
 #[derive(Debug)]
 enum TempData {
@@ -16,6 +17,13 @@ impl fmt::Display for TempData {
             Self::Boolean(x) => write!(f,"{}",x)
         }
     }
+}
+
+pub fn read_html_file(file_path: &str) -> Result<String, io::Error> {
+    let mut file = fs::File::open(file_path)?;
+    let mut content = String::new();
+    file.read_to_string(&mut content)?;
+    Ok(content)
 }
 
 pub fn render_final_template(mut template: String, mut data: HashMap<&str, TempData>) -> String {
