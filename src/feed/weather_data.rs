@@ -8,6 +8,8 @@ pub enum WeatherError {
     Reqwest(#[from] reqwest::Error),
     #[error("No geocoding data found")]
     NoGeocodingData,
+    #[error("Error in reading HTML file")]
+    NoHtmlToString,
 }
 
 #[derive(Debug, Deserialize)]
