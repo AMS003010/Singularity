@@ -1,5 +1,6 @@
 use std::fs;
 use std::io::Error as IOError;
+use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
 
@@ -31,6 +32,7 @@ async fn run_actix_server(port: u16) -> std::io::Result<()> {
     let server = HttpServer::new(move || {
         App::new()
             .route("/", web::get().to(landerpage))
+            .service(fs_actix::Files::new("/static", "src/assets/static").show_files_listing())
     })
     .bind(addr.clone())
     .unwrap()
