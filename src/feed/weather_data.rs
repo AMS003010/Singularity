@@ -45,9 +45,9 @@ struct HourlyUnits {
 }
 
 #[derive(Debug, Deserialize)]
-struct HourlyDataUnit {
+pub struct HourlyDataUnit {
     time: Vec<String>,
-    temperature_2m: Vec<f64>,
+    pub temperature_2m: Vec<f64>,
     weather_code: Vec<u64>,
 }
 
@@ -61,7 +61,7 @@ pub struct WeatherForecast {
     timezone_abbreviation: String,
     elevation: f64,
     hourly_units: HourlyUnits,
-    hourly: HourlyDataUnit,
+    pub hourly: HourlyDataUnit,
 }
 
 async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
