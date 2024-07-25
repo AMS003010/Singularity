@@ -67,12 +67,14 @@ pub struct WeatherForecast {
 async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
     let url = format!("https://geocoding-api.open-meteo.com/v1/search?name={}&count=10&language=en&format=json", place);
     let response = reqwest::get(&url).await?.json::<GeoResponse>().await?;
+    println!("GEO CODING: {:?}",response);
     Ok(response)
 }
 
 async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WeatherError> {
     let url = format!("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1", lat, long);
     let response = reqwest::get(&url).await?.json::<WeatherForecast>().await?;
+    println!("FORECAST: {:?}",response);
     Ok(response)
 }
 

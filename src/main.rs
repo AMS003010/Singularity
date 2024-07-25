@@ -45,7 +45,6 @@ async fn run_actix_server(port: u16) -> std::io::Result<()> {
 
 #[actix_web::main]
 async fn main() -> Result<(),IOError> {
-    weather_widget_handler("Bengaluru".to_string()).await;
 
     //TODO: Parse the singularity.yaml outside the container
 
