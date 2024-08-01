@@ -2,6 +2,10 @@ use crate::feed::weather_data::{fetch_weather, WeatherError};
 use crate::internals::render::{insert_html, read_html_file, render_final_template, TempData};
 use std::collections::HashMap;
 
+fn extract_time(timestamp: &str) -> &str {
+    &timestamp[timestamp.len() - 5..]
+}
+
 pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError> {
     let mut weather_code: HashMap<i32, &str> = HashMap::new();
     weather_code.insert(0,"Clear Sky");
@@ -44,19 +48,30 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
                         Ok(inner_html) => {
                             let mut template_data = HashMap::new();
                             template_data.insert("place", TempData::Text(loc));
+
+                            let present_weather_code = data.hourly.weather_code[0] as i32;
+                            let present_weather = weather_code.get(&present_weather_code).unwrap_or(&"Unknown");
+
+                            let time1 = extract_time(&data.hourly.time[0]);
+                            let time2 = extract_time(&data.hourly.time[4]);
+                            let time3 = extract_time(&data.hourly.time[8]);
+                            let time4 = extract_time(&data.hourly.time[12]);
+                            let time5 = extract_time(&data.hourly.time[16]);
+                            let time6 = extract_time(&data.hourly.time[20]);
+
                             template_data.insert("presentTemp", TempData::Number(data.hourly.temperature_2m[0] as i32));
-                            template_data.insert("presentWeather", TempData::Number(data.hourly.temperature_2m[0] as i32));
-                            template_data.insert("time1", TempData::Number(data.hourly.temperature_2m[0] as i32));
+                            template_data.insert("presentWeather", TempData::Text(present_weather.to_string()));
+                            template_data.insert("time1", TempData::Text(time1.to_string()));
                             template_data.insert("temp1", TempData::Number(data.hourly.temperature_2m[0] as i32));
-                            template_data.insert("time2", TempData::Number(data.hourly.temperature_2m[4] as i32));
+                            template_data.insert("time2", TempData::Text(time2.to_string()));
                             template_data.insert("temp2", TempData::Number(data.hourly.temperature_2m[4] as i32));
-                            template_data.insert("time3", TempData::Number(data.hourly.temperature_2m[8] as i32));
+                            template_data.insert("time3", TempData::Text(time3.to_string()));
                             template_data.insert("temp3", TempData::Number(data.hourly.temperature_2m[8] as i32));
-                            template_data.insert("time4", TempData::Number(data.hourly.temperature_2m[12] as i32));
+                            template_data.insert("time4", TempData::Text(time4.to_string()));
                             template_data.insert("temp4", TempData::Number(data.hourly.temperature_2m[12] as i32));
-                            template_data.insert("time5", TempData::Number(data.hourly.temperature_2m[16] as i32));
+                            template_data.insert("time5", TempData::Text(time5.to_string()));
                             template_data.insert("temp5", TempData::Number(data.hourly.temperature_2m[16] as i32));
-                            template_data.insert("time6", TempData::Number(data.hourly.temperature_2m[20] as i32));
+                            template_data.insert("time6", TempData::Text(time6.to_string()));
                             template_data.insert("temp6", TempData::Number(data.hourly.temperature_2m[20] as i32));
 
                             let inner_html = render_final_template(inner_html, template_data);

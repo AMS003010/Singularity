@@ -21,7 +21,7 @@ use internals::singularity::Config;
 use widgets::weather::weather_widget_handler;
 
 async fn landerpage() -> impl Responder {
-    match weather_widget_handler("London".to_string()).await {
+    match weather_widget_handler("Bengaluru".to_string()).await {
         Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
         Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
     }

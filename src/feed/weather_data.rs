@@ -49,9 +49,9 @@ struct HourlyUnits {
 
 #[derive(Debug, Deserialize)]
 pub struct HourlyDataUnit {
-    time: Vec<String>,
+    pub time: Vec<String>,
     pub temperature_2m: Vec<f64>,
-    weather_code: Vec<u64>,
+    pub weather_code: Vec<u64>,
 }
 
 #[derive(Debug, Deserialize)]

@@ -1,4 +1,4 @@
-<div class="logoContainer border-[1px] border-[#4b5563] w-max text-gray-600 p-4 rounded-2xl mt-4">
+<div class="logoContainer border-[1px] border-[#4b5563] w-[100%] md:w-max text-gray-600 p-4 rounded-2xl mt-4">
   <div class="flex items-center justify-start gap-2">
     <div>
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-300">
@@ -8,7 +8,7 @@
     </div>
     <div class="font-semibold text-gray-100">{{ place }}</div>
   </div>
-  <div class="flex justify-start items-center hover:invert">
+  <div class="flex justify-start items-center hover:invert mr-4">
     <div class="mix-blend-luminosity">
       <?xml version="1.0" encoding="utf-8"?>
       <!-- (c) ammap.com | SVG weather icons -->
@@ -193,9 +193,9 @@
       <div class="text-base">{{ presentWeather }}</div>
     </div>
   </div>
-  <div class="flex items-center justify-between gap-4">
-    <div class="flex gap-2">    
-      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 hover:invert cursor-pointer">
+  <div class="2xl:flex-col md:flex items-center justify-between gap-4">
+    <div class="flex justify-around md:justify-between md:gap-2">    
+      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
         <div class="text-sm">{{ time1 }}</div>
         <div class="mix-blend-luminosity">
           <?xml version="1.0" encoding="utf-8"?>
@@ -378,7 +378,7 @@
         </div>
         <div class="text-sm">{{ temp1 }} &deg;C</div>
       </div>
-      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 hover:invert cursor-pointer">
+      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
         <div class="text-sm">{{ time2 }}</div>
         <div class="mix-blend-luminosity">
           <?xml version="1.0" encoding="utf-8"?>
@@ -561,7 +561,7 @@
         </div>
         <div class="text-sm">{{ temp2 }} &deg;C</div>
       </div>
-      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 hover:invert cursor-pointer">
+      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
         <div class="text-sm">{{ time3 }}</div>
         <div class="mix-blend-luminosity">
           <?xml version="1.0" encoding="utf-8"?>
@@ -745,8 +745,9 @@
         <div class="text-sm">{{ temp3 }} &deg;C</div>
       </div> 
     </div>
-    <div class="flex gap-2">
-      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 hover:invert cursor-pointer">
+    <div class="w-[100%] h-[1rem] lg:hidden md:block"></div>
+    <div class="flex justify-around md:justify-between md:gap-2">
+      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
         <div class="text-sm">{{ time4 }}</div>
         <div class="mix-blend-luminosity">
           <?xml version="1.0" encoding="utf-8"?>
@@ -929,7 +930,7 @@
         </div>
         <div class="text-sm">{{ temp4 }} &deg;C</div>
       </div>
-      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 hover:invert cursor-pointer">
+      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
         <div class="text-sm">{{ time5 }}</div>
         <div class="mix-blend-luminosity">
           <?xml version="1.0" encoding="utf-8"?>
@@ -1112,7 +1113,7 @@
         </div>
         <div class="text-sm">{{ temp5 }} &deg;C</div>
       </div>
-      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 hover:invert cursor-pointer">
+      <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
         <div class="text-sm">{{ time6 }}</div>
         <div class="mix-blend-luminosity">
           <?xml version="1.0" encoding="utf-8"?>
