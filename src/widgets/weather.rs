@@ -48,16 +48,16 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
                             template_data.insert("presentWeather", TempData::Number(data.hourly.temperature_2m[0] as i32));
                             template_data.insert("time1", TempData::Number(data.hourly.temperature_2m[0] as i32));
                             template_data.insert("temp1", TempData::Number(data.hourly.temperature_2m[0] as i32));
-                            template_data.insert("time2", TempData::Number(data.hourly.temperature_2m[1] as i32));
-                            template_data.insert("temp2", TempData::Number(data.hourly.temperature_2m[1] as i32));
-                            template_data.insert("time3", TempData::Number(data.hourly.temperature_2m[2] as i32));
-                            template_data.insert("temp3", TempData::Number(data.hourly.temperature_2m[2] as i32));
-                            template_data.insert("time4", TempData::Number(data.hourly.temperature_2m[3] as i32));
-                            template_data.insert("temp4", TempData::Number(data.hourly.temperature_2m[3] as i32));
-                            template_data.insert("time5", TempData::Number(data.hourly.temperature_2m[4] as i32));
-                            template_data.insert("temp5", TempData::Number(data.hourly.temperature_2m[4] as i32));
-                            template_data.insert("time6", TempData::Number(data.hourly.temperature_2m[5] as i32));
-                            template_data.insert("temp6", TempData::Number(data.hourly.temperature_2m[5] as i32));
+                            template_data.insert("time2", TempData::Number(data.hourly.temperature_2m[4] as i32));
+                            template_data.insert("temp2", TempData::Number(data.hourly.temperature_2m[4] as i32));
+                            template_data.insert("time3", TempData::Number(data.hourly.temperature_2m[8] as i32));
+                            template_data.insert("temp3", TempData::Number(data.hourly.temperature_2m[8] as i32));
+                            template_data.insert("time4", TempData::Number(data.hourly.temperature_2m[12] as i32));
+                            template_data.insert("temp4", TempData::Number(data.hourly.temperature_2m[12] as i32));
+                            template_data.insert("time5", TempData::Number(data.hourly.temperature_2m[16] as i32));
+                            template_data.insert("temp5", TempData::Number(data.hourly.temperature_2m[16] as i32));
+                            template_data.insert("time6", TempData::Number(data.hourly.temperature_2m[20] as i32));
+                            template_data.insert("temp6", TempData::Number(data.hourly.temperature_2m[20] as i32));
 
                             let inner_html = render_final_template(inner_html, template_data);
                             let final_html = insert_html(outer_html, inner_html);

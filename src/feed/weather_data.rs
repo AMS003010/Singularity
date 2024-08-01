@@ -1,6 +1,7 @@
 use reqwest::Error;
 use serde::Deserialize;
 use thiserror::Error;
+use serde_json::{self, Value};
 
 #[derive(Debug, Error)]
 pub enum WeatherError {
@@ -10,6 +11,8 @@ pub enum WeatherError {
     NoGeocodingData,
     #[error("Error in reading HTML file")]
     NoHtmlToString,
+    #[error("Serde JSON error: {0}")]
+    SerdeJson(#[from] serde_json::Error),
 }
 
 #[derive(Debug, Deserialize)]
@@ -24,7 +27,7 @@ struct GeoResult {
     admin1_id: u64,
     admin2_id: u64,
     timezone: String,
-    population: u64,
+    population: Option<u64>,
     country_id: u64,
     country: String,
     admin1: String,
@@ -66,21 +69,38 @@ pub struct WeatherForecast {
 
 async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
     let url = format!("https://geocoding-api.open-meteo.com/v1/search?name={}&count=10&language=en&format=json", place);
-    let response = reqwest::get(&url).await?.json::<GeoResponse>().await?;
-    println!("GEO CODING: {:?}",response);
-    Ok(response)
+    
+    // Make the GET request and get the response text
+    let response = reqwest::get(&url).await?;
+    let response_text = response.text().await?;
+    
+    // Print the raw response text for debugging
+    println!("Raw response: {}", response_text);
+
+    let mut json_values: Value = serde_json::from_str(&response_text)?;
+
+    if let Some(results) = json_values["results"].as_array_mut() {
+        if results.len()>1 {
+            results.truncate(1);
+        }
+    }
+    
+    // Attempt to deserialize the response text
+    let geo_response: GeoResponse = serde_json::from_value(json_values)?;
+    
+    Ok(geo_response)
 }
 
 async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WeatherError> {
     let url = format!("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1", lat, long);
     let response = reqwest::get(&url).await?.json::<WeatherForecast>().await?;
-    println!("FORECAST: {:?}",response);
     Ok(response)
 }
 
 pub async fn fetch_weather(loc: String) -> Result<WeatherForecast, WeatherError> {
     match fetch_geocoding(loc).await {
         Ok(response) => {
+            println!("DEBUG GOD: {:?}", response.results.first());
             if let Some(first_result) = response.results.first() {
                 println!("{} {}", first_result.latitude, first_result.longitude);
                 match fetch_weather_forecast(first_result.latitude, first_result.longitude).await {
