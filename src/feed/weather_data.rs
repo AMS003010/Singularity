@@ -3,6 +3,7 @@ use serde::Deserialize;
 use thiserror::Error;
 use serde_json::{self, Value};
 use std::collections::HashMap;
+use std::time::Instant;
 
 #[derive(Debug, Error)]
 pub enum WeatherError {
@@ -69,6 +70,7 @@ pub struct WeatherForecast {
 }
 
 async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
+    let start = Instant::now();
     let url = format!("https://geocoding-api.open-meteo.com/v1/search?name={}&count=10&language=en&format=json", place);
     
     // Make the GET request and get the response text
@@ -76,7 +78,7 @@ async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
     let response_text = response.text().await?;
     
     // Print the raw response text for debugging
-    println!("Raw response: {}", response_text);
+    //println!("Raw response: {}", response_text);
 
     let mut json_values: Value = serde_json::from_str(&response_text)?;
 
@@ -88,22 +90,27 @@ async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
     
     // Attempt to deserialize the response text
     let geo_response: GeoResponse = serde_json::from_value(json_values)?;
-    
+    let duration = start.elapsed();
+    println!("Geocoding API {:?}",duration);
     Ok(geo_response)
 }
 
 async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WeatherError> {
+    let start = Instant::now();
     let url = format!("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1", lat, long);
     let response = reqwest::get(&url).await?.json::<WeatherForecast>().await?;
+    //println!("{:?}",response);
+    let duration = start.elapsed();
+    println!("Forecast API {:?}",duration);
     Ok(response)
 }
 
 pub async fn fetch_weather(loc: String) -> Result<WeatherForecast, WeatherError> {
     match fetch_geocoding(loc).await {
         Ok(response) => {
-            println!("DEBUG GOD: {:?}", response.results.first());
+            // println!("DEBUG GOD: {:?}", response.results.first());
             if let Some(first_result) = response.results.first() {
-                println!("{} {}", first_result.latitude, first_result.longitude);
+                // println!("{} {}", first_result.latitude, first_result.longitude);
                 match fetch_weather_forecast(first_result.latitude, first_result.longitude).await {
                     Ok(data) => Ok(data),
                     Err(e) => {

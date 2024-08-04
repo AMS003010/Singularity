@@ -1,6 +1,7 @@
 use crate::feed::weather_data::{fetch_weather, WeatherError, fetch_svg_for_weather_code};
 use crate::internals::render::{insert_html, read_html_file, render_final_template, TempData, insert_html_once, hydrate_val_once};
 use std::collections::HashMap;
+use std::time::Instant;
 
 fn extract_time(timestamp: &str) -> &str {
     &timestamp[timestamp.len() - 5..]
@@ -8,7 +9,7 @@ fn extract_time(timestamp: &str) -> &str {
 
 fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WeatherError> {
     let path = fetch_svg_for_weather_code(code);
-    println!("{}", path);
+    // println!("{}", path);
     match read_html_file(&path) {
         Ok(mut html) => {
             if *svg_count == 0 {
@@ -56,6 +57,8 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
     weather_code.insert(95, "Thunderstorm");
     weather_code.insert(96, "Thunderstorm");
     weather_code.insert(99, "Thunderstorm");
+
+    let start = Instant::now();
 
     match fetch_weather(loc.clone()).await {
 
@@ -113,6 +116,8 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
 
                             let inner_html = render_final_template(temp_inner_html, template_data);
                             let final_html = insert_html(outer_html, inner_html);
+                            let duration = start.elapsed();
+                            println!("Complete render in {:?}", duration);
                             // println!("{}", final_html);
                             Ok(final_html)
                         }
