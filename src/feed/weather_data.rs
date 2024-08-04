@@ -2,6 +2,7 @@ use reqwest::Error;
 use serde::Deserialize;
 use thiserror::Error;
 use serde_json::{self, Value};
+use std::collections::HashMap;
 
 #[derive(Debug, Error)]
 pub enum WeatherError {
@@ -23,15 +24,15 @@ struct GeoResult {
     longitude: f64,
     elevation: f64,
     feature_code: String,
-    country_code: String,
-    admin1_id: u64,
-    admin2_id: u64,
+    country_code: Option<String>,
+    admin1_id: Option<u64>,
+    admin2_id: Option<u64>,
     timezone: String,
     population: Option<u64>,
-    country_id: u64,
-    country: String,
-    admin1: String,
-    admin2: String,
+    country_id: Option<u64>,
+    country: Option<String>,
+    admin1: Option<String>,
+    admin2: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -119,5 +120,44 @@ pub async fn fetch_weather(loc: String) -> Result<WeatherForecast, WeatherError>
             eprintln!("Error fetching geocoding data: {}", e);
             Err(e)
         }
+    }
+}
+
+pub fn fetch_svg_for_weather_code(code: &i32) -> String {
+    let mut weather_svg: HashMap<i32, &str> = HashMap::new();
+    weather_svg.insert(0, "clear_day.html");
+    weather_svg.insert(1, "clear_day.html");
+    weather_svg.insert(2, "cloudy.html");
+    weather_svg.insert(3, "overcast.html");
+    weather_svg.insert(45, "fog.html");
+    weather_svg.insert(48, "fog.html");
+    weather_svg.insert(51, "drizzle.html");
+    weather_svg.insert(53, "drizzle.html");
+    weather_svg.insert(55, "drizzle.html");
+    weather_svg.insert(56, "drizzle.html");
+    weather_svg.insert(57, "drizzle.html");
+    weather_svg.insert(61, "drizzle.html");
+    weather_svg.insert(63, "moderate_rain.html");
+    weather_svg.insert(65, "heavy_rain.html");
+    weather_svg.insert(66, "heavy_rain.html");
+    weather_svg.insert(67, "heavy_rain.html");
+    weather_svg.insert(71, "snow.html");
+    weather_svg.insert(73, "moderate_snow.html");
+    weather_svg.insert(75, "heavy_snow.html");
+    weather_svg.insert(77, "heavy_snow.html");
+    weather_svg.insert(80, "drizzle.html");
+    weather_svg.insert(81, "moderate_rain.html");
+    weather_svg.insert(82, "heavy_rain.html");
+    weather_svg.insert(85, "snow.html");
+    weather_svg.insert(86, "snow.html");
+    weather_svg.insert(95, "thunder.html");
+    weather_svg.insert(96, "thunder.html");
+    weather_svg.insert(99, "thunder.html");
+
+    // Check if the weather code exists in the HashMap
+    if let Some(&svg_name) = weather_svg.get(code) {
+        format!("src/assets/svgs/{}", svg_name)
+    } else {
+        String::from("src/assets/svgs/thunder.html") // Or any default value or handling
     }
 }

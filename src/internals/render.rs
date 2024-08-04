@@ -26,7 +26,7 @@ pub fn read_html_file(file_path: &str) -> Result<String, io::Error> {
     Ok(content)
 }
 
-pub fn render_final_template(template: String, data: HashMap<&str, TempData>) -> String {
+pub fn render_final_template(template: String, data: HashMap<String, TempData>) -> String {
     let print_regex = Regex::new(r"\{\{\s*(.*?)\s*\}\}").unwrap();
     let result = print_regex.replace_all(&template, |caps: &Captures| {
         let key = caps.get(1).unwrap().as_str().trim();
@@ -39,10 +39,28 @@ pub fn render_final_template(template: String, data: HashMap<&str, TempData>) ->
     result.replace("{#", "<!--").replace("#}", "-->")
 }
 
+pub fn hydrate_val_once(template: String, pattern: String, val: String) -> String {
+    let escaped_pattern = regex::escape(&pattern);
+    let placeholder = format!(r"\{{\{{\s*{}\s*\}}\}}", escaped_pattern);
+    let print_regex = Regex::new(&placeholder).unwrap();
+    print_regex.replace(&template, val.as_str()).to_string()
+}
+
 pub fn insert_html(outer: String, inner: String) -> String {
     let placeholder_regex = Regex::new(r"\[\[(.*?)\]\]").unwrap();
     let result = placeholder_regex.replace(&outer, |_: &Captures| {
         inner.clone()
     });
     result.to_string()
+}
+
+pub fn insert_html_once(outer: String, inner: String) -> String {
+    let placeholder_regex = Regex::new(r"\[\[(.*?)\]\]").unwrap();
+    if let Some(matched) = placeholder_regex.find(&outer) {
+        let mut result = outer.clone();
+        result.replace_range(matched.range(),&inner);
+        result
+    } else {
+        outer
+    }
 }
