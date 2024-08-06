@@ -3,6 +3,10 @@ use std::io::Error as IOError;
 use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
+use internals::singularity::Config;
+use widgets::weather::weather_widget_handler;
+
+//TODO: Adding a System config Page
 
 mod widgets {
     pub mod weather;
@@ -16,9 +20,6 @@ mod internals {
     pub mod singularity;
     pub mod render;
 }
-
-use internals::singularity::Config;
-use widgets::weather::weather_widget_handler;
 
 async fn landerpage() -> impl Responder {
     match weather_widget_handler("Bengaluru".to_string()).await {
