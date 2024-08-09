@@ -1,14 +1,15 @@
-use reqwest::Error;
+use hyper::{Body, Client, Uri};
+use hyper_tls::HttpsConnector;
 use serde::Deserialize;
-use thiserror::Error;
 use serde_json::{self, Value};
 use std::collections::HashMap;
 use std::time::Instant;
+use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum WeatherError {
-    #[error("Reqwest error: {0}")]
-    Reqwest(#[from] reqwest::Error),
+    #[error("Hyper error: {0}")]
+    Hyper(#[from] hyper::Error),
     #[error("No geocoding data found")]
     NoGeocodingData,
     #[error("Error in reading HTML file")]
@@ -71,37 +72,50 @@ pub struct WeatherForecast {
 
 async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
     let start = Instant::now();
-    let url = format!("https://geocoding-api.open-meteo.com/v1/search?name={}&count=10&language=en&format=json", place);
-    
-    // Make the GET request and get the response text
-    let response = reqwest::get(&url).await?;
-    let response_text = response.text().await?;
-    
-    // Print the raw response text for debugging
-    //println!("Raw response: {}", response_text);
+    let url = format!(
+        "https://geocoding-api.open-meteo.com/v1/search?name={}&count=10&language=en&format=json",
+        place
+    );
+    let uri: Uri = url.parse().unwrap();
+
+    let https = HttpsConnector::new();
+    let client = Client::builder().build::<_, Body>(https);
+
+    let res = client.get(uri).await?;
+    let body = hyper::body::to_bytes(res.into_body()).await?;
+    let response_text = String::from_utf8(body.to_vec()).unwrap();
 
     let mut json_values: Value = serde_json::from_str(&response_text)?;
 
     if let Some(results) = json_values["results"].as_array_mut() {
-        if results.len()>1 {
+        if results.len() > 1 {
             results.truncate(1);
         }
     }
-    
-    // Attempt to deserialize the response text
+
     let geo_response: GeoResponse = serde_json::from_value(json_values)?;
     let duration = start.elapsed();
-    println!("Geocoding API {:?}",duration);
+    println!("Geocoding API {:?}", duration);
     Ok(geo_response)
 }
 
 async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WeatherError> {
     let start = Instant::now();
-    let url = format!("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1", lat, long);
-    let response = reqwest::get(&url).await?.json::<WeatherForecast>().await?;
-    //println!("{:?}",response);
+    let url = format!(
+        "https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1",
+        lat, long
+    );
+    let uri: Uri = url.parse().unwrap();
+
+    let https = HttpsConnector::new();
+    let client = Client::builder().build::<_, Body>(https);
+
+    let res = client.get(uri).await?;
+    let body = hyper::body::to_bytes(res.into_body()).await?;
+    let response: WeatherForecast = serde_json::from_slice(&body)?;
+
     let duration = start.elapsed();
-    println!("Forecast API {:?}",duration);
+    println!("Forecast API {:?}", duration);
     Ok(response)
 }
 
