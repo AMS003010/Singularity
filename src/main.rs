@@ -8,6 +8,10 @@ use widgets::weather::weather_widget_handler;
 
 //TODO: Adding a System config Page
 
+//TODO: Adding a cache approach
+
+//TODO: Remove the warnings
+
 mod widgets {
     pub mod weather;
 }
@@ -21,17 +25,19 @@ mod internals {
     pub mod render;
 }
 
-async fn landerpage() -> impl Responder {
+async fn landerpage(config: web::Data<Config>) -> impl Responder {
+    println!("Beginning of render -> {:?}", config);
     match weather_widget_handler("Bengaluru".to_string()).await {
         Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
         Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
     }
 }
 
-async fn run_actix_server(port: u16) -> std::io::Result<()> {
+async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
     let addr = format!("0.0.0.0:{}", port);
     let server = HttpServer::new(move || {
         App::new()
+            .app_data(web::Data::new(config.clone())) // Clone and share the Config object
             .route("/", web::get().to(landerpage))
             .service(fs_actix::Files::new("/static", "src/assets/static").show_files_listing())
     })
@@ -45,9 +51,9 @@ async fn run_actix_server(port: u16) -> std::io::Result<()> {
 }
 
 #[actix_web::main]
-async fn main() -> Result<(),IOError> {
+async fn main() -> Result<(), IOError> {
 
-    //TODO: Parse the singularity.yaml outside the container
+    //TODO: Remove alternate path parse for singularity.yaml
 
     let yaml_data = match fs::read_to_string("singularity.yaml") {
         Ok(data) => data,
@@ -60,10 +66,10 @@ async fn main() -> Result<(),IOError> {
     let singularity: SerdeResult<Config> = serde_yaml::from_str(&yaml_data);
     let port = 8080;
     match singularity {
-        Ok(value) => {
-            println!("{:?}", value);
+        Ok(config) => {
+            println!("After parsing -> {:?}", config);
             println!("\nParsed yaml file Successfully!!!");
-            if let Err(e) = run_actix_server(port).await {
+            if let Err(e) = run_actix_server(port, config).await {
                 eprintln!("Failed to run Actix server: {}", e);
             }
         },

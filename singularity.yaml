@@ -6,7 +6,7 @@ pages:
           - type: calendar
 
           - type: weather
-            location: London, United Kingdom
+            location: London
 
           - type: rss
             feeds:

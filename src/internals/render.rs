@@ -64,3 +64,7 @@ pub fn insert_html_once(outer: String, inner: String) -> String {
         outer
     }
 }
+
+// pub async fn final_yaml_to_html_render() -> Result<String, WeatherError> {
+//     let mut widget_map = HashMap::new()
+// }

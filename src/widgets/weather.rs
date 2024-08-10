@@ -74,13 +74,13 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
 
                             let present_weather_code = data.hourly.weather_code[0] as i32;
                             let weather_codes = [
-                                data.hourly.weather_code[0] as i32,
-                                data.hourly.weather_code[0] as i32,
+                                data.hourly.weather_code[4] as i32,
                                 data.hourly.weather_code[4] as i32,
                                 data.hourly.weather_code[8] as i32,
                                 data.hourly.weather_code[12] as i32,
                                 data.hourly.weather_code[16] as i32,
                                 data.hourly.weather_code[20] as i32,
+                                data.hourly.weather_code[23] as i32,
                             ];
 
                             let mut temp_inner_html = inner_html;
@@ -96,12 +96,12 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
                             let present_weather = weather_code.get(&present_weather_code).unwrap_or(&"---");
 
                             let times = [
-                                extract_time(&data.hourly.time[0]),
                                 extract_time(&data.hourly.time[4]),
                                 extract_time(&data.hourly.time[8]),
                                 extract_time(&data.hourly.time[12]),
                                 extract_time(&data.hourly.time[16]),
                                 extract_time(&data.hourly.time[20]),
+                                extract_time(&data.hourly.time[23]),
                             ];
 
                             for (i, time) in times.iter().enumerate() {
