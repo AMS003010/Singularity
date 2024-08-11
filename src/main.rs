@@ -6,11 +6,15 @@ use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
 use widgets::weather::weather_widget_handler;
 
-//TODO: Adding a System config Page
+//TODO: Adding a System config Page 
 
 //TODO: Adding a cache approach
 
 //TODO: Remove the warnings
+
+//TODO: ---FUTURE--- Implementing PGO & LTO
+
+//TODO: ---FUTURE--- Replacing Actix-web and hyper with tokio
 
 mod widgets {
     pub mod weather;
@@ -26,6 +30,8 @@ mod internals {
 }
 
 async fn landerpage(config: web::Data<Config>) -> impl Responder {
+    let final_html: String = String::new();
+    
     println!("Beginning of render -> {:?}", config);
     match weather_widget_handler("Bengaluru".to_string()).await {
         Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
@@ -37,7 +43,7 @@ async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
     let addr = format!("0.0.0.0:{}", port);
     let server = HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(config.clone())) // Clone and share the Config object
+            .app_data(web::Data::new(config.clone()))
             .route("/", web::get().to(landerpage))
             .service(fs_actix::Files::new("/static", "src/assets/static").show_files_listing())
     })
