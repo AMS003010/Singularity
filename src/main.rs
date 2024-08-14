@@ -4,6 +4,7 @@ use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
+use internals::render::final_yaml_to_html_render;
 use widgets::weather::weather_widget_handler;
 
 //TODO: Adding a System config Page 
@@ -31,8 +32,8 @@ mod internals {
 
 async fn landerpage(config: web::Data<Config>) -> impl Responder {
     let final_html: String = String::new();
-    
-    println!("Beginning of render -> {:?}", config);
+    final_yaml_to_html_render(&config);
+    // println!("Beginning of render -> {:?}", config);
     match weather_widget_handler("Bengaluru".to_string()).await {
         Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
         Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
@@ -73,7 +74,7 @@ async fn main() -> Result<(), IOError> {
     let port = 8080;
     match singularity {
         Ok(config) => {
-            println!("After parsing -> {:?}", config);
+            // println!("After parsing -> {:#?}", config);
             println!("\nParsed yaml file Successfully!!!");
             if let Err(e) = run_actix_server(port, config).await {
                 eprintln!("Failed to run Actix server: {}", e);

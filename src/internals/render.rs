@@ -1,6 +1,10 @@
 use regex::{Regex, Captures};
 use std::{fs, fmt, collections::HashMap};
 use std::io::{self, Read};
+use std::time::Instant;
+use crate::widgets::weather::weather_widget_handler;
+use crate::internals::singularity::Config;
+use actix_web::web::Data;
 
 #[derive(Debug)]
 pub enum TempData {
@@ -65,6 +69,30 @@ pub fn insert_html_once(outer: String, inner: String) -> String {
     }
 }
 
-// pub async fn final_yaml_to_html_render() -> Result<String, WeatherError> {
-//     let mut widget_map = HashMap::new()
-// }
+// TODO: Going with a simple rendering method, find a better method for faster parse and render
+
+pub fn final_yaml_to_html_render(data_config: &Data<Config>) {
+    let start = Instant::now();
+    if !data_config.pages.is_empty() {
+        for page in &data_config.pages {
+            println!("{}",page.name); // here instead of println, a render function is going to be executed
+            if !page.columns.is_empty() {
+                for column in &page.columns {
+                    for widget in &column.widgets {
+                        println!(" -- {}",widget.widget_type);  // here instead of println, a render function is going to be executed
+                    }
+                }
+            }
+        }
+    }
+    let duration = start.elapsed();
+    println!("Config parse and render in {:?}", duration);
+    // let mut widget_map = HashMap::new()
+    // widget_map.insert("weather",weather_widget_handler);
+    // if let Some(func) = widget_map.get("weather") {
+    //     match func("Bengaluru".to_string()).await {
+    //         Ok(html) => println!("FROM FUNCTION +++ {:?}",html),
+    //         Err(e) => println!("Errror in render functiion {}",e),
+    //     }
+    // }
+}

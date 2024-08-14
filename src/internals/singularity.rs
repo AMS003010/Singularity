@@ -34,7 +34,7 @@ pub struct Feed {
 }
 
 #[derive(Debug, Clone)]
-enum WidgetType {
+pub enum WidgetType {
     Weather(String),
     Calendar(String),
     Rss(String),
