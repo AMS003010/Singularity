@@ -2,7 +2,7 @@ use regex::{Regex, Captures};
 use std::{fs, fmt, collections::HashMap};
 use std::io::{self, Read};
 use std::time::Instant;
-use crate::widgets::weather::weather_widget_handler;
+// use crate::widgets::weather::weather_widget_handler;
 use crate::internals::singularity::Config;
 use actix_web::web::Data;
 

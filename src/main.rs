@@ -4,8 +4,8 @@ use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
-use internals::render::final_yaml_to_html_render;
-use widgets::weather::weather_widget_handler;
+// use widgets::weather::weather_widget_handler;
+use widgets::clock::clock_widget_handler;
 
 //TODO: Adding a System config Page 
 
@@ -19,10 +19,12 @@ use widgets::weather::weather_widget_handler;
 
 mod widgets {
     pub mod weather;
+    pub mod clock;
 }
 
 mod feed {
     pub mod weather_data;
+    pub mod clock_data;
 }
 
 mod internals {
@@ -30,11 +32,16 @@ mod internals {
     pub mod render;
 }
 
-async fn landerpage(config: web::Data<Config>) -> impl Responder {
-    let final_html: String = String::new();
-    final_yaml_to_html_render(&config);
+async fn landerpage(_config: web::Data<Config>) -> impl Responder {
+    // let final_html: String = String::new();
+    // final_yaml_to_html_render(&config);
+    // clock_widget_handler().await;
     // println!("Beginning of render -> {:?}", config);
-    match weather_widget_handler("Bengaluru".to_string()).await {
+    // match weather_widget_handler("Bengaluru".to_string()).await {
+    //     Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
+    //     Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
+    // }
+    match clock_widget_handler().await {
         Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
         Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
     }
