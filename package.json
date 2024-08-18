@@ -1,0 +1,15 @@
+{
+  "name": "singularity",
+  "version": "1.0.0",
+  "description": "Have all your stuff in one place, that's right 😌 all in your ___Singularity___ \r <br/><br/>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^3.4.10"
+  }
+}
