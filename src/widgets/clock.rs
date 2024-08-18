@@ -1,4 +1,4 @@
-use crate::feed::clock_data::{get_now_time, get_current_time_for_place, TimeError};
+use crate::feed::clock_data::{get_current_time_for_place, TimeError};
 use crate::internals::render::{insert_html, read_html_file, render_final_template, TempData};
 use std::collections::HashMap;
 
@@ -7,7 +7,7 @@ fn extract_offset(timestamp: &str) -> &str {
 }
 
 fn extract_time(timestamp: &str) -> &str {
-    &timestamp[10..16]
+    &timestamp[11..16]
 }
 
 pub async fn clock_widget_handler() -> Result<String, TimeError> {
@@ -17,9 +17,6 @@ pub async fn clock_widget_handler() -> Result<String, TimeError> {
             match read_html_file("src/assets/templates/clock.html") {
                 Ok(inner_html) => {
                     let mut template_data: HashMap<String, TempData> = HashMap::new();
-                    
-                    let maintime = get_now_time();
-                    template_data.insert("nowtime".to_string(), TempData::Text(maintime));
                     
                     let mut count = 1;
                     for place in places.iter() {

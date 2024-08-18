@@ -1,29 +1,29 @@
 <div class="logoContainer h-max md:divide-x 2xl:divide-y md:divide-gray-400 2xl:divide-gray-400 md:flex 2xl:flex-col items-center p-4 pl-0 border-[1px] border-[#6b7280] text-[#6b7280] rounded-2xl w-[100%] md:w-max 2xl:w-[100%]">
-    <div class="md:mx-6 mx-4 text-3xl mb-2 text-gray-300">{{ nowtime }}</div>
+    <div class="maintime md:mx-6 mx-4 text-3xl mb-2 text-gray-300"></div>
     <div class="pl-4">
         <div class="flex gap-6 justify-start">
-            <div class="text-gray-400">{{ time1 }}</div>
+            <div id="time1_value" class="text-gray-400">{{ time1 }}</div>
             <div class="flex justify-between gap-4 w-[100%]">
                 <div>{{ place1 }}</div>
                 <div class="text-gray-400">{{ offset1 }}hr</div>
             </div>
         </div>
         <div class="flex gap-6 justify-start">
-            <div class="text-gray-400">{{ time2 }}</div>
+            <div id="time2_value"  class="text-gray-400">{{ time2 }}</div>
             <div class="flex justify-between gap-4 w-[100%]">
                 <div>{{ place2 }}</div>
                 <div class="text-gray-400">{{ offset2 }}hr</div>
             </div>
         </div>
         <div class="flex gap-6 justify-start">
-            <div class="text-gray-400">{{ time3 }}</div>
+            <div id="time3_value"  class="text-gray-400">{{ time3 }}</div>
             <div class="flex justify-between gap-4 w-[100%]">
                 <div>{{ place3 }}</div>
                 <div class="text-gray-400">{{ offset3 }}hr</div>
             </div>
         </div>
         <div class="flex gap-6 justify-start">
-            <div class="text-gray-400">{{ time4 }}</div>
+            <div id="time4_value"  class="text-gray-400">{{ time4 }}</div>
             <div class="flex justify-between gap-4 w-[100%]">
                 <div>{{ place4 }}</div>
                 <div class="text-gray-400">{{ offset4 }}hr</div>
@@ -31,3 +31,67 @@
         </div>
     </div>
 </div>
+<script>
+    function updateHelper(time) {
+        let hr = parseInt(time.slice(0, 2));
+        let min = parseInt(time.slice(3, 5));
+        // console.log("Before  " + hr+":"+min)
+
+        min += 1;
+        if (min === 60) {
+            min = 0;
+            hr += 1;
+        }
+
+        if (hr === 24) {
+            hr = 0;
+        }
+
+        hr = hr < 10 ? '0' + hr : hr;
+        min = min < 10 ? '0' + min : min;
+        // console.log(hr+":"+min)
+
+        return `${hr}:${min}`;
+    }
+
+    function updateMainTime() {
+        const maintime = document.querySelector(".maintime");
+        const time1 = document.querySelector('#time1_value');
+        const time2 = document.querySelector('#time2_value');
+        const time3 = document.querySelector('#time3_value');
+        const time4 = document.querySelector('#time4_value');
+
+        if (!maintime || !maintime.innerHTML) {
+            // If maintime is not set, initialize it with the current time
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            maintime.innerHTML = `${hours}:${minutes}`;
+            return;
+        }
+
+        const currTime = maintime.innerHTML;
+
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        const presentTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+        maintime.innerHTML = presentTime;
+
+        if (parseInt(currTime.slice(3)) != parseInt(presentTime.slice(3)) || currTime.slice(0, 2) != presentTime.slice(0, 2)) {
+            if (time1 && time2 && time3 && time4) {
+                time1.innerHTML = updateHelper(time1.innerHTML);
+                time2.innerHTML = updateHelper(time2.innerHTML);
+                time3.innerHTML = updateHelper(time3.innerHTML);
+                time4.innerHTML = updateHelper(time4.innerHTML);
+            }
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateMainTime();
+        setInterval(updateMainTime, 2000);
+    });
+</script>
