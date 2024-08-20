@@ -4,6 +4,7 @@ use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
+use internals::port::find_available_port;
 // use widgets::weather::weather_widget_handler;
 use widgets::clock::clock_widget_handler;
 
@@ -30,6 +31,7 @@ mod feed {
 mod internals {
     pub mod singularity;
     pub mod render;
+    pub mod port;
 }
 
 async fn landerpage(_config: web::Data<Config>) -> impl Responder {
@@ -67,21 +69,13 @@ async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
 #[actix_web::main]
 async fn main() -> Result<(), IOError> {
 
-    //TODO: Remove alternate path parse for singularity.yaml
-
-    let yaml_data = match fs::read_to_string("singularity.yaml") {
-        Ok(data) => data,
-        Err(_) => {
-            println!("Couldn't find singularity.yaml under '/' ❌");
-            println!("Trying under '../app/singularity.yaml' 🕜\n");
-            fs::read_to_string("../app/singularity.yaml").expect("Unable to read file")
-        }
-    };
+    let yaml_data = fs::read_to_string("singularity.yaml").expect("Couldn't find singularity.yaml under '/' ❌");
     let singularity: SerdeResult<Config> = serde_yaml::from_str(&yaml_data);
-    let port = 8080;
+    let port = find_available_port(8000);
     match singularity {
         Ok(config) => {
-            // println!("After parsing -> {:#?}", config);
+            // println!("After parsing -> {:?}", config);
+            
             println!("\nParsed yaml file Successfully!!!");
             if let Err(e) = run_actix_server(port, config).await {
                 eprintln!("Failed to run Actix server: {}", e);
