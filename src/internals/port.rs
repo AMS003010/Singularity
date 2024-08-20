@@ -1,28 +1,35 @@
-// TODO: Check for one port and switch to another if busy
+use std::net::{TcpListener, TcpStream};
 
+pub fn find_available_port(start_port: u16) -> u16 {
+    let mut port = start_port;
+    loop {
+        println!("Trying to bind to port {}", port);
+        if is_port_ok(port) {
+            println!("Port {} is available ✔️", port);
+            return port;
+        }
+        println!("Port {} is busy ⛔. Trying the next port...", port);
+        port += 1;
 
+        if port > 65535 {
+            panic!("No available ports found in the valid range!");
+        }
+    }
+}
 
+fn is_port_ok(port: u16) -> bool {
+    let address = format!("127.0.0.1:{}", port);
 
-
-// use std::net::{TcpListener, TcpStream};
-
-// pub fn find_available_port(start_port: u16) -> u16 {
-//     let mut port = start_port;
-//     loop {
-//         if is_port_ok(port) {
-//             return port;
-//         }
-//         println!("Looks like port {} is busy ⛔",port);
-//         port+=1;
-//     }
-// }
-
-// fn is_port_ok(port: u16) -> bool {
-//     TcpListener::bind("127.0.0.1",port).is_ok()
-// }
-
-// fn main(){
-//     let start_port = 5500;
-//     let a = find_available_port(start_port);
-//     println!("Switching to port {} ⚓",a);
-// }
+    match TcpStream::connect(&address) {
+        Ok(_) => {
+            println!("Port {} is in use.", port);
+            false
+        }
+        Err(_) => {
+            match TcpListener::bind(&address) {
+                Ok(_) => true, // Port is available
+                Err(_) => false, // Port is unavailable
+            }
+        }
+    }
+}
