@@ -2,6 +2,14 @@
 name = "singularity"
 version = "0.1.0"
 edition = "2021"
+description = "A dashboard to have all your stuff in one place, your Singularity"
+homepage = "https://github.com/AMS003010/Singularity"
+documentation = "https://github.com/AMS003010/Singularity"
+repository = "https://github.com/AMS003010/Singularity"
+keywords = ["dashboard", "self-hosted", "customize"]
+categories = ["gui"]
+authors = ["Abhijith M S <abhijithmsaji132@gmail.com>"]
+license = "MIT OR Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

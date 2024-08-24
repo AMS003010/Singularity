@@ -71,7 +71,7 @@ async fn main() -> Result<(), IOError> {
 
     let yaml_data = fs::read_to_string("singularity.yaml").expect("Couldn't find singularity.yaml under '/' ❌");
     let singularity: SerdeResult<Config> = serde_yaml::from_str(&yaml_data);
-    let port = find_available_port(8000);
+    let port = find_available_port(8080);
     match singularity {
         Ok(config) => {
             // println!("After parsing -> {:?}", config);
