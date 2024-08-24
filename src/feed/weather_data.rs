@@ -1,3 +1,5 @@
+use crate::internals::singularity::WidgetError;
+
 use hyper::{Body, Client, Uri};
 use hyper_tls::HttpsConnector;
 use serde::Deserialize;
@@ -70,7 +72,7 @@ pub struct WeatherForecast {
     pub hourly: HourlyDataUnit,
 }
 
-async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
+async fn fetch_geocoding(place: String) -> Result<GeoResponse, WidgetError> {
     let start = Instant::now();
     let url = format!(
         "https://geocoding-api.open-meteo.com/v1/search?name={}&count=10&language=en&format=json",
@@ -99,7 +101,7 @@ async fn fetch_geocoding(place: String) -> Result<GeoResponse, WeatherError> {
     Ok(geo_response)
 }
 
-async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WeatherError> {
+async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WidgetError> {
     let start = Instant::now();
     let url = format!(
         "https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1",
@@ -119,7 +121,7 @@ async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, 
     Ok(response)
 }
 
-pub async fn fetch_weather(loc: String) -> Result<WeatherForecast, WeatherError> {
+pub async fn fetch_weather(loc: String) -> Result<WeatherForecast, WidgetError> {
     match fetch_geocoding(loc).await {
         Ok(response) => {
             // println!("DEBUG GOD: {:?}", response.results.first());
@@ -134,7 +136,7 @@ pub async fn fetch_weather(loc: String) -> Result<WeatherForecast, WeatherError>
                 }
             } else {
                 eprintln!("No geocoding data found");
-                Err(WeatherError::NoGeocodingData)
+                Err(WidgetError::NoGeocodingData)
             }
         }
         Err(e) => {

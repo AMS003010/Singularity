@@ -1,33 +1,36 @@
-use crate::feed::weather_data::{fetch_weather, WeatherError, fetch_svg_for_weather_code};
+use crate::feed::weather_data::{fetch_weather, fetch_svg_for_weather_code};
 use crate::internals::render::{insert_html, read_html_file, render_final_template, TempData, insert_html_once, hydrate_val_once};
+use crate::internals::singularity::WidgetError;
 use std::collections::HashMap;
 use std::time::Instant;
+
+// TODO: The size injected into the weather svgs are not absorbing the values after final render 
 
 fn extract_time(timestamp: &str) -> &str {
     &timestamp[timestamp.len() - 5..]
 }
 
-fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WeatherError> {
+fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WidgetError> {
     let path = fetch_svg_for_weather_code(code);
     // println!("{}", path);
     match read_html_file(&path) {
         Ok(mut html) => {
             if *svg_count == 0 {
-                html = hydrate_val_once(html, "svgSize".to_string(), "8".to_string());
+                html = hydrate_val_once(html, "svgSize".to_string(), "32".to_string());
             } else {
-                html = hydrate_val_once(html, "svgSize".to_string(), "3".to_string());
+                html = hydrate_val_once(html, "svgSize".to_string(), "12".to_string());
             }
             *svg_count += 1;
             Ok(html)
         }
         Err(_) => {
             eprintln!("Error in fetching HTML file");
-            Err(WeatherError::NoHtmlToString)
+            Err(WidgetError::NoHtmlToString)
         }
     }
 }
 
-pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError> {
+pub async fn weather_widget_handler(loc: String) -> Result<String, WidgetError> {
     let mut weather_code: HashMap<i32, &str> = HashMap::new();
     weather_code.insert(0, "Clear Sky");
     weather_code.insert(1, "Mainly Clear");
@@ -65,7 +68,7 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
         // TODO: Error handling if API call goes wrong to return a fallback HTML
 
         Ok(data) => {
-            match read_html_file("src/assets/templates/document.html") {
+            match read_html_file("src/assets/templates/page.html") {
                 Ok(outer_html) => {
                     match read_html_file("src/assets/templates/weather.html") {
                         Ok(inner_html) => {
@@ -123,19 +126,19 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WeatherError>
                         }
                         Err(e) => {
                             eprintln!("Error in reading weather HTML file: {}", e);
-                            Err(WeatherError::NoHtmlToString)
+                            Err(WidgetError::NoHtmlToString)
                         }
                     }
                 }
                 Err(e) => {
                     eprintln!("Error in reading main HTML file: {}", e);
-                    Err(WeatherError::NoHtmlToString)
+                    Err(WidgetError::NoHtmlToString)
                 }
             }
         }
         Err(e) => {
             eprintln!("Error in fetching weather: {}", e);
-            Err(WeatherError::NoHtmlToString)
+            Err(WidgetError::NoHtmlToString)
         }
     }
 }

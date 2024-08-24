@@ -1,9 +1,12 @@
 use regex::{Regex, Captures};
 use std::{fs, fmt, collections::HashMap};
 use std::io::{self, Read};
+use std::future::Future;
+use std::pin::Pin;
 use std::time::Instant;
-// use crate::widgets::weather::weather_widget_handler;
-use crate::internals::singularity::Config;
+use crate::widgets::weather::weather_widget_handler;
+use crate::widgets::clock::clock_widget_handler;
+use crate::internals::singularity::{Config, WidgetError};
 use actix_web::web::Data;
 
 #[derive(Debug)]
@@ -12,6 +15,8 @@ pub enum TempData {
     Boolean(bool),
     Text(String)
 }
+
+type WidgetHandler = fn(String) -> Pin<Box<dyn Future<Output = Result<String, WidgetError>> + Send>>;
 
 impl fmt::Display for TempData {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -69,30 +74,52 @@ pub fn insert_html_once(outer: String, inner: String) -> String {
     }
 }
 
+//TODO: Try removing the parameter for clock widget
+
 // TODO: Going with a simple rendering method, find a better method for faster parse and render
 
-pub fn final_yaml_to_html_render(data_config: &Data<Config>) {
-    let start = Instant::now();
-    if !data_config.pages.is_empty() {
-        for page in &data_config.pages {
-            println!("{}",page.name); // here instead of println, a render function is going to be executed
-            if !page.columns.is_empty() {
-                for column in &page.columns {
-                    for widget in &column.widgets {
-                        println!(" -- {}",widget.widget_type);  // here instead of println, a render function is going to be executed
+pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_html: String) -> String {
+    let start = std::time::Instant::now();
+    let mut widget_map: HashMap<&str, WidgetHandler> = HashMap::new();
+
+    widget_map.insert("clock", |s: String| Box::pin(clock_widget_handler(s)));
+    widget_map.insert("weather", |s: String| Box::pin(weather_widget_handler(s)));
+
+    match read_html_file("src/assets/templates/document.html") {
+        Ok(doc_html) => {
+            final_html = doc_html;
+            if !data_config.pages.is_empty() {
+                for page in &data_config.pages {
+                    if !page.columns.is_empty() {
+                        for column in &page.columns {
+                            match read_html_file("src/assets/templates/page.html") {
+                                Ok(page_html) => {
+                                    final_html = insert_html(final_html, page_html);
+                                    for widget in &column.widgets {
+                                        if let Some(func) = widget_map.get(widget.widget_type.as_str()) {
+                                            match func("Bengaluru".to_string()).await {
+                                                Ok(widget_html) => {
+                                                    let widget_html = format!("{}{}", widget_html, "[[ Content ]]");
+                                                    final_html = insert_html(final_html, widget_html);
+                                                }
+                                                Err(e) => println!("Error in render function: {}", e),
+                                            }
+                                        }
+                                    }
+                                }
+                                Err(e) => {
+                                    eprintln!("Error in page HTML file: {}", e);
+                                }
+                            }
+                        }
                     }
                 }
             }
+            final_html
+        }
+        Err(e) => {
+            eprintln!("Error in main HTML file: {}", e);
+            final_html
         }
     }
-    let duration = start.elapsed();
-    println!("Config parse and render in {:?}", duration);
-    // let mut widget_map = HashMap::new()
-    // widget_map.insert("weather",weather_widget_handler);
-    // if let Some(func) = widget_map.get("weather") {
-    //     match func("Bengaluru".to_string()).await {
-    //         Ok(html) => println!("FROM FUNCTION +++ {:?}",html),
-    //         Err(e) => println!("Errror in render functiion {}",e),
-    //     }
-    // }
 }

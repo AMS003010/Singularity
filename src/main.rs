@@ -5,7 +5,8 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
 use internals::port::find_available_port;
-// use widgets::weather::weather_widget_handler;
+use internals::render::final_yaml_to_html_render;
+use widgets::weather::weather_widget_handler;
 use widgets::clock::clock_widget_handler;
 
 //TODO: Adding a System config Page 
@@ -36,17 +37,21 @@ mod internals {
 
 async fn landerpage(_config: web::Data<Config>) -> impl Responder {
     // let final_html: String = String::new();
-    // final_yaml_to_html_render(&config);
-    // clock_widget_handler().await;
-    // println!("Beginning of render -> {:?}", config);
+    // final_yaml_to_html_render(&_config, &final_html);
+    // // clock_widget_handler().await;
+    // println!("Beginning of render -> {:?}", _config);
     // match weather_widget_handler("Bengaluru".to_string()).await {
     //     Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
     //     Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
     // }
-    match clock_widget_handler().await {
-        Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
-        Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
-    }
+    // match clock_widget_handler("dummy".to_string()).await {
+    //     Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
+    //     Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
+    // }
+    // HttpResponse::Ok().content_type("text/html").body(final_html)
+    let final_html: String = String::new();
+    let rendered_html = final_yaml_to_html_render(&_config, final_html).await;
+    HttpResponse::Ok().content_type("text/html").body(rendered_html)
 }
 
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {

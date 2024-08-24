@@ -1,5 +1,6 @@
-use crate::feed::clock_data::{get_current_time_for_place, TimeError};
+use crate::feed::clock_data::{get_current_time_for_place};
 use crate::internals::render::{insert_html, read_html_file, render_final_template, TempData};
+use crate::internals::singularity::WidgetError;
 use std::collections::HashMap;
 
 fn extract_offset(timestamp: &str) -> &str {
@@ -10,9 +11,10 @@ fn extract_time(timestamp: &str) -> &str {
     &timestamp[11..16]
 }
 
-pub async fn clock_widget_handler() -> Result<String, TimeError> {
+pub async fn clock_widget_handler(_dummy: String) -> Result<String, WidgetError> {
+    println!("{}",_dummy);
     let places = ["London", "Tokyo", "Delhi", "Los Angeles"];
-    match read_html_file("src/assets/templates/document.html") {
+    match read_html_file("src/assets/templates/page.html") {
         Ok(outer_html) => {
             match read_html_file("src/assets/templates/clock.html") {
                 Ok(inner_html) => {
@@ -32,7 +34,7 @@ pub async fn clock_widget_handler() -> Result<String, TimeError> {
                             }
                             Err(e) => {
                                 eprintln!("Error in getting time/timezone: {}", e);
-                                return Err(TimeError::NoTimeZone);
+                                return Err(WidgetError::NoTimeZone);
                             }
                         }
                     }
@@ -42,13 +44,13 @@ pub async fn clock_widget_handler() -> Result<String, TimeError> {
                 }
                 Err(e) => {
                     eprintln!("Error in reading clock HTML file: {}", e);
-                    Err(TimeError::NoHtmlToString)
+                    Err(WidgetError::NoHtmlToString)
                 }
             }
         }
         Err(e) => {
             eprintln!("Error in main HTML file: {}", e);
-            Err(TimeError::NoHtmlToString)
+            Err(WidgetError::NoHtmlToString)
         }
     }
 }

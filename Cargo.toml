@@ -7,7 +7,7 @@ homepage = "https://github.com/AMS003010/Singularity"
 documentation = "https://github.com/AMS003010/Singularity"
 repository = "https://github.com/AMS003010/Singularity"
 keywords = ["dashboard", "self-hosted", "customize"]
-categories = ["gui"]
+categories = ["command-line-utilities"]
 authors = ["Abhijith M S <abhijithmsaji132@gmail.com>"]
 license = "MIT OR Apache-2.0"
 

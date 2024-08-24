@@ -1,6 +1,24 @@
 use serde::Deserialize;
 use serde::Deserializer;
+use serde_json::{self, Value};
+use hyper::{Body, Client, Uri};
+use hyper_tls::HttpsConnector;
 use std::fmt;
+use thiserror::Error;
+
+#[derive(Debug, Error)]
+pub enum WidgetError {
+    #[error("Hyper error: {0}")]
+    Hyper(#[from] hyper::Error),
+    #[error("No geocoding data found")]
+    NoGeocodingData,
+    #[error("Error in reading HTML file")]
+    NoHtmlToString,
+    #[error("Serde JSON error: {0}")]
+    SerdeJson(#[from] serde_json::Error),
+    #[error("No timezone found")]
+    NoTimeZone,
+}
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct Config {
@@ -36,7 +54,7 @@ pub struct Feed {
 #[derive(Debug, Clone)]
 pub enum WidgetType {
     Weather(String),
-    Calendar(String),
+    Clock(String),
     Rss(String),
 }
 
@@ -49,8 +67,8 @@ impl<'de> Deserialize<'de> for WidgetType {
         let s = String::deserialize(deserializer)?;
         if s.starts_with("weather") {
             Ok(WidgetType::Weather(s))
-        } else if s.starts_with("calendar") {
-            Ok(WidgetType::Calendar(s))
+        } else if s.starts_with("clock") {
+            Ok(WidgetType::Clock(s))
         } else if s.starts_with("rss") {
             Ok(WidgetType::Rss(s))
         } else {
@@ -63,8 +81,18 @@ impl fmt::Display for WidgetType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             WidgetType::Weather(data) => write!(f, "Weather: {}", data),
-            WidgetType::Calendar(data) => write!(f, "Calendar: {}", data),
+            WidgetType::Clock(data) => write!(f, "Clock: {}", data),
             WidgetType::Rss(data) => write!(f, "RSS: {}", data),
+        }
+    }
+}
+
+impl WidgetType {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            WidgetType::Weather(_) => "weather",
+            WidgetType::Clock(_) => "clock",
+            WidgetType::Rss(_) => "rss",
         }
     }
 }
