@@ -61,77 +61,64 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WidgetError> 
     weather_code.insert(96, "Thunderstorm");
     weather_code.insert(99, "Thunderstorm");
 
-    let start = Instant::now();
-
     match fetch_weather(loc.clone()).await {
 
         // TODO: Error handling if API call goes wrong to return a fallback HTML
 
         Ok(data) => {
-            match read_html_file("src/assets/templates/page.html") {
-                Ok(outer_html) => {
-                    match read_html_file("src/assets/templates/weather.html") {
-                        Ok(inner_html) => {
-                            let mut template_data: HashMap<String, TempData> = HashMap::new();
-                            template_data.insert("place".to_string(), TempData::Text(loc.clone()));
+            match read_html_file("src/assets/templates/weather.html") {
+                Ok(inner_html) => {
+                    let mut template_data: HashMap<String, TempData> = HashMap::new();
+                    template_data.insert("place".to_string(), TempData::Text(loc.clone()));
 
-                            let present_weather_code = data.hourly.weather_code[0] as i32;
-                            let weather_codes = [
-                                data.hourly.weather_code[4] as i32,
-                                data.hourly.weather_code[4] as i32,
-                                data.hourly.weather_code[8] as i32,
-                                data.hourly.weather_code[12] as i32,
-                                data.hourly.weather_code[16] as i32,
-                                data.hourly.weather_code[20] as i32,
-                                data.hourly.weather_code[23] as i32,
-                            ];
+                    let present_weather_code = data.hourly.weather_code[0] as i32;
+                    let weather_codes = [
+                        data.hourly.weather_code[4] as i32,
+                        data.hourly.weather_code[4] as i32,
+                        data.hourly.weather_code[8] as i32,
+                        data.hourly.weather_code[12] as i32,
+                        data.hourly.weather_code[16] as i32,
+                        data.hourly.weather_code[20] as i32,
+                        data.hourly.weather_code[23] as i32,
+                    ];
 
-                            let mut temp_inner_html = inner_html;
-                            let mut svg_count = 0;
-                            for code in &weather_codes {
-                                if let Ok(svg) = final_svg_comp(code, &mut svg_count) {
-                                    temp_inner_html = insert_html_once(temp_inner_html, svg);
-                                } else {
-                                    eprintln!("Error in generating SVG for code: {}", code);
-                                }
-                            }
-
-                            let present_weather = weather_code.get(&present_weather_code).unwrap_or(&"---");
-
-                            let times = [
-                                extract_time(&data.hourly.time[4]),
-                                extract_time(&data.hourly.time[8]),
-                                extract_time(&data.hourly.time[12]),
-                                extract_time(&data.hourly.time[16]),
-                                extract_time(&data.hourly.time[20]),
-                                extract_time(&data.hourly.time[23]),
-                            ];
-
-                            for (i, time) in times.iter().enumerate() {
-                                let time_key = format!("time{}", i + 1);
-                                let temp_key = format!("temp{}", i + 1);
-                                template_data.insert(time_key.clone(), TempData::Text(time.to_string()));
-                                template_data.insert(temp_key.clone(), TempData::Number(data.hourly.temperature_2m[i * 4] as i32));
-                            }
-
-                            template_data.insert("presentTemp".to_string(), TempData::Number(data.hourly.temperature_2m[0] as i32));
-                            template_data.insert("presentWeather".to_string(), TempData::Text(present_weather.to_string()));
-
-                            let inner_html = render_final_template(temp_inner_html, template_data);
-                            let final_html = insert_html(outer_html, inner_html);
-                            let duration = start.elapsed();
-                            println!("Complete render in {:?}", duration);
-                            // println!("{}", final_html);
-                            Ok(final_html)
-                        }
-                        Err(e) => {
-                            eprintln!("Error in reading weather HTML file: {}", e);
-                            Err(WidgetError::NoHtmlToString)
+                    let mut temp_inner_html = inner_html;
+                    let mut svg_count = 0;
+                    for code in &weather_codes {
+                        if let Ok(svg) = final_svg_comp(code, &mut svg_count) {
+                            temp_inner_html = insert_html_once(temp_inner_html, svg);
+                        } else {
+                            eprintln!("Error in generating SVG for code: {}", code);
                         }
                     }
+
+                    let present_weather = weather_code.get(&present_weather_code).unwrap_or(&"---");
+
+                    let times = [
+                        extract_time(&data.hourly.time[4]),
+                        extract_time(&data.hourly.time[8]),
+                        extract_time(&data.hourly.time[12]),
+                        extract_time(&data.hourly.time[16]),
+                        extract_time(&data.hourly.time[20]),
+                        extract_time(&data.hourly.time[23]),
+                    ];
+
+                    for (i, time) in times.iter().enumerate() {
+                        let time_key = format!("time{}", i + 1);
+                        let temp_key = format!("temp{}", i + 1);
+                        template_data.insert(time_key.clone(), TempData::Text(time.to_string()));
+                        template_data.insert(temp_key.clone(), TempData::Number(data.hourly.temperature_2m[i * 4] as i32));
+                    }
+
+                    template_data.insert("presentTemp".to_string(), TempData::Number(data.hourly.temperature_2m[0] as i32));
+                    template_data.insert("presentWeather".to_string(), TempData::Text(present_weather.to_string()));
+
+                    let inner_html = render_final_template(temp_inner_html, template_data);
+                    // println!("{}", inner_html);
+                    Ok(inner_html)
                 }
                 Err(e) => {
-                    eprintln!("Error in reading main HTML file: {}", e);
+                    eprintln!("Error in reading weather HTML file: {}", e);
                     Err(WidgetError::NoHtmlToString)
                 }
             }

@@ -3,14 +3,24 @@ pages:
     columns:
       - size: small
         widgets:
-          # - type: weather
-          #   location: London
-
-          - type: clock
-
           - type: weather
-            location: London
+            location: London, United Kingdom
+          - type: weather
+            location: London, United Kingdom
+          - type: weather
+            location: London, United Kingdom
 
+      - size: small
+        widgets:
+          - type: weather
+            location: London, United Kingdom
+          - type: weather
+            location: London, United Kingdom
+          - type: weather
+            location: London, United Kingdom
+      - size: small
+        widgets:
+          - type: clock
           # - type: rss
           #   feeds:
           #     - url: https://ciechanow.ski/atom.xml

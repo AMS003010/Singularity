@@ -23,6 +23,14 @@ body {
   flex-direction: row;
 }
 
+.w-12 {
+  width: 3rem;
+}
+
+.w-32 {
+  width: 8rem;
+}
+
 @media (min-width: 768px) {
   .weatherContainer {
     display: flex;

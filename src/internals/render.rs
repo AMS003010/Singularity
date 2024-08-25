@@ -74,12 +74,14 @@ pub fn insert_html_once(outer: String, inner: String) -> String {
     }
 }
 
-//TODO: Try removing the parameter for clock widget
+// TODO: Try removing the parameter for clock widget
 
 // TODO: Going with a simple rendering method, find a better method for faster parse and render
 
+// TODO: Adding a cache approach
+
 pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_html: String) -> String {
-    let start = std::time::Instant::now();
+    let start = Instant::now();
     let mut widget_map: HashMap<&str, WidgetHandler> = HashMap::new();
 
     widget_map.insert("clock", |s: String| Box::pin(clock_widget_handler(s)));
@@ -90,16 +92,24 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
             final_html = doc_html;
             if !data_config.pages.is_empty() {
                 for page in &data_config.pages {
+                    // println!("Page render +--->  {}",final_html);
                     if !page.columns.is_empty() {
-                        for column in &page.columns {
-                            match read_html_file("src/assets/templates/page.html") {
-                                Ok(page_html) => {
-                                    final_html = insert_html(final_html, page_html);
-                                    for widget in &column.widgets {
+                        for (col_index, column) in page.columns.iter().enumerate() {
+                            match read_html_file("src/assets/templates/column.html") {
+                                Ok(mut col_html) => {
+                                    if(col_index!=page.columns.len()-1) {
+                                        col_html = format!("{}{}", col_html, "[[ SURPRISE ]]");
+                                    }
+                                    final_html = insert_html(final_html, col_html);
+                                    for (row_index, widget) in column.widgets.iter().enumerate() {
                                         if let Some(func) = widget_map.get(widget.widget_type.as_str()) {
                                             match func("Bengaluru".to_string()).await {
-                                                Ok(widget_html) => {
-                                                    let widget_html = format!("{}{}", widget_html, "[[ Content ]]");
+                                                Ok(mut widget_html) => {
+                                                    // println!("-- {} {} {}",widget.widget_type.as_str(),&row_index,column.widgets.len()-1);
+                                                    if (row_index!=column.widgets.len()-1) {
+                                                        widget_html = format!("{}{}", widget_html, "[[ Content ]]");
+                                                        // println!("{} YES",&row_index);
+                                                    }
                                                     final_html = insert_html(final_html, widget_html);
                                                 }
                                                 Err(e) => println!("Error in render function: {}", e),
@@ -111,10 +121,13 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                                     eprintln!("Error in page HTML file: {}", e);
                                 }
                             }
+                            // println!("Column render +--->  {} \n\n------------------------------------------------------------------\n",final_html);
                         }
                     }
                 }
             }
+            let duration = start.elapsed();
+            println!("Complete render in {:?}", duration);
             final_html
         }
         Err(e) => {

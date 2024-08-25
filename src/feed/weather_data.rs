@@ -73,7 +73,7 @@ pub struct WeatherForecast {
 }
 
 async fn fetch_geocoding(place: String) -> Result<GeoResponse, WidgetError> {
-    let start = Instant::now();
+    // let start = Instant::now();
     let url = format!(
         "https://geocoding-api.open-meteo.com/v1/search?name={}&count=10&language=en&format=json",
         place
@@ -96,13 +96,13 @@ async fn fetch_geocoding(place: String) -> Result<GeoResponse, WidgetError> {
     }
 
     let geo_response: GeoResponse = serde_json::from_value(json_values)?;
-    let duration = start.elapsed();
-    println!("Geocoding API {:?}", duration);
+    // let duration = start.elapsed();
+    // println!("Geocoding API {:?}", duration);
     Ok(geo_response)
 }
 
 async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WidgetError> {
-    let start = Instant::now();
+    // let start = Instant::now();
     let url = format!(
         "https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1",
         lat, long
@@ -116,8 +116,8 @@ async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, 
     let body = hyper::body::to_bytes(res.into_body()).await?;
     let response: WeatherForecast = serde_json::from_slice(&body)?;
 
-    let duration = start.elapsed();
-    println!("Forecast API {:?}", duration);
+    // let duration = start.elapsed();
+    // println!("Forecast API {:?}", duration);
     Ok(response)
 }
 

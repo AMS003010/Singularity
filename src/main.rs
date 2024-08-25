@@ -9,9 +9,7 @@ use internals::render::final_yaml_to_html_render;
 use widgets::weather::weather_widget_handler;
 use widgets::clock::clock_widget_handler;
 
-//TODO: Adding a System config Page 
-
-//TODO: Adding a cache approach
+//TODO: Adding a System config Page
 
 //TODO: Remove the warnings
 
