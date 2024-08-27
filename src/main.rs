@@ -8,6 +8,7 @@ use internals::port::find_available_port;
 use internals::render::final_yaml_to_html_render;
 use widgets::weather::weather_widget_handler;
 use widgets::clock::clock_widget_handler;
+use widgets::calendar::calendar_widget_handler;
 
 //TODO: Adding a System config Page
 
@@ -20,11 +21,13 @@ use widgets::clock::clock_widget_handler;
 mod widgets {
     pub mod weather;
     pub mod clock;
+    pub mod calendar;
 }
 
 mod feed {
     pub mod weather_data;
     pub mod clock_data;
+    pub mod calendar_data;
 }
 
 mod internals {
@@ -47,9 +50,15 @@ async fn landerpage(_config: web::Data<Config>) -> impl Responder {
     //     Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
     // }
     // HttpResponse::Ok().content_type("text/html").body(final_html)
+
     let final_html: String = String::new();
     let rendered_html = final_yaml_to_html_render(&_config, final_html).await;
     HttpResponse::Ok().content_type("text/html").body(rendered_html)
+
+    // match calendar_widget_handler("dummy".to_string()).await {
+    //     Ok(html) => HttpResponse::Ok().content_type("text/html").body(html),
+    //     Err(e) => HttpResponse::InternalServerError().body(format!("Error: {}", e)),
+    // }
 }
 
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
@@ -58,6 +67,7 @@ async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(config.clone()))
             .route("/", web::get().to(landerpage))
+            .route("/home", web::get().to(landerpage))
             .service(fs_actix::Files::new("/static", "src/assets/static").show_files_listing())
     })
     .bind(addr.clone())

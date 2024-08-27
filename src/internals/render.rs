@@ -6,6 +6,7 @@ use std::pin::Pin;
 use std::time::Instant;
 use crate::widgets::weather::weather_widget_handler;
 use crate::widgets::clock::clock_widget_handler;
+use crate::widgets::calendar::calendar_widget_handler;
 use crate::internals::singularity::{Config, WidgetError};
 use actix_web::web::Data;
 
@@ -86,6 +87,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
 
     widget_map.insert("clock", |s: String| Box::pin(clock_widget_handler(s)));
     widget_map.insert("weather", |s: String| Box::pin(weather_widget_handler(s)));
+    widget_map.insert("calendar", |s: String| Box::pin(calendar_widget_handler(s)));
 
     match read_html_file("src/assets/templates/document.html") {
         Ok(doc_html) => {
@@ -97,7 +99,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                         for (col_index, column) in page.columns.iter().enumerate() {
                             match read_html_file("src/assets/templates/column.html") {
                                 Ok(mut col_html) => {
-                                    if(col_index!=page.columns.len()-1) {
+                                    if col_index!=page.columns.len()-1 {
                                         col_html = format!("{}{}", col_html, "[[ SURPRISE ]]");
                                     }
                                     final_html = insert_html(final_html, col_html);
@@ -106,7 +108,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                                             match func("Bengaluru".to_string()).await {
                                                 Ok(mut widget_html) => {
                                                     // println!("-- {} {} {}",widget.widget_type.as_str(),&row_index,column.widgets.len()-1);
-                                                    if (row_index!=column.widgets.len()-1) {
+                                                    if row_index!=column.widgets.len()-1 {
                                                         widget_html = format!("{}{}", widget_html, "[[ Content ]]");
                                                         // println!("{} YES",&row_index);
                                                     }

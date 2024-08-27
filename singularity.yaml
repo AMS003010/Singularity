@@ -5,19 +5,9 @@ pages:
         widgets:
           - type: weather
             location: London, United Kingdom
-          - type: weather
-            location: London, United Kingdom
-          - type: weather
-            location: London, United Kingdom
-
       - size: small
         widgets:
-          - type: weather
-            location: London, United Kingdom
-          - type: weather
-            location: London, United Kingdom
-          - type: weather
-            location: London, United Kingdom
+          - type: calendar
       - size: small
         widgets:
           - type: clock

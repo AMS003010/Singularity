@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <title>Singularity</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' type='text/css' media='screen' href='../static/main.css'>
+  <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+  <script src='../static/script.js'></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="w-[100vw] h-[100vh] bg-[#020208] p-4 text-white">
+  <div class="flex justify-between items-center gap-4 text-gray-400 w-[100%]">
+    <img src="../static/logo.gif" alt="logo_pic" class="logoContainer w-[3rem] h-[3rem] border-[1px] border-[#6b7280] text-[#6b7280] cursor-pointer rounded-xl"/>
+    <div class="logoContainer flex justify-start gap-4 w-[100%] border-[1px] border-[#6b7280] text-[#636363] py-2 rounded-lg pl-4">
+      <span class="font-bold hover:text-white cursor-pointer text-gray-700">
+        [<span class="page_select opacity-0 hover:opacity-100 text-white">+</span>]home
+      </span>
+      <span class="font-bold hover:text-white cursor-pointer text-gray-700">
+        [<span class="page_select opacity-0 hover:opacity-100 text-white">+</span>]stuff
+      </span>
+    </div>
+  </div>
+  <div class="doc md:flex 2xl:flex-col gap-5 mt-4 mb-8">
+    <div class="logoContainer p-4 px-6 border-[1px] border-[#6b7280] text-[#6b7280] rounded-2xl h-max w-max">
+      <div class="mb-4 text-sm font-extralight flex">
+        {{ dateToday }}<div class="text-gray-500 mx-1">&bull;</div>{{ monthToday }}<div class="text-gray-500 mx-1">&bull;</div>{{ yearToday }}
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th class="text-sm font-medium text-gray-300 tracking-wide text-center px-1 pb-2">{{ day_name0 }}</th>
+            <th class="text-sm font-medium text-gray-300 tracking-wide text-center px-1 pb-2">{{ day_name1 }}</th>
+            <th class="text-sm font-medium text-gray-300 tracking-wide text-center px-1 pb-2">{{ day_name2 }}</th>
+            <th class="text-sm font-medium text-gray-300 tracking-wide text-center px-1 pb-2">{{ day_name3 }}</th>
+            <th class="text-sm font-medium text-gray-300 tracking-wide text-center px-1 pb-2">{{ day_name4 }}</th>
+            <th class="text-sm font-medium text-gray-300 tracking-wide text-center px-1 pb-2">{{ day_name5 }}</th>
+            <th class="text-sm font-medium text-gray-300 tracking-wide text-center px-1 pb-2">{{ day_name6 }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-sm text-center whitespace-nowrap">1</td>
+            <td class="text-sm text-center whitespace-nowrap">2</td>
+            <td class="text-sm text-center whitespace-nowrap">3</td>
+            <td class="text-sm text-center whitespace-nowrap">4</td>
+            <td class="text-sm text-center whitespace-nowrap">5</td>
+            <td class="text-sm text-center whitespace-nowrap">6</td>
+            <td class="text-sm text-center whitespace-nowrap">7</td>
+          </tr>
+          <tr>
+            <td class="text-sm text-center whitespace-nowrap">8</td>
+            <td class="text-sm text-center whitespace-nowrap">9</td>
+            <td class="text-sm text-center whitespace-nowrap">10</td>
+            <td class="text-sm text-center whitespace-nowrap">11</td>
+            <td class="text-sm text-center whitespace-nowrap">12</td>
+            <td class="text-sm text-center whitespace-nowrap">13</td>
+            <td class="text-sm text-center whitespace-nowrap">14</td>
+          </tr>
+          <tr>
+            <td class="text-sm text-center whitespace-nowrap">15</td>
+            <td class="text-sm text-center whitespace-nowrap">16</td>
+            <td class="text-sm text-center rounded p-[0.1rem] text-gray-300 bg-gray-700 whitespace-nowrap">17</td>
+            <td class="text-sm text-center whitespace-nowrap">18</td>
+            <td class="text-sm text-center whitespace-nowrap">19</td>
+            <td class="text-sm text-center whitespace-nowrap">20</td>
+            <td class="text-sm text-center whitespace-nowrap">21</td>
+          </tr>
+          <tr>
+            <td class="text-sm text-center whitespace-nowrap">22</td>
+            <td class="text-sm text-center whitespace-nowrap">23</td>
+            <td class="text-sm text-center whitespace-nowrap">24</td>
+            <td class="text-sm text-center whitespace-nowrap">25</td>
+            <td class="text-sm text-center whitespace-nowrap">26</td>
+            <td class="text-sm text-center whitespace-nowrap">27</td>
+            <td class="text-sm text-center whitespace-nowrap">28</td>
+          </tr>
+          <tr>
+            <td class="text-sm text-center whitespace-nowrap">{{ day29 }}</td>
+            <td class="text-sm text-center whitespace-nowrap">{{ day30 }}</td>
+            <td class="text-sm text-center whitespace-nowrap">{{ day31 }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

@@ -55,7 +55,7 @@ pub struct Feed {
 pub enum WidgetType {
     Weather(String),
     Clock(String),
-    Rss(String),
+    Calendar(String),
 }
 
 // Custom deserialization for WidgetType
@@ -69,8 +69,8 @@ impl<'de> Deserialize<'de> for WidgetType {
             Ok(WidgetType::Weather(s))
         } else if s.starts_with("clock") {
             Ok(WidgetType::Clock(s))
-        } else if s.starts_with("rss") {
-            Ok(WidgetType::Rss(s))
+        } else if s.starts_with("calendar") {
+            Ok(WidgetType::Calendar(s))
         } else {
             Err(serde::de::Error::custom(format!("Invalid WeatherType: {}", s)))
         }
@@ -82,7 +82,7 @@ impl fmt::Display for WidgetType {
         match self {
             WidgetType::Weather(data) => write!(f, "Weather: {}", data),
             WidgetType::Clock(data) => write!(f, "Clock: {}", data),
-            WidgetType::Rss(data) => write!(f, "RSS: {}", data),
+            WidgetType::Calendar(data) => write!(f, "Calendar: {}", data),
         }
     }
 }
@@ -92,7 +92,7 @@ impl WidgetType {
         match self {
             WidgetType::Weather(_) => "weather",
             WidgetType::Clock(_) => "clock",
-            WidgetType::Rss(_) => "rss",
+            WidgetType::Calendar(_) => "calendar",
         }
     }
 }
