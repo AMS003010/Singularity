@@ -4,7 +4,7 @@
   <meta charset='utf-8'>
   <title>Singularity</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='/static/main-built.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='/static/main.css'>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <script src='/static/script.js'></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,14 +13,66 @@
   <div class="flex justify-between items-center gap-4 text-gray-400 w-[100%]">
     <img src="/static/logo.gif" alt="logo_pic" class="logoContainer w-[3rem] h-[3rem] border-[1px] border-[#6b7280] text-[#6b7280] cursor-pointer rounded-xl"/>
     <div class="logoContainer flex justify-start gap-4 w-[100%] border-[1px] border-[#6b7280] text-[#6b7280] py-2 rounded-lg pl-4">
+      <a href="/home" class="font-bold hover:text-white cursor-pointer text-gray-700">
+        [<span class="page_select opacity-0 hover:opacity-100 text-white">&#10035;</span>]<span class="shuffle cursor-pointer">home</span>
+      </a>
       <span class="font-bold hover:text-white cursor-pointer text-gray-700">
-        [<span class="page_select opacity-0 hover:opacity-100 text-white">&#10035;</span>]home
-      </span>
-      <span class="font-bold hover:text-white cursor-pointer text-gray-700">
-        [<span class="page_select opacity-0 hover:opacity-100 text-white">&#10035;</span>]stuff
+        [<span class="page_select opacity-0 hover:opacity-100 text-white">&#10035;</span>]<span class="shuffle cursor-pointer">stuff</span>
       </span>
     </div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set effect velocity in ms
+        var velocity = 50;
+      
+        var shuffleElements = document.querySelectorAll('.shuffle');
+      
+        shuffleElements.forEach(function(item) {
+            item.setAttribute('data-text', item.textContent);
+        });
+      
+        var shuffle = function(o) {
+            for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        };
+      
+        var shuffleText = function(element, originalText) {
+            var elementTextArray = [];
+            var randomText = [];
+      
+            for (var i = 0; i < originalText.length; i++) {
+                elementTextArray.push(originalText.charAt(i));
+            }
+      
+            var repeatShuffle = function(times, index) {
+                if (index === times) {
+                    element.textContent = originalText;
+                    return;
+                }
+      
+                setTimeout(function() {
+                    randomText = shuffle(elementTextArray.slice()); // Shuffle a copy of the array
+                    for (var i = 0; i < index; i++) {
+                        randomText[i] = originalText[i];
+                    }
+                    randomText = randomText.join('');
+                    element.textContent = randomText;
+                    index++;
+                    repeatShuffle(times, index);
+                }, velocity);
+            };
+      
+            repeatShuffle(originalText.length, 0);
+        };
+      
+        shuffleElements.forEach(function(item) {
+            item.addEventListener('mouseenter', function() {
+                shuffleText(item, item.getAttribute('data-text'));
+            });
+        });
+    });
+  </script>
   <div class="doc md:flex 2xl:flex-col gap-5 mt-8 mb-8">
     [[ Content ]]
   </div>
