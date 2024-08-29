@@ -4,13 +4,23 @@ pages:
       - size: small
         widgets:
           - type: weather
-            location: London, United Kingdom
+            location: Bengaluru
+          - type: weather
+            location: Bengaluru
+          - type: weather
+            location: Bengaluru
       - size: small
         widgets:
           - type: calendar
+          - type: weather
+            location: Bengaluru
+          - type: weather
+            location: Bengaluru
       - size: small
         widgets:
           - type: clock
+          - type: weather
+            location: Bengaluru
           # - type: rss
           #   feeds:
           #     - url: https://ciechanow.ski/atom.xml

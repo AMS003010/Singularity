@@ -38,12 +38,10 @@ pub async fn calendar_widget_handler(_dummy: String) -> Result<String, WidgetErr
             // println!("{}",get_day_from_date(day, month, year));
 
             let day_name = get_day_from_date(1, month, year);
-            println!("{}", &day_name);
 
             let index = day_name_list.iter().position(|&x| x == day_name);
             match index {
                 Some(i) => {
-                    println!("index : {}",i);
                     for j in 0..7 {
                         let day_number = format!("day_name{}",j);
                         template_data.insert(day_number, TempData::Text(day_name_list[(j+i)%7].to_string()));

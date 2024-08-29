@@ -24,6 +24,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.120"
 serde_yaml = "0.9"
 thiserror = "1.0.63"
+futures = "0.3"
 
 [[bin]]
 name = "singularity"
