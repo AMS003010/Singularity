@@ -3,6 +3,8 @@ use crate::internals::render::{read_html_file, render_final_template, TempData};
 use crate::internals::singularity::WidgetError;
 use std::collections::HashMap;
 
+// TODO: Add a feature to be able to highlight ceratin dates for events
+
 pub async fn calendar_widget_handler(_dummy: String) -> Result<String, WidgetError> {
     match read_html_file("src/assets/templates/calendar.html") {
         Ok(wid_html) => {

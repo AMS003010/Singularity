@@ -10,10 +10,6 @@ pub fn find_available_port(start_port: u16) -> u16 {
         }
         println!("Port {} is busy ⛔. Trying the next port...", port);
         port += 1;
-
-        if port > 65535 {
-            panic!("No available ports found in the valid range!");
-        }
     }
 }
 
