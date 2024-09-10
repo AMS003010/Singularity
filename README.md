@@ -39,7 +39,7 @@ cargo r -r
 docker compose up
 ```
 
-#### Using Cargo to build an executable for your device
+#### Building from source
 _I'm still working on this_ 😅
 
 <br/><br/>
