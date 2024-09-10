@@ -25,6 +25,8 @@ Run this command to build the executable and run it
 cargo r -r
 ```
 
+<br>
+
 ### Installation
 > [!CAUTION]
 >
