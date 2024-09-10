@@ -1,4 +1,4 @@
-## Singularity
+# Singularity
 Have all your stuff in one place, that's right 😌 all in your ___Singularity___ 
 
 (PS: Under the hood, it's basically a templating engine with data injection having parallelism to speed up rendering 😅)
