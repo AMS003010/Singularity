@@ -14,6 +14,8 @@ use widgets::calendar::calendar_widget_handler;
 
 //TODO: Remove the warnings
 
+//TODO: Implementing COW (Clone On Write) wherever possible
+
 //TODO: ---FUTURE--- Implementing PGO & LTO
 
 //TODO: ---FUTURE--- Replacing Actix-web and hyper with tokio
