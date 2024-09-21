@@ -16,6 +16,8 @@ use widgets::calendar::calendar_widget_handler;
 
 //TODO: Implementing COW (Clone On Write) wherever possible
 
+//TODO: Implementing a initial Static HTML render like React / Nextjs and then rehydrate it 
+
 //TODO: ---FUTURE--- Implementing PGO & LTO
 
 //TODO: ---FUTURE--- Replacing Actix-web and hyper with tokio
