@@ -16,7 +16,10 @@ use widgets::calendar::calendar_widget_handler;
 
 //TODO: Implementing COW (Clone On Write) wherever possible
 
-//TODO: Implementing a initial Static HTML render like React / Nextjs and then rehydrate it 
+//TODO: Implementing a initial Static HTML render like React / Nextjs and then rehydrate it
+
+//TODO: Add a path for .executable approach like 'singularity -p /test/singularity.yaml'
+//      and path of '/singularity.yaml' for container approach with volumes enabled
 
 //TODO: ---FUTURE--- Implementing PGO & LTO
 
