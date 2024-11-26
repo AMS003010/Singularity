@@ -23,18 +23,6 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Use Case
-      description: How would this enhancement benefit you or others? Please provide a use case.
-    validations:
-      required: true
-  - type: textarea
-    attributes:
-      label: Blockers
-      description: If there are any blockers or related issues that need to be addressed before this enhancement can be implemented, please describe them and provide the issue IDs.
-    validations:
-      required: false
-  - type: textarea
-    attributes:
       label: Additional Information/ Attachments
       description: Any additional information, images, diagrams, files, context, or details you'd like to provide about the enhancement request.
     validations:
