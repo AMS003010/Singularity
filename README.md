@@ -4,6 +4,10 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 (PS: Under the hood, it's basically a templating engine with data injection having parallelism to speed up rendering 😅)
 <br/>
 
+#### Behind the scenes ⚠️⚠️⚠️
+![image](https://github.com/user-attachments/assets/7f5f46a3-d54b-48cd-8265-d8ab969557e5)
+
+
 ### Features
 #### Various widgets
 * Weather
