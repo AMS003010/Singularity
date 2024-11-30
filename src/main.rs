@@ -25,6 +25,8 @@ use widgets::calendar::calendar_widget_handler;
 
 //TODO: ---FUTURE--- Replacing Actix-web and hyper with tokio
 
+//TODO: Maybe add a position system to make the widget injection faster
+
 mod widgets {
     pub mod weather;
     pub mod clock;

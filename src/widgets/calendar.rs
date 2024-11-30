@@ -10,6 +10,9 @@ pub async fn calendar_widget_handler(_dummy: String) -> Result<String, WidgetErr
         Ok(wid_html) => {
             let mut template_data: HashMap<String, TempData> = HashMap::new();
 
+            // Injecting theme
+            template_data.insert("widget_theme".to_string(),TempData::Text(_dummy.to_string()));
+
             let day_name_list = ["Sun","Mon", "Tue","Wed", "Thu", "Fri", "Sat"];
 
             let (year, month, day, weekday) = get_current_date();

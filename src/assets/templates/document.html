@@ -9,10 +9,10 @@
   <script src='/static/script.js'></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="w-[100vw] h-[100vh] bg-[#020208] p-4 px-6 text-white">
+<body class="w-[100vw] min-h-[100vh] p-4 px-6 text-white" style="background-color: {{ theme_background_color }};">
   <div class="flex justify-between items-center gap-4 text-gray-400 w-[100%]">
-    <img src="/static/logo.gif" alt="logo_pic" class="logoContainer w-[3rem] h-[3rem] border-[1px] border-[#6b7280] text-[#6b7280] cursor-pointer rounded-xl"/>
-    <div class="logoContainer flex justify-start gap-4 w-[100%] border-[1px] border-[#6b7280] text-[#6b7280] py-2 rounded-lg pl-4">
+    <img src="/static/logo.gif" alt="logo_pic" class="widget-shadow {{ widget_theme }} w-[3rem] h-[3rem] border-[1px] cursor-pointer rounded-xl"/>
+    <div class="widget-shadow {{ widget_theme }} flex justify-start gap-4 w-[100%] border-[1px] py-2 rounded-lg pl-4">
       <a href="/home" class="font-bold hover:text-white cursor-pointer text-gray-700">
         [<span class="page_select opacity-0 hover:opacity-100 text-white">&#10035;</span>]<span class="shuffle cursor-pointer">home</span>
       </a>
@@ -73,8 +73,12 @@
         });
     });
   </script>
-  <div class="doc md:flex 2xl:flex-col justify-between mt-8 mb-8">
+  <div class="doc md:flex 2xl:flex-col justify-between mt-8 mb-28">
     [[ Content ]]
+  </div>
+  <div class="honeyhere">
+    <a href="https://github.com/AMS003010/Singularity">Singularity 𖦹</a>
+    <a href="https://github.com/AMS003010/Singularity/issues" target="_blank">🡤 Raise an issue</a>
   </div>
 </body>
 </html>

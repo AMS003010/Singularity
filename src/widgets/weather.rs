@@ -71,7 +71,7 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WidgetError> 
     weather_code.insert(96, "Thunderstorm");
     weather_code.insert(99, "Thunderstorm");
 
-    match fetch_weather(loc.clone()).await {
+    match fetch_weather("Bengaluru".to_string()).await {
 
         // TODO: Error handling if API call goes wrong to return a fallback HTML
 
@@ -79,7 +79,11 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WidgetError> 
             match read_html_file("src/assets/templates/weather.html") {
                 Ok(inner_html) => {
                     let mut template_data: HashMap<String, TempData> = HashMap::new();
-                    template_data.insert("place".to_string(), TempData::Text(loc.clone()));
+
+                    // Injecting theme
+                    template_data.insert("widget_theme".to_string(),TempData::Text(loc.to_string()));
+
+                    template_data.insert("place".to_string(), TempData::Text("Bengaluru".to_string()));
 
                     let present_weather_code = data.hourly.weather_code[0] as i32;
                     let weather_codes = [

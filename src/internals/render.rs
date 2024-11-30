@@ -94,6 +94,13 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
         Ok(doc_html) => {
             final_html = doc_html;
             if !data_config.pages.is_empty() {
+                println!("{}",data_config.theme_background_color);
+                // Injecting theme
+                let mut template_data: HashMap<String, TempData> = HashMap::new();
+                template_data.insert("widget_theme".to_string(),TempData::Text(data_config.theme.to_string()));
+                template_data.insert("theme_background_color".to_string(),TempData::Text(data_config.theme_background_color.to_string()));
+                final_html = render_final_template(final_html, template_data);
+
                 for page in &data_config.pages {
                     if !page.columns.is_empty() {
                         for (col_index, column) in page.columns.iter().enumerate() {
@@ -110,7 +117,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                                         .map(|(row_index, widget)| {
                                             let func = widget_map.get(widget.widget_type.as_str()).unwrap();
                                             async move {
-                                                let mut widget_html = func("Bengaluru".to_string()).await?;
+                                                let mut widget_html = func(data_config.theme.to_string()).await?;
                                                 if row_index != column.widgets.len() - 1 {
                                                     widget_html = format!("{}{}", widget_html, "[[ Content ]]");
                                                 }

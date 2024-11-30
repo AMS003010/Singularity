@@ -10,6 +10,11 @@
   src: url('fonts/JetBrainsMono-Regular.woff2') format('woff2');
 }
 
+html, body {
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: scroll;
+}
+
 body {
   font-family: 'JetBrains Mono', monospace;
 }
@@ -35,7 +40,7 @@ body {
 }
 
 
-.logoContainer {
+.widget-shadow {
   box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
 }
 
@@ -50,6 +55,38 @@ body {
 
 .w-32 {
   width: 8rem;
+}
+
+.honeyhere {
+  color: yellow;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.honeyhere a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.4rem;
+}
+
+.neo-noir {
+  color: #6b7280;
+  border-width: 1px;
+  border-color: #6b7280;
+}
+
+.molten-blue {
+  color: darkblue;
+  border-width: 1px;
+  border-color: darkblue;
+}
+
+.bloodline {
+  color: red;
+  border-width: 1px;
+  border-color: darkred;
 }
 
 @media (min-width: 768px) {

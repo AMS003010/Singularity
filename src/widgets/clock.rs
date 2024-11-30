@@ -16,6 +16,9 @@ pub async fn clock_widget_handler(_dummy: String) -> Result<String, WidgetError>
     match read_html_file("src/assets/templates/clock.html") {
         Ok(inner_html) => {
             let mut template_data: HashMap<String, TempData> = HashMap::new();
+
+            // Injecting theme
+            template_data.insert("widget_theme".to_string(),TempData::Text(_dummy.to_string()));
             
             let mut count = 1;
             for place in places.iter() {

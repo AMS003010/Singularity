@@ -11,8 +11,8 @@
 </head>
 <body class="w-[100vw] h-[100vh] bg-[#020208] p-4 text-white">
   <div class="flex justify-between items-center gap-4 text-gray-400 w-[100%]">
-    <img src="../static/logo.gif" alt="logo_pic" class="logoContainer w-[3rem] h-[3rem] border-[1px] border-[#6b7280] text-[#6b7280] cursor-pointer rounded-xl"/>
-    <div class="logoContainer flex justify-start gap-4 w-[100%] border-[1px] border-[#6b7280] text-[#636363] py-2 rounded-lg pl-4">
+    <img src="../static/logo.gif" alt="logo_pic" class="widget-shadow {{ widget_theme }} w-[3rem] h-[3rem] border-[1px] cursor-pointer rounded-xl"/>
+    <div class="widget-shadow flex justify-start gap-4 w-[100%] border-[1px] border-[#6b7280] text-[#636363] py-2 rounded-lg pl-4">
       <span class="font-bold hover:text-white cursor-pointer text-gray-700">
         [<span class="page_select opacity-0 hover:opacity-100 text-white">+</span>]home
       </span>
@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="doc md:flex 2xl:flex-col gap-5 mt-4 mb-8">
-    <div class="logoContainer p-4 px-6 border-[1px] border-[#6b7280] text-[#6b7280] rounded-2xl h-max w-max">
+    <div class="widget-shadow {{ widget_theme }} p-4 px-6 border-[1px] rounded-2xl h-max w-max">
       <div class="mb-4 text-sm font-extralight flex">
         {{ dateToday }}<div class="text-gray-500 mx-1">&bull;</div>{{ monthToday }}<div class="text-gray-500 mx-1">&bull;</div>{{ yearToday }}
       </div>
