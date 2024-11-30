@@ -94,7 +94,6 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
         Ok(doc_html) => {
             final_html = doc_html;
             if !data_config.pages.is_empty() {
-                println!("{}",data_config.theme_background_color);
                 // Injecting theme
                 let mut template_data: HashMap<String, TempData> = HashMap::new();
                 template_data.insert("widget_theme".to_string(),TempData::Text(data_config.theme.to_string()));
@@ -144,7 +143,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                 }
             }
             let duration = start.elapsed();
-            println!("Complete render in {:?}", duration);
+            println!("⚪ Complete render in {:?}", duration);
             final_html
         }
         Err(e) => {

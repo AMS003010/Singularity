@@ -2,13 +2,12 @@ use std::net::{TcpListener, TcpStream};
 
 pub fn find_available_port(start_port: u16) -> u16 {
     let mut port = start_port;
+    println!("\n🟤 Trying to bind to port {}", port);
     loop {
-        println!("Trying to bind to port {}", port);
         if is_port_ok(port) {
-            println!("Port {} is available ✔️", port);
+            println!("🟡 Port {} is available 🍙", port);
             return port;
         }
-        println!("Port {} is busy ⛔. Trying the next port...", port);
         port += 1;
     }
 }
@@ -18,7 +17,7 @@ fn is_port_ok(port: u16) -> bool {
 
     match TcpStream::connect(&address) {
         Ok(_) => {
-            println!("Port {} is in use.", port);
+            println!("🟤 Port {} is busy 🚧", port);
             false
         }
         Err(_) => {
