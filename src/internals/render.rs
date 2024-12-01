@@ -143,7 +143,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                 }
             }
             let duration = start.elapsed();
-            println!("⚪ Complete render in {:?}", duration);
+            println!("🔵 Rendered in {:?}", duration);
             final_html
         }
         Err(e) => {

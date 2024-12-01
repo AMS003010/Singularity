@@ -83,7 +83,7 @@ async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
     .unwrap()
     .run();
 
-    println!("\n🟡 Singularity🌌 running at http://127.0.0.1:{}\n", port);
+    println!("🌀 Singularity running at http://127.0.0.1:{}\n", port);
     server.await.unwrap();
     Ok(())
 }
@@ -98,7 +98,9 @@ async fn main() -> Result<(), IOError> {
         Ok(config) => {
             // println!("After parsing -> {:?}", config);
             
-            println!("\n🟡 Config file parse successfully !!!");
+            println!("🟡 Config file parsed successfully 🎛️");
+            println!("\n🌀 Theme set: {}", config.theme);
+            println!("🌀 Background set: {}", config.theme_background_color);
             if let Err(e) = run_actix_server(port, config).await {
                 eprintln!("Failed to run Actix server: {}", e);
             }

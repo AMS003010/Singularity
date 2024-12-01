@@ -1,5 +1,5 @@
-theme: neo-noir
-theme_background_color: "#020208"
+theme: molten-blue
+theme_background_color: "#F1E9D2"
 pages:
   - name: Home
     columns:
