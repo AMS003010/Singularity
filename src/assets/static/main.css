@@ -58,7 +58,6 @@ body {
 }
 
 .honeyhere {
-  color: yellow;
   display: flex;
   justify-content: space-between;
   margin-top: 0.4rem;
@@ -81,6 +80,12 @@ body {
   color: darkblue;
   border-width: 1px;
   border-color: darkblue;
+}
+
+.caffeine-rush {
+  color: #634832;
+  border-width: 1px;
+  border-color: #967259;
 }
 
 .bloodline {

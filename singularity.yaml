@@ -1,5 +1,7 @@
-theme: molten-blue
+theme: caffeine-rush
 theme_background_color: "#F1E9D2"
+widget_heading: "darkblue"
+footer: "black"
 pages:
   - name: Home
     columns:

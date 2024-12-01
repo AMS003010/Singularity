@@ -18,7 +18,7 @@ pub enum TempData {
     Text(String)
 }
 
-type WidgetHandler = fn(String) -> Pin<Box<dyn Future<Output = Result<String, WidgetError>> + Send>>;
+type WidgetHandler = fn(String, String) -> Pin<Box<dyn Future<Output = Result<String, WidgetError>> + Send>>;
 
 impl fmt::Display for TempData {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -86,9 +86,9 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
     let start = Instant::now();
     let mut widget_map: HashMap<&str, WidgetHandler> = HashMap::new();
 
-    widget_map.insert("clock", |s: String| Box::pin(clock_widget_handler(s)));
-    widget_map.insert("weather", |s: String| Box::pin(weather_widget_handler(s)));
-    widget_map.insert("calendar", |s: String| Box::pin(calendar_widget_handler(s)));
+    widget_map.insert("clock", |s1: String, s2: String| Box::pin(clock_widget_handler(s1, s2)));
+    widget_map.insert("weather", |s1: String, s2: String| Box::pin(weather_widget_handler(s1, s2)));
+    widget_map.insert("calendar", |s1: String, s2: String| Box::pin(calendar_widget_handler(s1, s2)));
 
     match read_html_file("src/assets/templates/document.html") {
         Ok(doc_html) => {
@@ -98,6 +98,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                 let mut template_data: HashMap<String, TempData> = HashMap::new();
                 template_data.insert("widget_theme".to_string(),TempData::Text(data_config.theme.to_string()));
                 template_data.insert("theme_background_color".to_string(),TempData::Text(data_config.theme_background_color.to_string()));
+                template_data.insert("footerTheme".to_string(),TempData::Text(data_config.footer.to_string()));
                 final_html = render_final_template(final_html, template_data);
 
                 for page in &data_config.pages {
@@ -116,7 +117,8 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                                         .map(|(row_index, widget)| {
                                             let func = widget_map.get(widget.widget_type.as_str()).unwrap();
                                             async move {
-                                                let mut widget_html = func(data_config.theme.to_string()).await?;
+                                                // Add widget_heading as an additional argument
+                                                let mut widget_html = func(data_config.theme.to_string(), data_config.widget_heading.to_string()).await?;
                                                 if row_index != column.widgets.len() - 1 {
                                                     widget_html = format!("{}{}", widget_html, "[[ Content ]]");
                                                 }

@@ -5,13 +5,14 @@ use std::collections::HashMap;
 
 // TODO: Add a feature to be able to highlight ceratin dates for events
 
-pub async fn calendar_widget_handler(_dummy: String) -> Result<String, WidgetError> {
+pub async fn calendar_widget_handler(theme: String, _widget_theme: String) -> Result<String, WidgetError> {
     match read_html_file("src/assets/templates/calendar.html") {
         Ok(wid_html) => {
             let mut template_data: HashMap<String, TempData> = HashMap::new();
 
             // Injecting theme
-            template_data.insert("widget_theme".to_string(),TempData::Text(_dummy.to_string()));
+            template_data.insert("widget_theme".to_string(),TempData::Text(theme.to_string()));
+            template_data.insert("widgetHeading".to_string(),TempData::Text(_widget_theme.to_string()));
 
             let day_name_list = ["Sun","Mon", "Tue","Wed", "Thu", "Fri", "Sat"];
 

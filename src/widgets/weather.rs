@@ -40,7 +40,7 @@ fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WidgetError
     }
 }
 
-pub async fn weather_widget_handler(loc: String) -> Result<String, WidgetError> {
+pub async fn weather_widget_handler(loc: String, _widget_theme: String) -> Result<String, WidgetError> {
     let mut weather_code: HashMap<i32, &str> = HashMap::new();
     weather_code.insert(0, "Clear Sky");
     weather_code.insert(1, "Mainly Clear");
@@ -82,6 +82,7 @@ pub async fn weather_widget_handler(loc: String) -> Result<String, WidgetError> 
 
                     // Injecting theme
                     template_data.insert("widget_theme".to_string(),TempData::Text(loc.to_string()));
+                    template_data.insert("widgetHeading".to_string(),TempData::Text(_widget_theme.to_string()));
 
                     template_data.insert("place".to_string(), TempData::Text("Bengaluru".to_string()));
 

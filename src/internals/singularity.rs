@@ -22,9 +22,11 @@ pub enum WidgetError {
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct Config {
-    pub pages: Vec<Page>,
     pub theme: String,
     pub theme_background_color: String,
+    pub widget_heading: String,
+    pub footer: String,
+    pub pages: Vec<Page>,
 }
 
 #[derive(Debug, Deserialize, Clone)]
