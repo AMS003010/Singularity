@@ -21,37 +21,50 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 * Clock
 * Calendar
 
+## Install
 
-### Run the project ( &nbsp; _just wanna run it_ &nbsp; )
-#### Prerequisites
+### Windows
+
+#### Prerequisites (Need to install manually)
 - rustc
 - Cargo
 - rustup
 
-You can install them [here](https://www.rust-lang.org/tools/install)
-
 Run this command to build the executable and run it
 ```
+git clone https://github.com/AMS003010/Singularity.git
+cd Singularity
 cargo r -r
 ```
 
+### Linux
+This was tested on a Ubuntu 24.04 LTS
 
-### Installation
-> [!CAUTION]
->
-> The project is under active development, expect things to break every once in a while 😑.
+This script installs everything for you including the prerequisites 
+```
+git clone https://github.com/AMS003010/Singularity.git
+cd Singularity/scripts/install-linux.sh
+chmod +x install-linux.sh
+mv install-linux.sh ../
+./install-linux.sh
+```
 
+Now to run the executable, type
+```
+singularity
+```
 
-#### Using docker compose
+### Run it as container
 
 ```
 docker compose up
 ```
 
-#### Building from source
-_I'm still working on this_ 😅
+> [!CAUTION]
+>
+> The project is under active development, expect things to break every once in a while 😑.
 
-<br/><br/>
+<br/>
 
 > [!NOTE]
 > Inspired from [Glance](https://github.com/glanceapp/glance)
