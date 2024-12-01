@@ -98,7 +98,7 @@ async fn main() -> Result<(), IOError> {
         Ok(config) => {
             // println!("After parsing -> {:?}", config);
             
-            println!("🟡 Config file parsed successfully 🎛️");
+            println!("🟡 Config file parsed successfully ⚙️");
             println!("\n🌀 Theme set: {}", config.theme);
             println!("🌀 Background set: {}", config.theme_background_color);
             if let Err(e) = run_actix_server(port, config).await {
