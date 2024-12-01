@@ -4,6 +4,12 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 (PS: Under the hood, it's basically a templating engine with data injection having parallelism to speed up rendering 😅)
 <br/>
 
+## Contents
+* <a href="#installation">Install</a>
+* <a href="docs/configuration.md">Configuration</a>
+* <a href="docs/preconfigured-pages.md">Preconfigured pages</a>
+* <a href="docs/themes.md">Themes</a>
+
 #### Behind the scenes ⚠️⚠️⚠️
 ![image](https://github.com/user-attachments/assets/6f6bd473-2425-4208-b681-9c2515ed3ce8)
 
