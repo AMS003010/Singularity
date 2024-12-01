@@ -5,7 +5,7 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 <br/>
 
 ## Contents
-* <a href="https://github.com/AMS003010/Singularity/blob/main/src/docs/install.md">Install</a>
+* <a href="https://github.com/AMS003010/Singularity/blob/main/docs/install.md">Install</a>
 * <a href="https://github.com/AMS003010/Singularity/blob/main/src/docs/configuration.md">Configuration</a>
 * <a href="https://github.com/AMS003010/Singularity/blob/main/src/docs/preconfigured-pages.md">Preconfigured pages</a>
 * <a href="https://github.com/AMS003010/Singularity/blob/main/src/docs/themes.md">Themes</a>
