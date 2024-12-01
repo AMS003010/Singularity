@@ -21,3 +21,13 @@ theme_background_color: "black"
 widget_heading: "white"
 footer: "yellow"
 ```
+
+### bloodline
+![image](https://github.com/user-attachments/assets/d7d03708-12ef-4190-8ada-2a9e651319b8)
+
+```
+theme: bloodline
+theme_background_color: "black"
+widget_heading: "white"
+footer: "yellow"
+```
