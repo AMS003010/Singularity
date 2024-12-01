@@ -1,18 +1,7 @@
 use crate::feed::weather_data::{fetch_weather, fetch_svg_for_weather_code};
-use crate::internals::render::{insert_html, read_html_file, render_final_template, TempData, insert_html_once, hydrate_val_once};
+use crate::internals::render::{read_html_file, render_final_template, TempData, insert_html_once, hydrate_val_once};
 use crate::internals::singularity::WidgetError;
 use std::collections::HashMap;
-use std::sync::Arc;
-use tokio::sync::RwLock;
-use std::time::{Duration, Instant};
-
-#[derive(Clone)]
-struct CachedWeather {
-    data: String,  // Or the appropriate type for the weather data
-    timestamp: Instant,
-}
-
-type WeatherCache = Arc<RwLock<HashMap<String, CachedWeather>>>;
 
 // TODO: The size injected into the weather svgs are not absorbing the values after final render 
 

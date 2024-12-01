@@ -1,8 +1,6 @@
 use serde::Deserialize;
 use serde::Deserializer;
-use serde_json::{self, Value};
-use hyper::{Body, Client, Uri};
-use hyper_tls::HttpsConnector;
+use serde_json::{self};
 use std::fmt;
 use thiserror::Error;
 

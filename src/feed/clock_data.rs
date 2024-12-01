@@ -1,14 +1,5 @@
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
-use thiserror::Error;
-
-#[derive(Debug, Error)]
-pub enum TimeError {
-    #[error("No timezone found")]
-    NoTimeZone,
-    #[error("Error in reading HTML file")]
-    NoHtmlToString,
-}
 
 fn get_timezone_for_place(place: &str) -> Option<chrono::FixedOffset> {
     let mut place_to_timezone = HashMap::new();

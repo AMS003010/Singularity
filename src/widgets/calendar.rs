@@ -16,8 +16,7 @@ pub async fn calendar_widget_handler(theme: String, _widget_theme: String) -> Re
 
             let day_name_list = ["Sun","Mon", "Tue","Wed", "Thu", "Fri", "Sat"];
 
-            let (year, month, day, weekday) = get_current_date();
-            let mut no_of_days = 0;
+            let (year, month, day, _weekday) = get_current_date();
             let month_name = get_month(&month);
 
             template_data.insert("dateToday".to_string(),TempData::Text(day.to_string()));
@@ -25,7 +24,6 @@ pub async fn calendar_widget_handler(theme: String, _widget_theme: String) -> Re
             template_data.insert("yearToday".to_string(),TempData::Text(year.to_string()));
 
             if &month_name=="January" || &month_name=="March" || &month_name=="May" || &month_name=="July" || &month_name=="August" || &month_name=="October" || &month_name=="December" {
-                no_of_days = 31;
                 template_data.insert("day29".to_string(),TempData::Number(29));
                 template_data.insert("day30".to_string(),TempData::Number(30));
                 template_data.insert("day31".to_string(),TempData::Number(31));
@@ -40,7 +38,7 @@ pub async fn calendar_widget_handler(theme: String, _widget_theme: String) -> Re
                 template_data.insert("day31".to_string(),TempData::Text("  ".to_string()));
             }
 
-            // println!("{} {} {} {} {}",&year, &month, &day, &weekday, &no_of_days);            
+            // println!("{} {} {} {} {}",&year, &month, &day, &weekday, &_no_of_days);            
             // println!("{}",get_day_from_date(day, month, year));
 
             let day_name = get_day_from_date(1, month, year);

@@ -6,9 +6,9 @@ use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
 use internals::port::find_available_port;
 use internals::render::final_yaml_to_html_render;
-use widgets::weather::weather_widget_handler;
-use widgets::clock::clock_widget_handler;
-use widgets::calendar::calendar_widget_handler;
+// use widgets::weather::weather_widget_handler;
+// use widgets::clock::clock_widget_handler;
+// use widgets::calendar::calendar_widget_handler;
 
 //TODO: Adding a System config Page
 

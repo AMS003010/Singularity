@@ -5,22 +5,19 @@ use hyper_tls::HttpsConnector;
 use serde::Deserialize;
 use serde_json::{self, Value};
 use std::collections::HashMap;
-use std::time::Instant;
+// use std::time::Instant;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum WeatherError {
     #[error("Hyper error: {0}")]
     Hyper(#[from] hyper::Error),
-    #[error("No geocoding data found")]
-    NoGeocodingData,
-    #[error("Error in reading HTML file")]
-    NoHtmlToString,
     #[error("Serde JSON error: {0}")]
     SerdeJson(#[from] serde_json::Error),
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct GeoResult {
     id: u64,
     name: String,
@@ -40,12 +37,14 @@ struct GeoResult {
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct GeoResponse {
     results: Vec<GeoResult>,
     generationtime_ms: f64,
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct HourlyUnits {
     time: String,
     temperature_2m: String,
@@ -60,6 +59,7 @@ pub struct HourlyDataUnit {
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 pub struct WeatherForecast {
     latitude: f64,
     longitude: f64,

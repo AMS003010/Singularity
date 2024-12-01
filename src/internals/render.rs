@@ -12,6 +12,7 @@ use crate::internals::singularity::{Config, WidgetError};
 use actix_web::web::Data;
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub enum TempData {
     Number(i32),
     Boolean(bool),
