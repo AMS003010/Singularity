@@ -37,7 +37,6 @@ singularity
 docker compose up
 ```
 
-### Installation
 > [!CAUTION]
 >
 > The project is under active development, expect things to break every once in a while 😑.
