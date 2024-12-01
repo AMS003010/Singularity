@@ -1,7 +1,7 @@
-theme: caffeine-rush
-theme_background_color: "#F1E9D2"
-widget_heading: "darkblue"
-footer: "black"
+theme: bloodline
+theme_background_color: "black"
+widget_heading: "white"
+footer: "yellow"
 pages:
   - name: Home
     columns:
