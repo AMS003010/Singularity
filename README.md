@@ -72,11 +72,11 @@ git clone https://github.com/AMS003010/Singularity.git
 cd Singularity/scripts/
 chmod +x install-linux.sh
 mv install-linux.sh ../
-./install-linux.sh
 cd ..
+./install-linux.sh
 ```
 
-Now to run the executable, type
+Now open a new terminal under the root of the singularity directory and run the executable, type
 ```
 singularity
 ```
