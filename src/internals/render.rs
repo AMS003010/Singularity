@@ -150,7 +150,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
             final_html
         }
         Err(e) => {
-            eprintln!("Error in main HTML file: {}", e);
+            eprintln!("Couldn't find Src folder ⚠️: {}", e);
             final_html
         }
     }

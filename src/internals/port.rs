@@ -2,7 +2,7 @@ use std::net::{TcpListener, TcpStream};
 
 pub fn find_available_port(start_port: u16) -> u16 {
     let mut port = start_port;
-    println!("\n🟤 Trying to bind to port {}", port);
+    println!("🟤 Trying to bind to port {}", port);
     loop {
         if is_port_ok(port) {
             println!("🟡 Port {} is available 🛺", port);
