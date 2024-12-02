@@ -1,6 +1,6 @@
 ## Themes
 
-Some themes to get you started
+Some themes to get you started ( TBH still working on getting some decent themes ready 😅)
 
 ### caffeine-rush
 ![image](https://github.com/user-attachments/assets/3f0da272-d7f3-404a-866b-489df60b0a91)
