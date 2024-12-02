@@ -1,7 +1,9 @@
 # Singularity
 Have all your stuff in one place, that's right 😌 all in your ___Singularity___ 
 
-(PS: Under the hood, it's basically a templating engine with data injection having parallelism to speed up rendering 😅)
+( PS: Under the hood, it's basically a templating engine with data injection having parallelism to speed up rendering 😅. 
+Working on caching up stuff, in order to speed it up further⚡)
+
 <br/>
 
 ## Contents
@@ -10,20 +12,25 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 * <a href="https://github.com/AMS003010/Singularity/blob/main/docs/preconfigured-pages.md">Preconfigured pages</a>
 * <a href="https://github.com/AMS003010/Singularity/blob/main/docs/themes.md">Themes</a>
 
+<br/>
+
 #### Behind the scenes ⚠️⚠️⚠️
 ![image](https://github.com/user-attachments/assets/6f6bd473-2425-4208-b681-9c2515ed3ce8)
 
+<br/>
 
+## Features
+### Various widgets
+* Weather 🌤️
+* Clock ⏰
+* Calendar 🗓️
+* _Will be adding more in the near (distant) future_
 
-### Features
-#### Various widgets
-* Weather
-* Clock
-* Calendar
+<br/>
 
 ## Install
 
-### Windows
+### Windows 🪟
 
 #### Prerequisites (Need to install manually)
 - rustc
@@ -37,16 +44,19 @@ cd Singularity
 cargo r -r
 ```
 
-### Linux
-This was tested on a Ubuntu 24.04 LTS
+<br/>
 
-This script installs everything for you including the prerequisites 
+### Linux 🐧
+_This was tested on a Ubuntu 24.04 LTS_
+
+Run these commands. This script installs everything for you including the prerequisites. `install-linux.sh` will install the prerequisites, build the exectable and add it to path (cargo's path).
 ```
 git clone https://github.com/AMS003010/Singularity.git
-cd Singularity/scripts/install-linux.sh
+cd Singularity/scripts/
 chmod +x install-linux.sh
 mv install-linux.sh ../
 ./install-linux.sh
+cd ..
 ```
 
 Now to run the executable, type
@@ -54,17 +64,23 @@ Now to run the executable, type
 singularity
 ```
 
-### Run it as container
+<br/>
+
+### Run it as container 📦
+
+#### Prerequisites
+- docker
 
 ```
+git clone https://github.com/AMS003010/Singularity.git
+cd Singularity
 docker compose up
 ```
 
-> [!CAUTION]
->
-> The project is under active development, expect things to break every once in a while 😑.
-
 <br/>
+
+> [!CAUTION]
+> The project is under active development, expect things to break every once in a while 😑.
 
 > [!NOTE]
 > Inspired from [Glance](https://github.com/glanceapp/glance)
