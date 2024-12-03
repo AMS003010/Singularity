@@ -5,7 +5,7 @@ Find some preconfigured config files
 
 ### Sample 1
 
-![image](https://github.com/user-attachments/assets/fee46fc2-f848-443a-8588-118b6f8be1a6)
+![image](https://github.com/user-attachments/assets/d8d4732f-7adf-483c-aed3-241793e47179)
 ```
 theme: caffeine-rush
 theme_background_color: "#F1E9D2"
