@@ -13,7 +13,7 @@ footer: "black"
 ```
 
 ### neo-noir
-![image](https://github.com/user-attachments/assets/489b52c2-4f5a-4bbb-aadd-f4832f2cd9fe)
+![image](https://github.com/user-attachments/assets/d8d4732f-7adf-483c-aed3-241793e47179)
 
 ```
 theme: neo-noir
@@ -23,7 +23,7 @@ footer: "yellow"
 ```
 
 ### bloodline
-![image](https://github.com/user-attachments/assets/d7d03708-12ef-4190-8ada-2a9e651319b8)
+![image](https://github.com/user-attachments/assets/6d4b3e16-b99d-4eaf-93cc-a47011a3cb20)
 
 ```
 theme: bloodline
