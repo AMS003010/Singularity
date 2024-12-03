@@ -1,9 +1,7 @@
 use crate::feed::weather_data::{fetch_weather, fetch_svg_for_weather_code};
-use crate::internals::render::{read_html_file, render_final_template, TempData, insert_html_once, hydrate_val_once};
+use crate::internals::render::{read_html_file, render_final_template, TempData, insert_html_once, insert_html, hydrate_val_once};
 use crate::internals::singularity::WidgetError;
 use std::collections::HashMap;
-
-// TODO: The size injected into the weather svgs are not absorbing the values after final render 
 
 fn extract_time(timestamp: &str) -> &str {
     &timestamp[timestamp.len() - 5..]
@@ -11,7 +9,6 @@ fn extract_time(timestamp: &str) -> &str {
 
 fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WidgetError> {
     let path = fetch_svg_for_weather_code(code);
-    // println!("{}", path);
     match read_html_file(&path) {
         Ok(mut html) => {
             if *svg_count == 0 {
@@ -61,18 +58,13 @@ pub async fn weather_widget_handler(loc: String, _widget_theme: String) -> Resul
     weather_code.insert(99, "Thunderstorm");
 
     match fetch_weather("Bengaluru".to_string()).await {
-
-        // TODO: Error handling if API call goes wrong to return a fallback HTML
-
         Ok(data) => {
             match read_html_file("src/assets/templates/weather.html") {
                 Ok(inner_html) => {
                     let mut template_data: HashMap<String, TempData> = HashMap::new();
 
-                    // Injecting theme
-                    template_data.insert("widget_theme".to_string(),TempData::Text(loc.to_string()));
-                    template_data.insert("widgetHeading".to_string(),TempData::Text(_widget_theme.to_string()));
-
+                    template_data.insert("widget_theme".to_string(), TempData::Text(loc.to_string()));
+                    template_data.insert("widgetHeading".to_string(), TempData::Text(_widget_theme.to_string()));
                     template_data.insert("place".to_string(), TempData::Text("Bengaluru".to_string()));
 
                     let present_weather_code = data.hourly.weather_code[0] as i32;
@@ -118,7 +110,6 @@ pub async fn weather_widget_handler(loc: String, _widget_theme: String) -> Resul
                     template_data.insert("presentWeather".to_string(), TempData::Text(present_weather.to_string()));
 
                     let inner_html = render_final_template(temp_inner_html, template_data);
-                    // println!("{}", inner_html);
                     Ok(inner_html)
                 }
                 Err(e) => {
@@ -129,7 +120,44 @@ pub async fn weather_widget_handler(loc: String, _widget_theme: String) -> Resul
         }
         Err(e) => {
             eprintln!("Error in fetching weather: {}", e);
-            Err(WidgetError::NoHtmlToString)
+            
+            match read_html_file("src/assets/templates/weather.html") {
+                Ok(fallback_html) => {
+                    let mut template_data: HashMap<String, TempData> = HashMap::new();
+                    let mut temp_inner_html = fallback_html;
+                    
+                    template_data.insert("widget_theme".to_string(), TempData::Text(loc.to_string()));
+                    template_data.insert("widgetHeading".to_string(), TempData::Text(_widget_theme.to_string()));
+                    template_data.insert("place".to_string(), TempData::Text("---".to_string()));
+                    template_data.insert("presentWeather".to_string(), TempData::Text("Weather Unavailable ⚠️<br/><br/>".to_string()));
+                    template_data.insert("presentTemp".to_string(), TempData::Text("<br/>503 Network Error🔌".to_string()));
+
+                    temp_inner_html = insert_html(temp_inner_html, "&nbsp;".to_string());
+                    temp_inner_html = insert_html(temp_inner_html, "---".to_string());
+                    temp_inner_html = insert_html(temp_inner_html, "---".to_string());
+                    temp_inner_html = insert_html(temp_inner_html, "---".to_string());
+                    temp_inner_html = insert_html(temp_inner_html, "---".to_string());
+                    temp_inner_html = insert_html(temp_inner_html, "---".to_string());
+                    temp_inner_html = insert_html(temp_inner_html, "---".to_string());
+
+                    let times = ["--:--"; 6];
+                    let temps = [0; 6];
+
+                    for (i, time) in times.iter().enumerate() {
+                        let time_key = format!("time{}", i + 1);
+                        let temp_key = format!("temp{}", i + 1);
+                        template_data.insert(time_key, TempData::Text(time.to_string()));
+                        template_data.insert(temp_key, TempData::Number(temps[i]));
+                    }
+
+                    let temp_inner_html = render_final_template(temp_inner_html, template_data);
+                    Ok(temp_inner_html)
+                }
+                Err(_) => {
+                    eprintln!("Failed to read fallback weather HTML template");
+                    Err(WidgetError::NoHtmlToString)
+                }
+            }
         }
     }
 }
