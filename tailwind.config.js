@@ -4,7 +4,7 @@ module.exports = {
     'src/assets/templates/document.html',
     'src/assets/templates/page.html',
     'src/assets/templates/column.html',
-    'src/assets/templates/calender.html',
+    'src/assets/templates/calendar.html',
     'src/assets/templates/clock.html',
     'src/assets/templates/weather.html',
     'src/assets/svgs/clear_day.html',
