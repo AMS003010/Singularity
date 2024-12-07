@@ -97,6 +97,14 @@ docker compose up
 
 <br/>
 
+## Profiling
+```
+cargo install samply --locked
+cargo build && samply record target/release/singularity
+```
+
+<br/>
+
 > [!CAUTION]
 > The project is under active development, expect things to break every once in a while 😑.
 
