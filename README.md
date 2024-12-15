@@ -97,6 +97,12 @@ docker compose up
 
 <br/>
 
+## Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/cdf8cb589bbd9eacf7b0f133ba4744847e64e98c.svg "Repobeats analytics image")
+
+<br/>
+
 ## Profiling
 ```
 cargo install samply --locked
