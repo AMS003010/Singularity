@@ -1,11 +1,14 @@
 use std::fs;
 use std::io::Error as IOError;
+use std::sync::Arc;
+use std::time::Duration;
 use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
 use internals::port::find_available_port;
 use internals::render::final_yaml_to_html_render;
+use internals::cache::GenericWidgetCache;
 
 // use widgets::weather::weather_widget_handler;
 // use widgets::clock::clock_widget_handler;
@@ -44,18 +47,25 @@ mod internals {
     pub mod singularity;
     pub mod render;
     pub mod port;
+    pub mod cache;
 }
 
-async fn landerpage(_config: web::Data<Config>) -> impl Responder {
+async fn landerpage(
+    config: web::Data<Config>,
+    widget_cache: web::Data<Arc<GenericWidgetCache>>,
+) -> impl Responder {
     let final_html: String = String::new();
-    let rendered_html = final_yaml_to_html_render(&_config, final_html).await;
+    let rendered_html = final_yaml_to_html_render(&config, final_html, &widget_cache).await;
+    // println!("---> main.rs // landerpage");
     HttpResponse::Ok().content_type("text/html").body(rendered_html)
 }
 
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
+    let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(50)));
     let server = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(config.clone()))
+            .app_data(web::Data::new(widget_cache.clone()))
             .route("/", web::get().to(landerpage))
             .route("/home", web::get().to(landerpage))
             .service(fs_actix::Files::new("/static", "src/assets/static").show_files_listing())

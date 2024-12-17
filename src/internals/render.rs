@@ -5,10 +5,12 @@ use std::io::{self, Read};
 use std::future::Future;
 use std::pin::Pin;
 use std::time::Instant;
+use std::sync::Arc;
 use crate::widgets::weather::weather_widget_handler;
 use crate::widgets::clock::clock_widget_handler;
 use crate::widgets::calendar::calendar_widget_handler;
 use crate::internals::singularity::{Config, WidgetError};
+use crate::internals::cache::GenericWidgetCache;
 use actix_web::web::Data;
 
 #[derive(Debug)]
@@ -19,7 +21,7 @@ pub enum TempData {
     Text(String)
 }
 
-type WidgetHandler = fn(String, String) -> Pin<Box<dyn Future<Output = Result<String, WidgetError>> + Send>>;
+type WidgetHandler = fn(String, String, Data<Arc<GenericWidgetCache>>) -> Pin<Box<dyn Future<Output = Result<String, WidgetError>> + Send>>;
 
 impl fmt::Display for TempData {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -83,13 +85,18 @@ pub fn insert_html_once(outer: String, inner: String) -> String {
 
 // TODO: Adding a cache approach
 
-pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_html: String) -> String {
+pub async fn final_yaml_to_html_render(
+    data_config: &Data<Config>,
+    mut final_html: String,
+    widget_cache: &Data<Arc<GenericWidgetCache>>
+) -> String {
     let start = Instant::now();
+    // println!("---> render.rs // final_yaml_to_html_render // Start");
     let mut widget_map: HashMap<&str, WidgetHandler> = HashMap::new();
 
-    widget_map.insert("clock", |s1: String, s2: String| Box::pin(clock_widget_handler(s1, s2)));
-    widget_map.insert("weather", |s1: String, s2: String| Box::pin(weather_widget_handler(s1, s2)));
-    widget_map.insert("calendar", |s1: String, s2: String| Box::pin(calendar_widget_handler(s1, s2)));
+    widget_map.insert("clock", |s1: String, s2: String, cache: Data<Arc<GenericWidgetCache>>| Box::pin(clock_widget_handler(s1, s2, cache)));
+    widget_map.insert("weather", |s1: String, s2: String, cache: Data<Arc<GenericWidgetCache>>| Box::pin(weather_widget_handler(s1, s2, cache)));
+    widget_map.insert("calendar", |s1: String, s2: String, cache: Data<Arc<GenericWidgetCache>>| Box::pin(calendar_widget_handler(s1, s2, cache)));
 
     match read_html_file("src/assets/templates/document.html") {
         Ok(doc_html) => {
@@ -119,7 +126,11 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                                             let func = widget_map.get(widget.widget_type.as_str()).unwrap();
                                             async move {
                                                 // Add widget_heading as an additional argument
-                                                let mut widget_html = func(data_config.theme.to_string(), data_config.widget_heading.to_string()).await?;
+                                                let mut widget_html = func(
+                                                    data_config.theme.to_string(),
+                                                    data_config.widget_heading.to_string(),
+                                                    widget_cache.clone()
+                                                ).await?;
                                                 if row_index != column.widgets.len() - 1 {
                                                     widget_html = format!("{}{}", widget_html, "[[ Content ]]");
                                                 }
@@ -146,6 +157,7 @@ pub async fn final_yaml_to_html_render(data_config: &Data<Config>, mut final_htm
                 }
             }
             let duration = start.elapsed();
+            // println!("---> render.rs // final_yaml_to_html_render // Stop");
             println!("♾️  Rendered in {:?}", duration);
             final_html
         }

@@ -1,7 +1,10 @@
 use crate::feed::weather_data::{fetch_weather, fetch_svg_for_weather_code};
 use crate::internals::render::{read_html_file, render_final_template, TempData, insert_html_once, insert_html, hydrate_val_once};
 use crate::internals::singularity::WidgetError;
+use crate::internals::cache::GenericWidgetCache;
 use std::collections::HashMap;
+use std::sync::Arc;
+use actix_web::web;
 
 fn extract_time(timestamp: &str) -> &str {
     &timestamp[timestamp.len() - 5..]
@@ -26,7 +29,27 @@ fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WidgetError
     }
 }
 
-pub async fn weather_widget_handler(loc: String, _widget_theme: String) -> Result<String, WidgetError> {
+pub async fn weather_widget_handler(
+    loc: String,
+    _widget_theme: String,
+    _widget_cache: web::Data<Arc<GenericWidgetCache>>
+) -> Result<String, WidgetError> {
+    // println!("---> weather.rs // weather_widget_handler");
+    const WIDGET_NAME: &str = "weather_widget";
+
+    match _widget_cache.get(WIDGET_NAME).await {
+        Ok(Some(cached_html)) => {
+            println!("Cache hit for widget: {}", WIDGET_NAME);
+            return Ok(cached_html);
+        }
+        Ok(None) => {
+            println!("Cache miss for widget: {}", WIDGET_NAME);
+        }
+        Err(e) => {
+            eprintln!("Cache retrieval error: {}", e);
+        }
+    }
+
     let mut weather_code: HashMap<i32, &str> = HashMap::new();
     weather_code.insert(0, "Clear Sky");
     weather_code.insert(1, "Mainly Clear");
@@ -110,6 +133,14 @@ pub async fn weather_widget_handler(loc: String, _widget_theme: String) -> Resul
                     template_data.insert("presentWeather".to_string(), TempData::Text(present_weather.to_string()));
 
                     let inner_html = render_final_template(temp_inner_html, template_data);
+                    match _widget_cache.insert(WIDGET_NAME.to_string(), inner_html.clone()).await {
+                        Ok(_) => {
+                            println!("Widget '{}' added to cache", WIDGET_NAME);
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to insert widget into cache: {}", e);
+                        }
+                    }
                     Ok(inner_html)
                 }
                 Err(e) => {

@@ -98,6 +98,7 @@ async fn fetch_geocoding(place: String) -> Result<GeoResponse, WidgetError> {
     let geo_response: GeoResponse = serde_json::from_value(json_values)?;
     // let duration = start.elapsed();
     // println!("Geocoding API {:?}", duration);
+    // println!("---> weather_data.rs // fetch_geocoding");
     Ok(geo_response)
 }
 
@@ -118,10 +119,12 @@ async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, 
 
     // let duration = start.elapsed();
     // println!("Forecast API {:?}", duration);
+    // println!("---> weather_data.rs // fetch_weather_forecast");
     Ok(response)
 }
 
 pub async fn fetch_weather(loc: String) -> Result<WeatherForecast, WidgetError> {
+    // println!("---> weather_data.rs // fetch_weather");
     match fetch_geocoding(loc).await {
         Ok(response) => {
             // println!("DEBUG GOD: {:?}", response.results.first());
@@ -177,6 +180,7 @@ pub fn fetch_svg_for_weather_code(code: &i32) -> String {
     weather_svg.insert(96, "thunder.html");
     weather_svg.insert(99, "thunder.html");
 
+    // println!("---> weather_data.rs // fetch_svg_for_weather_code");
     // Check if the weather code exists in the HashMap
     if let Some(&svg_name) = weather_svg.get(code) {
         format!("src/assets/svgs/{}", svg_name)

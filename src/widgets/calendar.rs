@@ -1,11 +1,34 @@
 use crate::feed::calendar_data::{get_current_date, get_month, get_day_from_date};
 use crate::internals::render::{read_html_file, render_final_template, TempData};
 use crate::internals::singularity::WidgetError;
+use crate::internals::cache::GenericWidgetCache;
 use std::collections::HashMap;
+use std::sync::Arc;
+use actix_web::web;
 
 // TODO: Add a feature to be able to highlight ceratin dates for events
 
-pub async fn calendar_widget_handler(theme: String, _widget_theme: String) -> Result<String, WidgetError> {
+pub async fn calendar_widget_handler(
+    theme: String,
+    _widget_theme: String,
+    _widget_cache: web::Data<Arc<GenericWidgetCache>>
+) -> Result<String, WidgetError> {
+    // println!("---> calendar.rs // calendar_widget_handler");
+    const WIDGET_NAME: &str = "calendar_widget";
+
+    match _widget_cache.get(WIDGET_NAME).await {
+        Ok(Some(cached_html)) => {
+            println!("Cache hit for widget: {}", WIDGET_NAME);
+            return Ok(cached_html);
+        }
+        Ok(None) => {
+            println!("Cache miss for widget: {}", WIDGET_NAME);
+        }
+        Err(e) => {
+            eprintln!("Cache retrieval error: {}", e);
+        }
+    }
+
     match read_html_file("src/assets/templates/calendar.html") {
         Ok(wid_html) => {
             let mut template_data: HashMap<String, TempData> = HashMap::new();
@@ -54,6 +77,14 @@ pub async fn calendar_widget_handler(theme: String, _widget_theme: String) -> Re
                 None => {println!("No index found");}
             }
             let wid_html = render_final_template(wid_html, template_data);
+            match _widget_cache.insert(WIDGET_NAME.to_string(), wid_html.clone()).await {
+                Ok(_) => {
+                    println!("Widget '{}' added to cache", WIDGET_NAME);
+                }
+                Err(e) => {
+                    eprintln!("Failed to insert widget into cache: {}", e);
+                }
+            }
             Ok(wid_html)
         }
         Err(e) => {
