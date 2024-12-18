@@ -61,7 +61,7 @@ async fn landerpage(
 }
 
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
-    let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(50)));
+    let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(240)));
     let server = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(config.clone()))

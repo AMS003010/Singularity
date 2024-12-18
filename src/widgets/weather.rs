@@ -39,11 +39,11 @@ pub async fn weather_widget_handler(
 
     match _widget_cache.get(WIDGET_NAME).await {
         Ok(Some(cached_html)) => {
-            println!("Cache hit for widget: {}", WIDGET_NAME);
+            // Cache HIT
             return Ok(cached_html);
         }
         Ok(None) => {
-            println!("Cache miss for widget: {}", WIDGET_NAME);
+            // Cache MISS
         }
         Err(e) => {
             eprintln!("Cache retrieval error: {}", e);
@@ -135,7 +135,7 @@ pub async fn weather_widget_handler(
                     let inner_html = render_final_template(temp_inner_html, template_data);
                     match _widget_cache.insert(WIDGET_NAME.to_string(), inner_html.clone()).await {
                         Ok(_) => {
-                            println!("Widget '{}' added to cache", WIDGET_NAME);
+                            // Inserted to Cache
                         }
                         Err(e) => {
                             eprintln!("Failed to insert widget into cache: {}", e);
