@@ -5,6 +5,7 @@ use serde::{Serialize, Deserialize, Serializer, Deserializer};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
+#[allow(dead_code)]
 pub enum CacheError {
     #[error("Failed to acquire cache lock")]
     LockError,
@@ -61,9 +62,9 @@ impl GenericWidgetCache {
         }
     }
 
-    pub fn default() -> Self {
-        Self::new(Duration::from_secs(3600))
-    }
+    // pub fn default() -> Self {
+    //     Self::new(Duration::from_secs(3600))
+    // }
 
     pub async fn get(&self, widget_name: &str) -> Result<Option<String>, CacheError> {
         let now = Instant::now();
@@ -105,49 +106,49 @@ impl GenericWidgetCache {
         Ok(())
     }
 
-    pub async fn clear(&self) -> Result<(), CacheError> {
-        let now = Instant::now();
+    // pub async fn clear(&self) -> Result<(), CacheError> {
+    //     let now = Instant::now();
 
-        tokio::time::timeout(
-            self.lock_timeout, 
-            async {
-                let cache = self.cache.lock().await;
-                cache.retain(|_, entry| now.duration_since(entry.timestamp) < self.ttl);
-            }
-        )
-        .await
-        .map_err(|_| CacheError::TimeoutError)?;
+    //     tokio::time::timeout(
+    //         self.lock_timeout, 
+    //         async {
+    //             let cache = self.cache.lock().await;
+    //             cache.retain(|_, entry| now.duration_since(entry.timestamp) < self.ttl);
+    //         }
+    //     )
+    //     .await
+    //     .map_err(|_| CacheError::TimeoutError)?;
 
-        Ok(())
-    }
+    //     Ok(())
+    // }
 
-    pub async fn remove(&self, widget_name: &str) -> Result<(), CacheError> {
-        tokio::time::timeout(
-            self.lock_timeout, 
-            async {
-                let cache = self.cache.lock().await;
-                cache.remove(widget_name);
-            }
-        )
-        .await
-        .map_err(|_| CacheError::TimeoutError)?;
+    // pub async fn remove(&self, widget_name: &str) -> Result<(), CacheError> {
+    //     tokio::time::timeout(
+    //         self.lock_timeout, 
+    //         async {
+    //             let cache = self.cache.lock().await;
+    //             cache.remove(widget_name);
+    //         }
+    //     )
+    //     .await
+    //     .map_err(|_| CacheError::TimeoutError)?;
 
-        Ok(())
-    }
+    //     Ok(())
+    // }
 
-    pub async fn len(&self) -> Result<usize, CacheError> {
-        let result = tokio::time::timeout(
-            self.lock_timeout, 
-            async {
-                let cache = self.cache.lock().await;
-                cache.len()
-            }
-        )
-        .await
-        .map_err(|_| CacheError::TimeoutError)?;
+    // pub async fn len(&self) -> Result<usize, CacheError> {
+    //     let result = tokio::time::timeout(
+    //         self.lock_timeout, 
+    //         async {
+    //             let cache = self.cache.lock().await;
+    //             cache.len()
+    //         }
+    //     )
+    //     .await
+    //     .map_err(|_| CacheError::TimeoutError)?;
     
-        Ok(result)
-    }
+    //     Ok(result)
+    // }
 
     // Clone implementation
     pub fn clone(&self) -> Self {
