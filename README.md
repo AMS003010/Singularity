@@ -14,7 +14,7 @@
 ```
 
 ( PS: It's a customizable dashboard powered by a templating engine with data injection having parallelism to speed up rendering 😅. 
-Working on caching up stuff, in order to speed it up further⚡. All built in rust 🦀)
+With a Shared Cache to speed it up further⚡. All built in rust 🦀)
 
 <br/>
 
