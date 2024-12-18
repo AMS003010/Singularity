@@ -150,6 +150,12 @@ pub async fn weather_widget_handler(
             }
         }
         Err(e) => {
+
+            /*---------------------------------------------------------------------------------------------
+            *  Contains the Fallback HTML in case of network error ⚠️
+            *  No cache needed here, cause it might return fallback HTML even when network is stable 🛜🌐
+            *--------------------------------------------------------------------------------------------*/
+
             eprintln!("Error in fetching weather: {}", e);
             
             match read_html_file("src/assets/templates/weather.html") {
