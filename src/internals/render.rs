@@ -9,6 +9,7 @@ use std::sync::Arc;
 use crate::widgets::weather::weather_widget_handler;
 use crate::widgets::clock::clock_widget_handler;
 use crate::widgets::calendar::calendar_widget_handler;
+use crate::widgets::header::header_widget_handler;
 use crate::internals::singularity::{Config, WidgetError};
 use crate::internals::cache::GenericWidgetCache;
 use actix_web::web::Data;
@@ -108,6 +109,15 @@ pub async fn final_yaml_to_html_render(
                 template_data.insert("theme_background_color".to_string(),TempData::Text(data_config.theme_background_color.to_string()));
                 template_data.insert("footerTheme".to_string(),TempData::Text(data_config.footer.to_string()));
                 final_html = render_final_template(final_html, template_data);
+
+                let header_widget_render = match header_widget_handler(data_config.theme.to_string()).await {
+                    Ok(rendered_html) => rendered_html,
+                    Err(e) => {
+                        eprintln!("Error rendering header widget: {}", e);
+                        String::new() // fallback HTML for Header widget
+                    }
+                };
+                final_html = insert_html_once(final_html, header_widget_render);
 
                 for page in &data_config.pages {
                     if !page.columns.is_empty() {
