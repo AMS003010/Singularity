@@ -110,16 +110,27 @@ pub async fn final_yaml_to_html_render(
                 template_data.insert("footerTheme".to_string(),TempData::Text(data_config.footer.to_string()));
                 final_html = render_final_template(final_html, template_data);
 
-                let header_widget_render = match header_widget_handler(data_config.theme.to_string()).await {
-                    Ok(rendered_html) => rendered_html,
-                    Err(e) => {
-                        eprintln!("Error rendering header widget: {}", e);
-                        String::new() // fallback HTML for Header widget
-                    }
-                };
-                final_html = insert_html_once(final_html, header_widget_render);
-
                 for page in &data_config.pages {
+
+                    match page.header_widget {
+                        Some(true) => {
+                            let header_widget_render = match header_widget_handler(data_config.theme.to_string()).await {
+                                Ok(rendered_html) => rendered_html,
+                                Err(e) => {
+                                    eprintln!("Error rendering header widget: {}", e);
+                                    String::new() // fallback HTML for Header widget
+                                }
+                            };
+                            final_html = insert_html_once(final_html, header_widget_render);
+                        },
+                        Some(false) => {
+                            final_html = insert_html_once(final_html, " ".to_string());
+                        },
+                        None => {
+                            final_html = insert_html_once(final_html, " ".to_string());
+                        }
+                    }
+
                     if !page.columns.is_empty() {
                         for (col_index, column) in page.columns.iter().enumerate() {
                             match read_html_file("src/assets/templates/column.html") {

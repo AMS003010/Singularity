@@ -4,6 +4,7 @@ widget_heading: "white"
 footer: "yellow"
 pages:
   - name: Home
+    header-widget: true
     columns:
       - size: small
         widgets:

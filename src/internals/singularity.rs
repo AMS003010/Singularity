@@ -30,6 +30,8 @@ pub struct Config {
 #[derive(Debug, Deserialize, Clone)]
 pub struct Page {
     pub name: String,
+    #[serde(rename = "header-widget")]
+    pub header_widget: Option<bool>,
     pub columns: Vec<Column>,
 }
 
