@@ -7,6 +7,7 @@ module.exports = {
     'src/assets/templates/calendar.html',
     'src/assets/templates/clock.html',
     'src/assets/templates/weather.html',
+    'src/assets/templates/header.html',
     'src/assets/svgs/clear_day.html',
     'src/assets/svgs/cloudy.html',
     'src/assets/svgs/drizzle.html',

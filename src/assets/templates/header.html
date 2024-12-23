@@ -1,0 +1,178 @@
+<div class="header-box flex gap-4 py-8">
+  <img
+    src="/static/logo32.gif"
+    class="w-32 h-auto rounded-lg"
+  />
+  <div class="{{ widget_theme }} w-[100%] h-[8rem] border-[3px] border-double cursor-pointer rounded-lg p-2">
+    <div class="flex h-[100%] justify-between gap-4">
+      <div class="grid grid-rows-2 grid-flow-col gap-4 pb-2">
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount1">{{ mount1 }}</div>
+            <div class="text-xs" id="avai_spc1">{{ available_space1 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount2">{{ mount2 }}</div>
+            <div class="text-xs" id="avai_spc2">{{ available_space2 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount3">{{ mount3 }}</div>
+            <div class="text-xs" id="avai_spc3">{{ available_space3 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount4">{{ mount4 }}</div>
+            <div class="text-xs" id="avai_spc4">{{ available_space4 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount5">{{ mount5 }}</div>
+            <div class="text-xs" id="avai_spc5">{{ available_space5 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount6">{{ mount6 }}</div>
+            <div class="text-xs" id="avai_spc6">{{ available_space6 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount7">{{ mount7 }}</div>
+            <div class="text-xs" id="avai_spc7">{{ available_space7 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+        <div class="{{ widget_theme }} drive-shadow w-[15rem] h-12 rounded-lg p-2">
+          <div class="flex justify-between items-center">
+            <div id="mount8">{{ mount8 }}</div>
+            <div class="text-xs" id="avai_spc8">{{ available_space8 }}</div>
+          </div>
+          <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
+        </div>
+      </div>        
+      <div class="flex flex-col justify-between items-start gap-2 p-2">
+
+        <div class="w-[100%] flex justify-between items-center">
+          <div class="flex gap-1 justify-center items-center">
+            <div class="text-lg text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microchip size-5">
+                <path d="M18 12h2"/>
+                <path d="M18 16h2"/>
+                <path d="M18 20h2"/>
+                <path d="M18 4h2"/>
+                <path d="M18 8h2"/>
+                <path d="M4 12h2"/>
+                <path d="M4 16h2"/>
+                <path d="M4 20h2"/>
+                <path d="M4 4h2"/>
+                <path d="M4 8h2"/>
+                <path d="M8 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-1.5c-.276 0-.494.227-.562.495a2 2 0 0 1-3.876 0C9.994 2.227 9.776 2 9.5 2z"/>
+              </svg>
+            </div>
+            <div id="cpu_usage">{{ cpu_usage }}%</div>
+          </div>
+          <div class="flex gap-1 justify-center items-center">
+            <div class="text-lg text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu size-5">
+                <rect width="16" height="16" x="4" y="4" rx="2"/>
+                <rect width="6" height="6" x="9" y="9" rx="1"/>
+                <path d="M15 2v2"/>
+                <path d="M15 20v2"/>
+                <path d="M2 15h2"/>
+                <path d="M2 9h2"/>
+                <path d="M20 15h2"/>
+                <path d="M20 9h2"/>
+                <path d="M9 2v2"/>
+                <path d="M9 20v2"/>
+              </svg>
+            </div>
+            <div>{{ cpu_numbers }}</div>
+          </div>
+          <div class="flex gap-1 justify-center items-center" id="wifi_status">{{ wifi_status }}</div>
+        </div>
+        <div class="flex flex-col h-max items-start gap-1">
+          <div class="flex gap-2 justify-start items-center text-sm">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ghost size-5">
+                <path d="M9 10h.01"/>
+                <path d="M15 10h.01"/>
+                <path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/>
+              </svg>
+            </div>
+            <div class="text-xs" id="sys_os_info">{{ os_info }}</div>
+          </div>
+          <div class="flex gap-2 justify-start items-center text-sm">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-laptop-minimal size-5">
+                <rect width="18" height="12" x="3" y="4" rx="2" ry="2"/>
+                <line x1="2" x2="22" y1="20" y2="20"/>
+              </svg>
+            </div>
+            <div class="text-xs" id="sys_host_name">{{ system_info_hostname }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    async function fetchSystemStats() {
+      try {
+        const response = await fetch("http://127.0.0.1:8080/stats");
+        const data = await response.json();
+
+        document.getElementById("cpu_usage").innerText = `${data.cpu_usage.toFixed(2)}%`;
+        document.getElementById("sys_host_name").innerText = data.system_info.host_name;
+        document.getElementById("sys_os_info").innerText = `${data.system_info.os_name} ${data.system_info.os_version}`;
+  
+        const diskKeys = [
+          "mount1",
+          "avai_spc1",
+          "mount2",
+          "avai_spc2",
+          "mount3",
+          "avai_spc3",
+          "mount4",
+          "avai_spc4",
+          "mount5",
+          "avai_spc5",
+          "mount6",
+          "avai_spc6",
+          "mount7",
+          "avai_spc7",
+          "mount8",
+          "avai_spc8"
+        ];
+  
+        data.disks.forEach((disk, index) => {
+          if (index < 8) {
+            document.getElementById(`mount${index + 1}`).innerText = disk.mount;
+            document.getElementById(`avai_spc${index + 1}`).innerText = `${(disk.available_space / 1e9).toFixed(2)} GB`;
+          }
+        });
+
+        const wifiStatus = data.network.some((network) => network.interface_name === "Wi-Fi")
+          ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wifi size-5"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg>`
+          : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wifi-off size-5"><path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/></svg>`;
+        document.getElementById("wifi_status").innerHTML = wifiStatus;
+      } catch (error) {
+        console.error("Failed to fetch system stats:", error);
+      }
+    }
+ 
+    fetchSystemStats();
+    setInterval(fetchSystemStats, 1000);
+  </script>  
+</div>

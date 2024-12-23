@@ -5,10 +5,13 @@ use std::time::Duration;
 use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
+use serde::Serialize;
 use internals::singularity::Config;
 use internals::port::find_available_port;
 use internals::render::final_yaml_to_html_render;
 use internals::cache::GenericWidgetCache;
+use feed::header_data::get_system_stats;
+use sysinfo::{System, SystemExt, CpuExt, DiskExt, NetworksExt, NetworkExt};
 
 // use widgets::weather::weather_widget_handler;
 // use widgets::clock::clock_widget_handler;
@@ -29,18 +32,22 @@ use internals::cache::GenericWidgetCache;
 
 //TODO: ---FUTURE--- Replacing Actix-web and hyper with tokio
 
+//TODO: Try checking if weather widget is already there then dont inject the time updation script
+
 //TODO: Maybe add a position system to make the widget injection faster
 
 mod widgets {
     pub mod weather;
     pub mod clock;
     pub mod calendar;
+    pub mod header;
 }
 
 mod feed {
     pub mod weather_data;
     pub mod clock_data;
     pub mod calendar_data;
+    pub mod header_data;
 }
 
 mod internals {
@@ -49,6 +56,42 @@ mod internals {
     pub mod port;
     pub mod cache;
 }
+
+#[derive(Serialize)]
+struct SystemStats {
+    total_memory: u64,
+    used_memory: u64,
+    total_swap: u64,
+    used_swap: u64,
+    cpu_usage: f32,
+    disks: Vec<DiskInfo>,
+    network: Vec<NetworkInfo>,
+    system_info: SystemInfo,
+}
+
+#[derive(Serialize)]
+struct DiskInfo {
+    name: String,
+    total_space: u64,
+    available_space: u64,
+}
+
+#[derive(Serialize)]
+struct NetworkInfo {
+    interface_name: String,
+    received_bytes: u64,
+    transmitted_bytes: u64,
+}
+
+#[derive(Serialize)]
+struct SystemInfo {
+    os_name: String,
+    os_version: String,
+    kernel_version: String,
+    uptime: u64,
+    hostname: String,
+}
+
 
 async fn landerpage(
     config: web::Data<Config>,
@@ -60,14 +103,21 @@ async fn landerpage(
     HttpResponse::Ok().content_type("text/html").body(rendered_html)
 }
 
+async fn stats_page() -> impl Responder {
+    let mut stats = get_system_stats();
+    web::Json(stats)
+}
+
+
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
-    let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(240)));
+    let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(5)));
     let server = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(config.clone()))
             .app_data(web::Data::new(widget_cache.clone()))
             .route("/", web::get().to(landerpage))
             .route("/home", web::get().to(landerpage))
+            .route("/stats", web::get().to(stats_page))
             .service(fs_actix::Files::new("/static", "src/assets/static").show_files_listing())
     })
     .bind(format!("0.0.0.0:{}", port))?
