@@ -5,13 +5,11 @@ use std::time::Duration;
 use actix_files as fs_actix;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde_yaml::Result as SerdeResult;
-use serde::Serialize;
 use internals::singularity::Config;
 use internals::port::find_available_port;
 use internals::render::final_yaml_to_html_render;
 use internals::cache::GenericWidgetCache;
 use feed::header_data::get_system_stats;
-use sysinfo::{System, SystemExt, CpuExt, DiskExt, NetworksExt, NetworkExt};
 
 // use widgets::weather::weather_widget_handler;
 // use widgets::clock::clock_widget_handler;
@@ -56,42 +54,6 @@ mod internals {
     pub mod port;
     pub mod cache;
 }
-
-#[derive(Serialize)]
-struct SystemStats {
-    total_memory: u64,
-    used_memory: u64,
-    total_swap: u64,
-    used_swap: u64,
-    cpu_usage: f32,
-    disks: Vec<DiskInfo>,
-    network: Vec<NetworkInfo>,
-    system_info: SystemInfo,
-}
-
-#[derive(Serialize)]
-struct DiskInfo {
-    name: String,
-    total_space: u64,
-    available_space: u64,
-}
-
-#[derive(Serialize)]
-struct NetworkInfo {
-    interface_name: String,
-    received_bytes: u64,
-    transmitted_bytes: u64,
-}
-
-#[derive(Serialize)]
-struct SystemInfo {
-    os_name: String,
-    os_version: String,
-    kernel_version: String,
-    uptime: u64,
-    hostname: String,
-}
-
 
 async fn landerpage(
     config: web::Data<Config>,
