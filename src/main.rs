@@ -8,7 +8,7 @@ use serde_yaml::Result as SerdeResult;
 use internals::singularity::Config;
 use internals::port::find_available_port;
 use internals::render::final_yaml_to_html_render;
-use internals::cache::GenericWidgetCache;
+use internals::cache::{GenericWidgetCache, convert_cache_ttl_to_seconds};
 use feed::header_data::get_system_stats;
 
 // use widgets::weather::weather_widget_handler;
@@ -66,13 +66,13 @@ async fn landerpage(
 }
 
 async fn stats_page() -> impl Responder {
-    let mut stats = get_system_stats();
+    let stats = get_system_stats();
     web::Json(stats)
 }
 
-
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
-    let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(5)));
+    let ttl = convert_cache_ttl_to_seconds(config.cache.clone().unwrap_or_default());
+    let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(ttl)));
     let server = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(config.clone()))

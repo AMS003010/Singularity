@@ -2,6 +2,7 @@ theme: neo-noir
 theme_background_color: "black"
 widget_heading: "white"
 footer: "yellow"
+cache: 0.15m
 pages:
   - name: Home
     header-widget: true

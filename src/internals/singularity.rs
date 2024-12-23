@@ -24,6 +24,7 @@ pub struct Config {
     pub theme_background_color: String,
     pub widget_heading: String,
     pub footer: String,
+    pub cache: Option<String>,
     pub pages: Vec<Page>,
 }
 

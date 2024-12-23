@@ -175,3 +175,33 @@ impl std::clone::Clone for GenericWidgetCache {
         self.clone()
     }
 }
+
+pub fn convert_cache_ttl_to_seconds(ttl: String) -> u64 {
+    if ttl.len() < 2 {
+        println!("\nNo Cache TTL mentioned !!");
+        println!("Using default of 5 Mins (5m)\n");
+        return 300;
+    }
+
+    let time: f32 = ttl[0..ttl.len() - 1].parse().unwrap_or(0.0);
+    let unit = ttl.chars().last().unwrap();
+
+    let ttl_in_sec = match unit {
+        'h' => (time * 3600.0) as u64,
+        'm' => (time * 60.0) as u64,
+        _ => {
+            println!("\nInvalid cache TTL format 2nd !!");
+            println!("Using default of 5 Mins (5m)\n");
+            return 300; // Default to 5 minutes
+        }
+    };
+    
+    if ttl_in_sec > 10 {
+        ttl_in_sec
+    }
+    else {
+        println!("\nUse a minimum TTL of 10 seconds !!");
+        println!("Using default of 5 Mins (5m)\n");
+        300
+    }
+}
