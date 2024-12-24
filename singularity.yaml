@@ -19,6 +19,25 @@ pages:
           - type: weather
             location: London, United Kingdom
           - type: calendar
+  - name: Juice
+    columns:
+      - size: small
+        widgets:
+          - type: clock
+      - size: small
+        widgets:
+          - type: calendar
+      - size: small
+        widgets:
+          - type: weather
+            location: London, United Kingdom
+  - name: Bun
+    header-widget: true
+    columns:
+      - size: small
+        widgets:
+          - type: weather
+            location: London, United Kingdom
           # - type: rss
           #   feeds:
           #     - url: https://ciechanow.ski/atom.xml

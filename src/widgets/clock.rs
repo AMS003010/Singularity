@@ -22,20 +22,20 @@ pub async fn clock_widget_handler(
     _widget_theme: String,
     _widget_cache: web::Data<Arc<GenericWidgetCache>>
 ) -> Result<String, WidgetError> {
-    const WIDGET_NAME: &str = "clock_widget";
+    // const WIDGET_NAME: &str = "clock_widget";
 
-    match _widget_cache.get(WIDGET_NAME).await {
-        Ok(Some(cached_html)) => {
-            // Cache HIT
-            return Ok(cached_html);
-        }
-        Ok(None) => {
-            // Cache MISS
-        }
-        Err(e) => {
-            eprintln!("Cache retrieval error: {}", e);
-        }
-    }
+    // match _widget_cache.get(WIDGET_NAME).await {
+    //     Ok(Some(cached_html)) => {
+    //         // Cache HIT
+    //         return Ok(cached_html);
+    //     }
+    //     Ok(None) => {
+    //         // Cache MISS
+    //     }
+    //     Err(e) => {
+    //         eprintln!("Cache retrieval error: {}", e);
+    //     }
+    // }
 
     let places = ["London", "Tokyo", "Delhi", "Los Angeles"];
     match read_html_file("src/assets/templates/clock.html") {
@@ -69,14 +69,14 @@ pub async fn clock_widget_handler(
             // Render final HTML
             let rendered_html = render_final_template(inner_html, template_data);
 
-            match _widget_cache.insert(WIDGET_NAME.to_string(), rendered_html.clone()).await {
-                Ok(_) => {
-                    // Inserted to Cache
-                }
-                Err(e) => {
-                    eprintln!("Failed to insert widget into cache: {}", e);
-                }
-            }
+            // match _widget_cache.insert(WIDGET_NAME.to_string(), rendered_html.clone()).await {
+            //     Ok(_) => {
+            //         // Inserted to Cache
+            //     }
+            //     Err(e) => {
+            //         eprintln!("Failed to insert widget into cache: {}", e);
+            //     }
+            // }
 
             Ok(rendered_html)
         }

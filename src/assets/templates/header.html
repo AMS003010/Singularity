@@ -1,4 +1,4 @@
-<div class="header-box flex gap-4 py-8">
+<div class="header-box animated-div preload flex gap-4 py-8">
   <img
     src="/static/logo32.gif"
     class="w-32 h-auto rounded-lg"
@@ -130,7 +130,7 @@
   <script>
     async function fetchSystemStats() {
       try {
-        const response = await fetch("http://127.0.0.1:8080/stats");
+        const response = await fetch("{{ singularity_link }}");
         const data = await response.json();
 
         document.getElementById("cpu_usage").innerText = `${data.cpu_usage.toFixed(2)}%`;
@@ -159,7 +159,7 @@
         data.disks.forEach((disk, index) => {
           if (index < 8) {
             document.getElementById(`mount${index + 1}`).innerText = disk.mount;
-            document.getElementById(`avai_spc${index + 1}`).innerText = `${(disk.available_space / 1e9).toFixed(2)} GB`;
+            document.getElementById(`avai_spc${index + 1}`).innerText = `${(disk.available_space / 1e9).toFixed(2)} GB Free`;
           }
         });
 

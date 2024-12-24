@@ -26,6 +26,7 @@ pub struct Config {
     pub footer: String,
     pub cache: Option<String>,
     pub pages: Vec<Page>,
+    pub port: Option<u16>,
 }
 
 #[derive(Debug, Deserialize, Clone)]

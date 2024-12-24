@@ -19,6 +19,10 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 /* Hide scrollbars but still allow scrolling */
 .scrollable {
   overflow: auto; /* Allow scrolling */
@@ -39,6 +43,17 @@ body {
   -ms-overflow-style: none; /* Hide scrollbar */
 }
 
+.animated-div {
+  opacity: 1;
+  transform: translateY(0); /* Only vertical translation */
+  transition: all 0.5s ease-out;
+}
+
+/* Preload animation */
+.animated-div.preload {
+  opacity: 0;
+  transform: translateY(20px); /* Starts 20px lower */
+}
 
 .widget-shadow {
   box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;

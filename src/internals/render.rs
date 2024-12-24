@@ -89,7 +89,8 @@ pub fn insert_html_once(outer: String, inner: String) -> String {
 pub async fn final_yaml_to_html_render(
     data_config: &Data<Config>,
     mut final_html: String,
-    widget_cache: &Data<Arc<GenericWidgetCache>>
+    widget_cache: &Data<Arc<GenericWidgetCache>>,
+    render_page_name: String
 ) -> String {
     let start = Instant::now();
     // println!("---> render.rs // final_yaml_to_html_render // Start");
@@ -103,74 +104,89 @@ pub async fn final_yaml_to_html_render(
         Ok(doc_html) => {
             final_html = doc_html;
             if !data_config.pages.is_empty() {
+
                 // Injecting theme
                 let mut template_data: HashMap<String, TempData> = HashMap::new();
                 template_data.insert("widget_theme".to_string(),TempData::Text(data_config.theme.to_string()));
                 template_data.insert("theme_background_color".to_string(),TempData::Text(data_config.theme_background_color.to_string()));
                 template_data.insert("footerTheme".to_string(),TempData::Text(data_config.footer.to_string()));
+                template_data.insert("page_title".to_string(),TempData::Text(render_page_name.to_string()));
                 final_html = render_final_template(final_html, template_data);
+
+                //Injecting page links
+                let mut link_final_render = String::new();
+                for page in &data_config.pages {
+                    let link_template = format!("<a href=\"/pages/{}\" class=\"font-bold hover:text-white cursor-pointer text-gray-700\">:<span class=\"shuffle cursor-pointer\">{}</span></a>", page.name, page.name);
+                    link_final_render.push_str(&link_template);
+                }
+                final_html = insert_html_once(final_html, link_final_render);
 
                 for page in &data_config.pages {
 
-                    match page.header_widget {
-                        Some(true) => {
-                            let header_widget_render = match header_widget_handler(data_config.theme.to_string()).await {
-                                Ok(rendered_html) => rendered_html,
-                                Err(e) => {
-                                    eprintln!("Error rendering header widget: {}", e);
-                                    String::new() // fallback HTML for Header widget
-                                }
-                            };
-                            final_html = insert_html_once(final_html, header_widget_render);
-                        },
-                        Some(false) => {
-                            final_html = insert_html_once(final_html, " ".to_string());
-                        },
-                        None => {
-                            final_html = insert_html_once(final_html, " ".to_string());
+                    if page.name == render_page_name {
+
+                        match page.header_widget {
+                            Some(true) => {
+                                let header_widget_render = match header_widget_handler(data_config.theme.to_string()).await {
+                                    Ok(rendered_html) => rendered_html,
+                                    Err(e) => {
+                                        eprintln!("Error rendering header widget: {}", e);
+                                        String::new() // fallback HTML for Header widget
+                                    }
+                                };
+                                final_html = insert_html_once(final_html, header_widget_render);
+                                let port = format!("http://127.0.0.1:{}/stats", data_config.clone().port.unwrap_or(8080).to_string());
+                                final_html = hydrate_val_once(final_html, "singularity_link".to_string(), port); 
+                            },
+                            Some(false) => {
+                                final_html = insert_html_once(final_html, " ".to_string());
+                            },
+                            None => {
+                                final_html = insert_html_once(final_html, " ".to_string());
+                            }
                         }
-                    }
 
-                    if !page.columns.is_empty() {
-                        for (col_index, column) in page.columns.iter().enumerate() {
-                            match read_html_file("src/assets/templates/column.html") {
-                                Ok(mut col_html) => {
-                                    if col_index != page.columns.len() - 1 {
-                                        col_html = format!("{}{}", col_html, "[[ SURPRISE ]]");
-                                    }
-                                    final_html = insert_html(final_html, col_html);
-
-                                    // Collect all widget futures
-                                    let widget_futures: Vec<_> = column.widgets.iter()
-                                        .enumerate()
-                                        .map(|(row_index, widget)| {
-                                            let func = widget_map.get(widget.widget_type.as_str()).unwrap();
-                                            async move {
-                                                // Add widget_heading as an additional argument
-                                                let mut widget_html = func(
-                                                    data_config.theme.to_string(),
-                                                    data_config.widget_heading.to_string(),
-                                                    widget_cache.clone()
-                                                ).await?;
-                                                if row_index != column.widgets.len() - 1 {
-                                                    widget_html = format!("{}{}", widget_html, "[[ Content ]]");
-                                                }
-                                                Ok::<String, WidgetError>(widget_html)
-                                            }
-                                        }).collect();
-
-                                    // Execute all widget futures in parallel
-                                    match join_all(widget_futures).await.into_iter().collect::<Result<Vec<_>, _>>() {
-                                        Ok(widget_htmls) => {
-                                            for widget_html in widget_htmls {
-                                                final_html = insert_html(final_html, widget_html);
-                                            }
+                        if !page.columns.is_empty() {
+                            for (col_index, column) in page.columns.iter().enumerate() {
+                                match read_html_file("src/assets/templates/column.html") {
+                                    Ok(mut col_html) => {
+                                        if col_index != page.columns.len() - 1 {
+                                            col_html = format!("{}{}", col_html, "[[ SURPRISE ]]");
                                         }
-                                        Err(e) => println!("Error rendering widgets: {}", e),
+                                        final_html = insert_html(final_html, col_html);
+
+                                        // Collect all widget futures
+                                        let widget_futures: Vec<_> = column.widgets.iter()
+                                            .enumerate()
+                                            .map(|(row_index, widget)| {
+                                                let func = widget_map.get(widget.widget_type.as_str()).unwrap();
+                                                async move {
+                                                    // Add widget_heading as an additional argument
+                                                    let mut widget_html = func(
+                                                        data_config.theme.to_string(),
+                                                        data_config.widget_heading.to_string(),
+                                                        widget_cache.clone()
+                                                    ).await?;
+                                                    if row_index != column.widgets.len() - 1 {
+                                                        widget_html = format!("{}{}", widget_html, "[[ Content ]]");
+                                                    }
+                                                    Ok::<String, WidgetError>(widget_html)
+                                                }
+                                            }).collect();
+
+                                        // Execute all widget futures in parallel
+                                        match join_all(widget_futures).await.into_iter().collect::<Result<Vec<_>, _>>() {
+                                            Ok(widget_htmls) => {
+                                                for widget_html in widget_htmls {
+                                                    final_html = insert_html(final_html, widget_html);
+                                                }
+                                            }
+                                            Err(e) => println!("Error rendering widgets: {}", e),
+                                        }
                                     }
-                                }
-                                Err(e) => {
-                                    eprintln!("Error in page HTML file: {}", e);
+                                    Err(e) => {
+                                        eprintln!("Error in page HTML file: {}", e);
+                                    }
                                 }
                             }
                         }

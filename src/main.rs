@@ -11,14 +11,6 @@ use internals::render::final_yaml_to_html_render;
 use internals::cache::{GenericWidgetCache, convert_cache_ttl_to_seconds};
 use feed::header_data::get_system_stats;
 
-// use widgets::weather::weather_widget_handler;
-// use widgets::clock::clock_widget_handler;
-// use widgets::calendar::calendar_widget_handler;
-
-//TODO: Adding a System config Page
-
-//TODO: Remove the warnings
-
 //TODO: Implementing COW (Clone On Write) wherever possible
 
 //TODO: Implementing a initial Static HTML render like React / Nextjs and then rehydrate it
@@ -55,31 +47,40 @@ mod internals {
     pub mod cache;
 }
 
-async fn landerpage(
-    config: web::Data<Config>,
-    widget_cache: web::Data<Arc<GenericWidgetCache>>,
-) -> impl Responder {
-    let final_html: String = String::new();
-    let rendered_html = final_yaml_to_html_render(&config, final_html, &widget_cache).await;
-    // println!("---> main.rs // landerpage");
-    HttpResponse::Ok().content_type("text/html").body(rendered_html)
-}
-
 async fn stats_page() -> impl Responder {
     let stats = get_system_stats();
     web::Json(stats)
 }
 
+async fn render_page(
+    page_name: web::Path<String>,
+    config: web::Data<Config>,
+    widget_cache: web::Data<Arc<GenericWidgetCache>>,   
+) -> impl Responder {
+    // Find the requested page in the configuration
+    let page_name = page_name.into_inner();
+    if let Some(page) = config.pages.iter().find(|p| p.name == page_name) {
+        let final_html = String::new();
+        let rendered_html = final_yaml_to_html_render(&config, final_html, &widget_cache, page.name.clone()).await;
+        HttpResponse::Ok().content_type("text/html").body(rendered_html)
+    } else {
+        HttpResponse::NotFound().body(format!("Page '{}' not found", page_name))
+    }
+}
+
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
     let ttl = convert_cache_ttl_to_seconds(config.cache.clone().unwrap_or_default());
     let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(ttl)));
+
+    // Clone the config for use inside the closure
+    let config_clone = config.clone();
+
     let server = HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(config.clone()))
+            .app_data(web::Data::new(config_clone.clone()))
             .app_data(web::Data::new(widget_cache.clone()))
-            .route("/", web::get().to(landerpage))
-            .route("/home", web::get().to(landerpage))
             .route("/stats", web::get().to(stats_page))
+            .route("/pages/{page_name}", web::get().to(render_page))
             .service(fs_actix::Files::new("/static", "src/assets/static").show_files_listing())
     })
     .bind(format!("0.0.0.0:{}", port))?
@@ -87,10 +88,19 @@ async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
     .shutdown_timeout(60)
     .run();
 
-    println!("🌀 Singularity running at http://127.0.0.1:{}\n", port);
+    if let Some(first_page) = config.pages.get(0) {
+        println!(
+            "🌀 Singularity running at http://127.0.0.1:{}/pages/{}\n",
+            port, first_page.name
+        );
+    } else {
+        println!("🟤 Mention at least 1 page in the config !!");
+    }
+
     server.await.unwrap();
     Ok(())
 }
+
 
 #[actix_web::main]
 async fn main() -> Result<(), IOError> {
@@ -111,9 +121,10 @@ async fn main() -> Result<(), IOError> {
 
     let port = find_available_port(8080);
     match singularity {
-        Ok(config) => {
+        Ok(mut config) => {
             // println!("After parsing -> {:?}", config);
             
+            config.port = Some(port);
             println!("🟡 Config file parsed successfully ⚙️");
             println!("\n🌀 Theme: {}", config.theme);
             println!("🌀 Background color: {}", config.theme_background_color);
