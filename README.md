@@ -44,7 +44,7 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 * _Will be adding more in the near (distant) future_
 
 ### Cache
-A shared cache is present which is enabled by default with a TTL (`T`ime `T`o `L`ine) of 5 minutes. So all the widgets with cache support will be cached for a duration of 5 minutes after which it will be refetched.
+A shared cache is present which is enabled by default with a TTL (Time To Live) of 5 minutes. So all the widgets with cache support will be cached for a duration of 5 minutes after which it will be refetched.
 
 ```
 theme: neo-noir
@@ -68,9 +68,14 @@ The `TTL` can be changed by changing the `cache` attribute in `singularity.yaml`
 <br/>
 
 ### Header Widget
-It is a special widget which can be enabled with `header-widget: true` for each page. It is by default set to `false` and is positioned by default after the the navbar in each page. It can be set specifically for each page. 
+It is a special monitoring widget which can be enabled with `header-widget: true` for each page. It is by default set to `false` and is positioned by default after the the navbar in each page. It can be set specifically for each page. 
 
-It shows the `mounts` available in the system along with the disk space available for each drive. It also shows the system stats. 
+It shows the `mounts` available in the system along with the disk space available in `GB` for each drive. It also shows the system stats like
+* CPU Usage 🖥
+* No. of Cores 🧇
+* Wi-Fi status 🛜
+* OS 💽
+* Username 🖥️
 
 <br/>
 
