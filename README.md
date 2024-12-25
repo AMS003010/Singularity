@@ -70,6 +70,9 @@ The `TTL` can be changed by changing the `cache` attribute in `singularity.yaml`
 ### Header Widget
 It is a special monitoring widget which can be enabled with `header-widget: true` for each page. It is by default set to `false` and is positioned by default after the the navbar in each page. It can be set specifically for each page. 
 
+![image](https://github.com/user-attachments/assets/b74282ed-fa32-4781-98d1-dbe9dc94e716)
+
+
 It shows the `mounts` available in the system along with the disk space available in `GB` for each drive. It also shows the system stats like
 * CPU Usage 🖥
 * No. of Cores 🧇
