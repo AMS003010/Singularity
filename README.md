@@ -43,6 +43,35 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 * Header
 * _Will be adding more in the near (distant) future_
 
+### Cache
+A shared cache is present which is enabled by default with a TTL (`T`ime `T`o `L`ine) of 5 minutes. So all the widgets with cache support will be cached for a duration of 5 minutes after which it will be refetched.
+
+```
+theme: neo-noir
+theme_background_color: "black"
+widget_heading: "white"
+footer: "yellow"
+cache: 5m
+```
+
+The `TTL` can be changed by changing the `cache` attribute in `singularity.yaml`. Supported formats
+* `10m` : Here `TTL` is set to 10 minutes
+* `2h` : Here `TTL` is set to 2 hours
+* `0.5h` : Here `TTL` is set to 30 minutes
+* `0.5m` : Here `TTL` is set to 30 seconds
+
+<br/>
+
+> [!NOTE]
+> Have a minimum `TTL` of 10 seconds. If it is `< 10 seconds` then it will use the system default of `5m`.
+
+<br/>
+
+### Header Widget
+It is a special widget which can be enabled with `header-widget: true` for each page. It is by default set to `false` and is positioned by default after the the navbar in each page. It can be set specifically for each page. 
+
+It shows the `mounts` available in the system along with the disk space available for each drive. It also shows the system stats. 
+
 <br/>
 
 ## Install
