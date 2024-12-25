@@ -63,6 +63,14 @@ body::-webkit-scrollbar {
   box-shadow: 1px 1px 0px 0px, 1px 1px 0px 0px, 1px 1px 0px 0px, 1px 1px 0px 0px, 3px 3px 0px 0px;
 }
 
+.page-selected {
+  border-bottom-color: white;
+  border-bottom-width: 2px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  color: white;
+}
+
 .weatherContainer {
   display: flex;
   flex-direction: row;

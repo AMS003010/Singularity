@@ -113,21 +113,31 @@ pub async fn final_yaml_to_html_render(
                 template_data.insert("page_title".to_string(),TempData::Text(render_page_name.to_string()));
                 final_html = render_final_template(final_html, template_data);
 
-                //Injecting page links
+                // Injecting page links
                 let mut link_final_render = String::new();
                 for page in &data_config.pages {
-                    let link_template = format!("<a href=\"/pages/{}\" class=\"font-bold hover:text-white cursor-pointer text-gray-700\">:<span class=\"shuffle cursor-pointer\">{}</span></a>", page.name, page.name);
+                    let link_template: String;
+                    if page.name == render_page_name {
+                        link_template = format!("<a href=\"/pages/{}\" class=\"page-selected font-bold hover:text-white cursor-pointer text-gray-700\"><span class=\"shuffle cursor-pointer h-[100%]\">{}</span></a>", page.name, page.name);
+                    } else {
+                        link_template = format!("<a href=\"/pages/{}\" class=\"font-bold hover:text-white cursor-pointer text-gray-700\"><span class=\"shuffle cursor-pointer h-[100%]\">{}</span></a>", page.name, page.name);
+                    }
                     link_final_render.push_str(&link_template);
                 }
                 final_html = insert_html_once(final_html, link_final_render);
 
+                // Injecting each page
                 for page in &data_config.pages {
 
                     if page.name == render_page_name {
 
+                        // Injectiong the header widget
                         match page.header_widget {
                             Some(true) => {
-                                let header_widget_render = match header_widget_handler(data_config.theme.to_string()).await {
+                                let header_widget_render = match header_widget_handler(
+                                    data_config.theme.to_string(),
+                                    widget_cache.clone()
+                                ).await {
                                     Ok(rendered_html) => rendered_html,
                                     Err(e) => {
                                         eprintln!("Error rendering header widget: {}", e);
@@ -147,6 +157,8 @@ pub async fn final_yaml_to_html_render(
                         }
 
                         if !page.columns.is_empty() {
+
+                            // Injecting each column
                             for (col_index, column) in page.columns.iter().enumerate() {
                                 match read_html_file("src/assets/templates/column.html") {
                                     Ok(mut col_html) => {
@@ -161,7 +173,7 @@ pub async fn final_yaml_to_html_render(
                                             .map(|(row_index, widget)| {
                                                 let func = widget_map.get(widget.widget_type.as_str()).unwrap();
                                                 async move {
-                                                    // Add widget_heading as an additional argument
+
                                                     let mut widget_html = func(
                                                         data_config.theme.to_string(),
                                                         data_config.widget_heading.to_string(),

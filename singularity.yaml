@@ -38,6 +38,18 @@ pages:
         widgets:
           - type: weather
             location: London, United Kingdom
+  - name: Stuff
+    header-widget: true
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+  - name: Crème-Brûlée
+    header-widget: true
+    columns:
+      - size: small
+        widgets:
+          - type: clock
           # - type: rss
           #   feeds:
           #     - url: https://ciechanow.ski/atom.xml

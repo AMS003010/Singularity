@@ -1,7 +1,10 @@
 use crate::feed::header_data::{SystemStats, get_system_stats};
 use crate::internals::singularity::WidgetError;
 use crate::internals::render::{read_html_file, render_final_template, TempData};
+use crate::internals::cache::GenericWidgetCache;
 use std::collections::HashMap;
+use std::sync::Arc;
+use actix_web::web;
 
 fn truncate_decimal(input: f32, decimal_places: usize) -> String {
     let factor = 10f32.powi(decimal_places as i32);
@@ -11,7 +14,24 @@ fn truncate_decimal(input: f32, decimal_places: usize) -> String {
 
 pub async fn header_widget_handler(
     theme: String,
+    _widget_cache: web::Data<Arc<GenericWidgetCache>>
 ) -> Result<String, WidgetError> {
+
+    const WIDGET_NAME: &str = "header_widget";
+
+    match _widget_cache.get(WIDGET_NAME).await {
+        Ok(Some(cached_html)) => {
+            // Cache HIT
+            return Ok(cached_html);
+        }
+        Ok(None) => {
+            // Cache MISS
+        }
+        Err(e) => {
+            eprintln!("Cache retrieval error: {}", e);
+        }
+    }
+
     let mut template_data: HashMap<String, TempData> = HashMap::new();
     let stats: SystemStats = get_system_stats();
     let mut count: i32 = 0;
@@ -66,6 +86,14 @@ pub async fn header_widget_handler(
     match read_html_file("src/assets/templates/header.html") {
         Ok(inner_html) => {
             let rendered_html = render_final_template(inner_html, template_data);
+            match _widget_cache.insert(WIDGET_NAME.to_string(), rendered_html.clone()).await {
+                Ok(_) => {
+                    // Inserted to Cache
+                }
+                Err(e) => {
+                    eprintln!("Failed to insert widget into cache: {}", e);
+                }
+            }
             Ok(rendered_html)
         }
         Err(e) => {
