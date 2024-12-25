@@ -36,7 +36,7 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 <br/>
 
 ## Features
-### Various widgets
+### Widgets
 * Weather 🌤️
 * Clock ⏰
 * Calendar 🗓️
