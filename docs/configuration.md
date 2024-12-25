@@ -39,15 +39,16 @@ The above config will look like this in the below mockup
 <br/>
 
 ## Features
-
-#### Various widgets
-* Weather
-* Clock
-* Calendar
+### Various widgets
+* Weather 🌤️
+* Clock ⏰
+* Calendar 🗓️
+* Header
+* _Will be adding more in the near (distant) future_
 
 <br/>
-(PS: Under the hood, it's basically a templating engine with data injection having parallelism to speed up rendering 😅)
+( PS: It's a customizable dashboard powered by a templating engine with data injection having parallelism to speed up rendering 😅. 
+With a Shared Cache to speed it up further⚡. All built in rust 🦀)
 <br/>
 
-#### Behind the scenes ⚠️⚠️⚠️
-![image](https://github.com/user-attachments/assets/d8d4732f-7adf-483c-aed3-241793e47179)
+![image](https://github.com/user-attachments/assets/39ea2b89-981e-43f6-b0f8-017bff644a9d)
