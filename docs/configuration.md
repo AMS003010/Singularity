@@ -39,7 +39,7 @@ The above config will look like this in the below mockup
 <br/>
 
 ## Features
-### Various widgets
+### Widgets
 * Weather 🌤️
 * Clock ⏰
 * Calendar 🗓️
