@@ -5,14 +5,16 @@ Find some preconfigured config files
 
 ### Sample 1
 
-![image](https://github.com/user-attachments/assets/d8d4732f-7adf-483c-aed3-241793e47179)
+![image](https://github.com/user-attachments/assets/39ea2b89-981e-43f6-b0f8-017bff644a9d)
 ```
-theme: caffeine-rush
-theme_background_color: "#F1E9D2"
-widget_heading: "darkblue"
-footer: "black"
+theme: neo-noir
+theme_background_color: "black"
+widget_heading: "white"
+footer: "yellow"
+cache: 5m
 pages:
   - name: Home
+    header-widget: true
     columns:
       - size: small
         widgets:
@@ -26,4 +28,35 @@ pages:
           - type: weather
             location: London, United Kingdom
           - type: calendar
+  - name: Juice
+    columns:
+      - size: small
+        widgets:
+          - type: clock
+      - size: small
+        widgets:
+          - type: calendar
+      - size: small
+        widgets:
+          - type: weather
+            location: London, United Kingdom
+  - name: Bun
+    header-widget: true
+    columns:
+      - size: small
+        widgets:
+          - type: weather
+            location: London, United Kingdom
+  - name: Stuff
+    header-widget: true
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+  - name: Crème-Brûlée
+    header-widget: true
+    columns:
+      - size: small
+        widgets:
+          - type: clock
 ```
