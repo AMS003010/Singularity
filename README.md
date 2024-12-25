@@ -21,6 +21,9 @@ With a Shared Cache to speed it up further⚡. All built in rust 🦀)
 # Singularity
 Have all your stuff in one place, that's right 😌 all in your ___Singularity___.
 
+![image](https://github.com/user-attachments/assets/39ea2b89-981e-43f6-b0f8-017bff644a9d)
+
+
 <br/>
 
 ## Contents
@@ -28,11 +31,6 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 * <a href="https://github.com/AMS003010/Singularity/blob/main/docs/configuration.md">Configuration</a>
 * <a href="https://github.com/AMS003010/Singularity/blob/main/docs/preconfigured-pages.md">Preconfigured pages</a>
 * <a href="https://github.com/AMS003010/Singularity/blob/main/docs/themes.md">Themes</a>
-
-<br/>
-
-#### Behind the scenes ⚠️⚠️⚠️
-![image](https://github.com/user-attachments/assets/d8d4732f-7adf-483c-aed3-241793e47179)
 
 
 <br/>
@@ -42,6 +40,7 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 * Weather 🌤️
 * Clock ⏰
 * Calendar 🗓️
+* Header
 * _Will be adding more in the near (distant) future_
 
 <br/>
