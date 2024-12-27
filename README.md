@@ -1,9 +1,5 @@
 ![Singularity](https://github.com/user-attachments/assets/2ce71654-284e-4cfd-ac25-044290ea25d2)
 
-
-( PS: It's a customizable dashboard powered by a templating engine with data injection having parallelism to speed up rendering 😅. 
-With a Shared Cache to speed it up further⚡. All built in rust 🦀)
-
 <br/>
 
 # Singularity
@@ -11,6 +7,8 @@ Have all your stuff in one place, that's right 😌 all in your ___Singularity__
 
 ![image](https://github.com/user-attachments/assets/39ea2b89-981e-43f6-b0f8-017bff644a9d)
 
+( PS: It's a customizable dashboard powered by a templating engine with data injection having parallelism to speed up rendering 😅. 
+With a Shared Cache to speed it up further⚡. All built in rust 🦀)
 
 <br/>
 
