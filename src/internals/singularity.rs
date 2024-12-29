@@ -16,6 +16,10 @@ pub enum WidgetError {
     SerdeJson(#[from] serde_json::Error),
     #[error("No timezone found")]
     NoTimeZone,
+    #[error("XML parsing error: {0}")]
+    XmlParse(String),
+    #[error("UTF-8 conversion error: {0}")]
+    Utf8Error(String),
 }
 
 #[derive(Debug, Deserialize, Clone)]
