@@ -36,15 +36,12 @@ pub async fn weather_widget_handler(
     _widget_cache: web::Data<Arc<GenericWidgetCache>>,
     _widget: Widget,
 ) -> Result<String, WidgetError> {
-    // println!("---> weather.rs // weather_widget_handler");
 
-    // let location = if let Widget::Weather { config } = _widget {
-    //     config.location
-    // } else {
-    //     return Err(WidgetError::NoGeocodingData);
-    // };
-
-    // println!("loca: {}",location);
+    let location = if let Widget::Weather { config } = _widget {
+        config.location
+    } else {
+        return Err(WidgetError::NoGeocodingData);
+    };
 
     const WIDGET_NAME: &str = "weather_widget";
 
@@ -91,7 +88,7 @@ pub async fn weather_widget_handler(
     weather_code.insert(96, "Thunderstorm");
     weather_code.insert(99, "Thunderstorm");
 
-    match fetch_weather("Bengaluru".to_string()).await {
+    match fetch_weather(location.to_string()).await {
         Ok(data) => {
             match read_html_file("src/assets/templates/weather.html") {
                 Ok(inner_html) => {
@@ -99,7 +96,7 @@ pub async fn weather_widget_handler(
 
                     template_data.insert("widget_theme".to_string(), TempData::Text(loc.to_string()));
                     template_data.insert("widgetHeading".to_string(), TempData::Text(_widget_theme.to_string()));
-                    template_data.insert("place".to_string(), TempData::Text("Bengaluru".to_string()));
+                    template_data.insert("place".to_string(), TempData::Text(location.to_string()));
 
                     let present_weather_code = data.hourly.weather_code[0] as i32;
                     let weather_codes = [

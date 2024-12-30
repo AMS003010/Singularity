@@ -2,7 +2,7 @@ theme: neo-noir
 theme_background_color: "black"
 widget_heading: "white"
 footer: "yellow"
-cache: 0.2m
+cache: 5m
 pages:
   - name: Home
     header-widget: true
@@ -17,7 +17,7 @@ pages:
       - size: small
         widgets:
           - type: weather
-            location: London, United Kingdom
+            location: Kozhikode
           - type: calendar
   - name: Juice
     columns:
@@ -30,14 +30,14 @@ pages:
       - size: small
         widgets:
           - type: weather
-            location: London, United Kingdom
+            location: Kozhikode
   - name: Bun
     header-widget: true
     columns:
       - size: small
         widgets:
           - type: weather
-            location: London, United Kingdom
+            location: Kozhikode
   - name: Stuff
     header-widget: true
     columns:
