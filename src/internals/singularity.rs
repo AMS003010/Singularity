@@ -43,62 +43,72 @@ pub struct Column {
     pub widgets: Vec<Widget>,
 }
 
+// Individual Widget Structs
 #[derive(Debug, Deserialize, Clone)]
-pub struct Widget {
-    #[serde(rename = "type")]
-    pub widget_type: WidgetType,
-    pub location: Option<String>,
-    pub feeds: Option<Vec<Feed>>,
+pub struct WeatherConfig {
+    pub location: String,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct RssConfig {
+    pub feeds: Vec<Feed>,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct YoutubeConfig {
+    pub channels: Vec<String>,
+}
+
+#[derive(Debug, Deserialize, Clone, Default)]
+pub struct ClockConfig;
+
+#[derive(Debug, Deserialize, Clone, Default)]
+pub struct CalendarConfig;
+
+// Main Widget Enum
+#[derive(Debug, Deserialize, Clone)]
+#[serde(tag = "type")]
+pub enum Widget {
+    #[serde(rename = "weather")]
+    Weather {
+        #[serde(flatten)]
+        config: WeatherConfig,
+    },
+    #[serde(rename = "clock")]
+    Clock,
+    #[serde(rename = "calendar")]
+    Calendar,
+    #[serde(rename = "youtube")]
+    Youtube {
+        #[serde(flatten)]
+        config: YoutubeConfig,
+    },
+    #[serde(rename = "rss")]
+    Rss {
+        #[serde(flatten)]
+        config: RssConfig,
+    },
 }
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct Feed {
     pub url: String,
+    #[serde(rename = "title")]
     pub name: Option<String>,
 }
 
-#[derive(Debug, Clone)]
-pub enum WidgetType {
-    Weather(String),
-    Clock(String),
-    Calendar(String),
-}
-
-// Custom deserialization for WidgetType
-impl<'de> Deserialize<'de> for WidgetType {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?;
-        if s.starts_with("weather") {
-            Ok(WidgetType::Weather(s))
-        } else if s.starts_with("clock") {
-            Ok(WidgetType::Clock(s))
-        } else if s.starts_with("calendar") {
-            Ok(WidgetType::Calendar(s))
-        } else {
-            Err(serde::de::Error::custom(format!("Invalid WeatherType: {}", s)))
+impl Widget {
+    pub fn clock_config(&self) -> Option<ClockConfig> {
+        match self {
+            Widget::Clock => Some(ClockConfig),
+            _ => None,
         }
     }
-}
 
-impl fmt::Display for WidgetType {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    pub fn calendar_config(&self) -> Option<CalendarConfig> {
         match self {
-            WidgetType::Weather(data) => write!(f, "Weather: {}", data),
-            WidgetType::Clock(data) => write!(f, "Clock: {}", data),
-            WidgetType::Calendar(data) => write!(f, "Calendar: {}", data),
-        }
-    }
-}
-
-impl WidgetType {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            WidgetType::Weather(_) => "weather",
-            WidgetType::Clock(_) => "clock",
-            WidgetType::Calendar(_) => "calendar",
+            Widget::Calendar => Some(CalendarConfig),
+            _ => None,
         }
     }
 }

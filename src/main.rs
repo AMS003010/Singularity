@@ -26,6 +26,8 @@ use feed::header_data::get_system_stats;
 
 //TODO: Maybe add a position system to make the widget injection faster
 
+// TODO: Going with a simple rendering method, find a better method for faster parse and render
+
 mod widgets {
     pub mod weather;
     pub mod clock;
@@ -122,7 +124,7 @@ async fn main() -> Result<(), IOError> {
     let port = find_available_port(8080);
     match singularity {
         Ok(mut config) => {
-            // println!("After parsing -> {:?}", config);
+            // println!("After parsing -> {:#?}", config);
             
             config.port = Some(port);
             println!("🟡 Config file parsed successfully ⚙️");

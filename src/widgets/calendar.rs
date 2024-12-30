@@ -2,6 +2,7 @@ use crate::feed::calendar_data::{get_current_date, get_month, get_day_from_date}
 use crate::internals::render::{read_html_file, render_final_template, TempData};
 use crate::internals::singularity::WidgetError;
 use crate::internals::cache::GenericWidgetCache;
+use crate::internals::singularity::Widget;
 use std::collections::HashMap;
 use std::sync::Arc;
 use actix_web::web;
@@ -11,7 +12,8 @@ use actix_web::web;
 pub async fn calendar_widget_handler(
     theme: String,
     _widget_theme: String,
-    _widget_cache: web::Data<Arc<GenericWidgetCache>>
+    _widget_cache: web::Data<Arc<GenericWidgetCache>>,
+    _widget: Widget,
 ) -> Result<String, WidgetError> {
     // println!("---> calendar.rs // calendar_widget_handler");
     const WIDGET_NAME: &str = "calendar_widget";
