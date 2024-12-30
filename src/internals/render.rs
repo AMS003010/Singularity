@@ -10,6 +10,7 @@ use crate::widgets::weather::weather_widget_handler;
 use crate::widgets::clock::clock_widget_handler;
 use crate::widgets::calendar::calendar_widget_handler;
 use crate::widgets::header::header_widget_handler;
+use crate::internals::singularity::Widget;
 use crate::internals::singularity::{Config, WidgetError};
 use crate::internals::cache::GenericWidgetCache;
 use actix_web::web::Data;
@@ -19,17 +20,22 @@ use actix_web::web::Data;
 pub enum TempData {
     Number(i32),
     Boolean(bool),
-    Text(String)
+    Text(String),
 }
 
-type WidgetHandler = fn(String, String, Data<Arc<GenericWidgetCache>>) -> Pin<Box<dyn Future<Output = Result<String, WidgetError>> + Send>>;
+type WidgetHandler = fn(
+    String,
+    String,
+    Data<Arc<GenericWidgetCache>>,
+    Widget
+) -> Pin<Box<dyn Future<Output = Result<String, WidgetError>> + Send>>;
 
 impl fmt::Display for TempData {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::Text(x) => write!(f, "{}", x),
             Self::Number(x) => write!(f, "{}", x),
-            Self::Boolean(x) => write!(f, "{}", x)
+            Self::Boolean(x) => write!(f, "{}", x),
         }
     }
 }
@@ -48,7 +54,7 @@ pub fn render_final_template(template: String, data: HashMap<String, TempData>) 
         if let Some(value) = data.get(key) {
             value.to_string()
         } else {
-            format!("{{{{ {} }}}}", key)  // retain the placeholder if the key is not found
+            format!("{{{{ {} }}}}", key)
         }
     }).to_string();
     result.replace("{#", "<!--").replace("#}", "-->")
@@ -73,32 +79,25 @@ pub fn insert_html_once(outer: String, inner: String) -> String {
     let placeholder_regex = Regex::new(r"\[\[(.*?)\]\]").unwrap();
     if let Some(matched) = placeholder_regex.find(&outer) {
         let mut result = outer.clone();
-        result.replace_range(matched.range(),&inner);
+        result.replace_range(matched.range(), &inner);
         result
     } else {
         outer
     }
 }
 
-// TODO: Try removing the parameter for clock widget
-
-// TODO: Going with a simple rendering method, find a better method for faster parse and render
-
-// TODO: Adding a cache approach
-
 pub async fn final_yaml_to_html_render(
     data_config: &Data<Config>,
     mut final_html: String,
     widget_cache: &Data<Arc<GenericWidgetCache>>,
-    render_page_name: String
+    render_page_name: String,
 ) -> String {
     let start = Instant::now();
-    // println!("---> render.rs // final_yaml_to_html_render // Start");
     let mut widget_map: HashMap<&str, WidgetHandler> = HashMap::new();
 
-    widget_map.insert("clock", |s1: String, s2: String, cache: Data<Arc<GenericWidgetCache>>| Box::pin(clock_widget_handler(s1, s2, cache)));
-    widget_map.insert("weather", |s1: String, s2: String, cache: Data<Arc<GenericWidgetCache>>| Box::pin(weather_widget_handler(s1, s2, cache)));
-    widget_map.insert("calendar", |s1: String, s2: String, cache: Data<Arc<GenericWidgetCache>>| Box::pin(calendar_widget_handler(s1, s2, cache)));
+    widget_map.insert("clock", |s1, s2, cache, widget| Box::pin(clock_widget_handler(s1, s2, cache, widget)));
+    widget_map.insert("weather", |s1, s2, cache, widget| Box::pin(weather_widget_handler(s1, s2, cache, widget)));
+    widget_map.insert("calendar", |s1, s2, cache, widget| Box::pin(calendar_widget_handler(s1, s2, cache, widget)));
 
     match read_html_file("src/assets/templates/document.html") {
         Ok(doc_html) => {
@@ -107,10 +106,10 @@ pub async fn final_yaml_to_html_render(
 
                 // Injecting theme
                 let mut template_data: HashMap<String, TempData> = HashMap::new();
-                template_data.insert("widget_theme".to_string(),TempData::Text(data_config.theme.to_string()));
-                template_data.insert("theme_background_color".to_string(),TempData::Text(data_config.theme_background_color.to_string()));
-                template_data.insert("footerTheme".to_string(),TempData::Text(data_config.footer.to_string()));
-                template_data.insert("page_title".to_string(),TempData::Text(render_page_name.to_string()));
+                template_data.insert("widget_theme".to_string(), TempData::Text(data_config.theme.to_string()));
+                template_data.insert("theme_background_color".to_string(), TempData::Text(data_config.theme_background_color.to_string()));
+                template_data.insert("footerTheme".to_string(), TempData::Text(data_config.footer.to_string()));
+                template_data.insert("page_title".to_string(), TempData::Text(render_page_name.to_string()));
                 final_html = render_final_template(final_html, template_data);
 
                 // Injecting page links
@@ -171,20 +170,33 @@ pub async fn final_yaml_to_html_render(
                                         let widget_futures: Vec<_> = column.widgets.iter()
                                             .enumerate()
                                             .map(|(row_index, widget)| {
-                                                let func = widget_map.get(widget.widget_type.as_str()).unwrap();
-                                                async move {
+                                                let widget_type = match widget {
+                                                    Widget::Clock => "clock",
+                                                    Widget::Calendar => "calendar",
+                                                    Widget::Weather { config: _ } => "weather",
+                                                    Widget::Youtube { config: _ } => "youtube",
+                                                    Widget::Rss { config: _ } => "rss",
+                                                };
 
+                                                let func = widget_map.get(widget_type).unwrap();
+                                                let widget_clone = widget.clone(); // Clone the widget to own it
+                                                async move {
                                                     let mut widget_html = func(
                                                         data_config.theme.to_string(),
                                                         data_config.widget_heading.to_string(),
-                                                        widget_cache.clone()
-                                                    ).await?;
+                                                        widget_cache.clone(),
+                                                        widget_clone,  // Pass the owned widget
+                                                    )
+                                                    .await?;
+
                                                     if row_index != column.widgets.len() - 1 {
                                                         widget_html = format!("{}{}", widget_html, "[[ Content ]]");
                                                     }
+
                                                     Ok::<String, WidgetError>(widget_html)
                                                 }
-                                            }).collect();
+                                            })
+                                            .collect();
 
                                         // Execute all widget futures in parallel
                                         match join_all(widget_futures).await.into_iter().collect::<Result<Vec<_>, _>>() {
@@ -193,12 +205,10 @@ pub async fn final_yaml_to_html_render(
                                                     final_html = insert_html(final_html, widget_html);
                                                 }
                                             }
-                                            Err(e) => println!("Error rendering widgets: {}", e),
+                                            Err(e) => eprintln!("Error rendering widgets: {}", e),
                                         }
                                     }
-                                    Err(e) => {
-                                        eprintln!("Error in page HTML file: {}", e);
-                                    }
+                                    Err(e) => eprintln!("Error in page HTML file: {}", e),
                                 }
                             }
                         }
@@ -206,7 +216,6 @@ pub async fn final_yaml_to_html_render(
                 }
             }
             let duration = start.elapsed();
-            // println!("---> render.rs // final_yaml_to_html_render // Stop");
             println!("♾️  Rendered in {:?}", duration);
             final_html
         }

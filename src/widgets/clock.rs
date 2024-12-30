@@ -2,6 +2,7 @@ use crate::feed::clock_data::{get_current_time_for_place};
 use crate::internals::render::{read_html_file, render_final_template, TempData};
 use crate::internals::singularity::WidgetError;
 use crate::internals::cache::GenericWidgetCache;
+use crate::internals::singularity::Widget;
 use std::collections::HashMap;
 use std::sync::Arc;
 use chrono::{DateTime, FixedOffset};
@@ -20,7 +21,8 @@ fn extract_time(time: &DateTime<FixedOffset>) -> String {
 pub async fn clock_widget_handler(
     theme: String,
     _widget_theme: String,
-    _widget_cache: web::Data<Arc<GenericWidgetCache>>
+    _widget_cache: web::Data<Arc<GenericWidgetCache>>,
+    _widget: Widget,
 ) -> Result<String, WidgetError> {
     // const WIDGET_NAME: &str = "clock_widget";
 

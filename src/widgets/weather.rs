@@ -2,6 +2,7 @@ use crate::feed::weather_data::{fetch_weather, fetch_svg_for_weather_code};
 use crate::internals::render::{read_html_file, render_final_template, TempData, insert_html_once, insert_html, hydrate_val_once};
 use crate::internals::singularity::WidgetError;
 use crate::internals::cache::GenericWidgetCache;
+use crate::internals::singularity::Widget;
 use std::collections::HashMap;
 use std::sync::Arc;
 use actix_web::web;
@@ -32,9 +33,19 @@ fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WidgetError
 pub async fn weather_widget_handler(
     loc: String,
     _widget_theme: String,
-    _widget_cache: web::Data<Arc<GenericWidgetCache>>
+    _widget_cache: web::Data<Arc<GenericWidgetCache>>,
+    _widget: Widget,
 ) -> Result<String, WidgetError> {
     // println!("---> weather.rs // weather_widget_handler");
+
+    // let location = if let Widget::Weather { config } = _widget {
+    //     config.location
+    // } else {
+    //     return Err(WidgetError::NoGeocodingData);
+    // };
+
+    // println!("loca: {}",location);
+
     const WIDGET_NAME: &str = "weather_widget";
 
     match _widget_cache.get(WIDGET_NAME).await {
