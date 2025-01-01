@@ -9,6 +9,7 @@ use std::sync::Arc;
 use crate::widgets::weather::weather_widget_handler;
 use crate::widgets::clock::clock_widget_handler;
 use crate::widgets::calendar::calendar_widget_handler;
+use crate::widgets::youtube::youtube_widget_handler;
 use crate::widgets::header::header_widget_handler;
 use crate::internals::singularity::Widget;
 use crate::internals::singularity::{Config, WidgetError};
@@ -98,32 +99,34 @@ pub async fn final_yaml_to_html_render(
     widget_map.insert("clock", |s1, s2, cache, widget| Box::pin(clock_widget_handler(s1, s2, cache, widget)));
     widget_map.insert("weather", |s1, s2, cache, widget| Box::pin(weather_widget_handler(s1, s2, cache, widget)));
     widget_map.insert("calendar", |s1, s2, cache, widget| Box::pin(calendar_widget_handler(s1, s2, cache, widget)));
+    widget_map.insert("youtube", |s1, s2, cache, widget| Box::pin(youtube_widget_handler(s1, s2, cache, widget)));
 
     match read_html_file("src/assets/templates/document.html") {
         Ok(doc_html) => {
             final_html = doc_html;
             if !data_config.pages.is_empty() {
 
-                // Injecting theme
-                let mut template_data: HashMap<String, TempData> = HashMap::new();
-                template_data.insert("widget_theme".to_string(), TempData::Text(data_config.theme.to_string()));
-                template_data.insert("theme_background_color".to_string(), TempData::Text(data_config.theme_background_color.to_string()));
-                template_data.insert("footerTheme".to_string(), TempData::Text(data_config.footer.to_string()));
-                template_data.insert("page_title".to_string(), TempData::Text(render_page_name.to_string()));
-                final_html = render_final_template(final_html, template_data);
-
                 // Injecting page links
                 let mut link_final_render = String::new();
                 for page in &data_config.pages {
                     let link_template: String;
                     if page.name == render_page_name {
-                        link_template = format!("<a href=\"/pages/{}\" class=\"page-selected font-bold hover:text-white cursor-pointer text-gray-700\"><span class=\"shuffle cursor-pointer h-[100%]\">{}</span></a>", page.name, page.name);
+                        link_template = format!("<a href=\"/pages/{}\" class=\"page-selected font-bold hover:text-white cursor-pointer text-gray-700\"><span class=\"shuffle cursor-pointer h-[100%]\" style=\"{}\">{}</span></a><style>.page-select-hover:hover {} </style>", page.name,"color: {{ widgetHeading }};", page.name, "{color: {{ widgetHeading }};}");
                     } else {
-                        link_template = format!("<a href=\"/pages/{}\" class=\"font-bold hover:text-white cursor-pointer text-gray-700\"><span class=\"shuffle cursor-pointer h-[100%]\">{}</span></a>", page.name, page.name);
+                        link_template = format!("<a href=\"/pages/{}\" class=\"page-select-hover font-bold hover:text-white cursor-pointer text-gray-700\"><span class=\"shuffle cursor-pointer h-[100%]\">{}</span></a>", page.name, page.name);
                     }
                     link_final_render.push_str(&link_template);
                 }
                 final_html = insert_html_once(final_html, link_final_render);
+
+                // Injecting theme
+                let mut template_data: HashMap<String, TempData> = HashMap::new();
+                template_data.insert("widget_theme".to_string(), TempData::Text(data_config.theme.to_string()));
+                template_data.insert("widgetHeading".to_string(), TempData::Text(data_config.widget_heading.to_string()));
+                template_data.insert("theme_background_color".to_string(), TempData::Text(data_config.theme_background_color.to_string()));
+                template_data.insert("footerTheme".to_string(), TempData::Text(data_config.footer.to_string()));
+                template_data.insert("page_title".to_string(), TempData::Text(render_page_name.to_string()));
+                final_html = render_final_template(final_html, template_data);
 
                 // Injecting each page
                 for page in &data_config.pages {

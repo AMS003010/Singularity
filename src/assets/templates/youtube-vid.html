@@ -1,0 +1,25 @@
+<div class="flex {{ widget_theme }} flex-col p-2 border-[2px] rounded-lg w-[12rem]" style="border-style: double;border-width: 3px;">
+    <div class="w-max">
+        <img
+            src="{{ yt_thumbnail_link }}"
+            class="w-[11rem] h-auto p-1 rounded-lg"
+        />
+    </div>
+    <div class="flex flex-col justify-between h-[100%]">
+        <div class="text-xs my-2 mx-1 line-clamp-2" style="color: {{ widgetHeading }};"><a href="{{ yt_video_link }}" target="_blank">{{ yt_video_title }}</a></div>
+        <a href="{{ yt_channel_link }}" target="_blank">
+            <div class="flex justify-between text-xs ml-1">
+                <div class="marquee-text w-[64%]">
+                    <div class="marquee-text-track">
+                        <p>&nbsp;</p>
+                        <p>{{ yt_channel_title }}</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+                <div class="w-max">&nbsp;|&nbsp;{{ yt_video_post_duration }}&nbsp;</div>
+            </div>
+        </a>
+    </div>
+</div>

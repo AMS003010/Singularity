@@ -4,15 +4,24 @@
   <meta charset='utf-8'>
   <title>Singularity | {{ page_title }}</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='/static/main-built.css'>
+  <link rel='stylesheet' type='text/css' media='screen' href='/static/main.css'>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <script src='/static/script.js'></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="w-[100vw] min-h-[100vh] p-4 px-6 text-white" style="background-color: {{ theme_background_color }};">
   <div class="animated-div preload flex justify-between items-center gap-4 text-gray-400 w-[100%]">
     <img src="/static/logo10.gif" alt="logo_pic" class="widget-shadow {{ widget_theme }} w-[3rem] h-[3rem] border-[1px] cursor-pointer rounded-xl"/>
     <div class="widget-shadow {{ widget_theme }} flex justify-start gap-4 w-[100%] border-[1px] py-2 rounded-lg pl-4">[[ Content ]]</div>
   </div>
+  <style>
+    .page-selected {
+      border-bottom-color: {{ widgetHeading }};
+      border-bottom-width: 2px;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
+  </style>
   <script>
     window.addEventListener('load', () => {
       const animatedDivs = document.querySelectorAll('.animated-div');

@@ -15,39 +15,46 @@ impl From<DeError> for WidgetError {
 pub struct Feed {
     id: String,
     #[serde(rename = "channelId", default)]
-    yt_channel_id: Option<String>,
-    title: String,
+    pub yt_channel_id: Option<String>,
+    pub title: String,
+    #[serde(rename = "author")]
+    pub author: Author,
     published: String,
     #[serde(default)]
     #[serde(rename = "entry")]
-    entries: Vec<Entry>,
+    pub entries: Vec<Entry>,
 }
 
 #[derive(Debug, Deserialize)]
-struct Entry {
+pub struct Author {
+    pub uri: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Entry {
     id: String,
-    title: String,
-    published: String,
+    pub title: String,
+    pub published: String,
     #[serde(rename = "group")]
-    media_group: Option<MediaGroup>,
+    pub media_group: Option<MediaGroup>,
 }
 
 #[derive(Debug, Deserialize)]
-struct MediaGroup {
+pub struct MediaGroup {
     #[serde(rename = "title")]
     title: Option<String>,
     #[serde(rename = "content")]
-    content: Option<MediaContent>,
+    pub content: Option<MediaContent>,
     #[serde(rename = "thumbnail")]
-    thumbnail: Option<MediaThumbnail>,
+    pub thumbnail: Option<MediaThumbnail>,
     #[serde(rename = "community")]
     community: Option<MediaCommunity>,
 }
 
 #[derive(Debug, Deserialize)]
-struct MediaContent {
+pub struct MediaContent {
     #[serde(rename = "@url")]
-    url: String,
+    pub url: String,
     #[serde(rename = "@width")]
     width: u32,
     #[serde(rename = "@height")]
@@ -55,9 +62,9 @@ struct MediaContent {
 }
 
 #[derive(Debug, Deserialize)]
-struct MediaThumbnail {
+pub struct MediaThumbnail {
     #[serde(rename = "@url")]
-    url: String,
+    pub url: String,
     #[serde(rename = "@width")]
     width: u32,
     #[serde(rename = "@height")]

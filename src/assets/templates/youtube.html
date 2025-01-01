@@ -1,6 +1,31 @@
-<div class="calendar-box animated-div preload">
+<div class="youtube-box animated-div preload w-[100%]">
+    <style>
+        /* Marquee animation */
+        .marquee-text {
+            overflow: clip;
+        }
+
+        .marquee-text-track {
+            display: flex;
+            padding-left: 4.8rem;
+            gap: 4.8rem;
+            width: max-content;
+            animation: marquee-move-text var(--speed, 10s) linear infinite var(
+                --direction,
+                forwards
+                );
+        }
+
+        @keyframes marquee-move-text {
+            to {
+                transform: translateX(-50%);
+            }
+        }
+    </style>
     <div class="mb-2" style="color: {{ widgetHeading }};">[ <span class="shuffle cursor-pointer">YouTube</span> ]</div>
-    <div class="clock widget-shadow {{ widget_theme }} h-max items-center p-4 pl-0 border-[1px] rounded-2xl w-[100%]">
-        Hi from youtube !!
-    </div>    
+    <div class="scrollWrapper youtube widget-shadow {{ widget_theme }} items-center pl-0 border-[1px] rounded-2xl w-[100%] h-max">
+        <div class="scrollContainer flex justify-start gap-2 p-2">
+            [[ Content ]]
+        </div>
+    </div>  
 </div>

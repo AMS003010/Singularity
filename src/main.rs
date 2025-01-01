@@ -10,7 +10,6 @@ use internals::port::find_available_port;
 use internals::render::final_yaml_to_html_render;
 use internals::cache::{GenericWidgetCache, convert_cache_ttl_to_seconds};
 use feed::header_data::get_system_stats;
-use feed::youtube_data::{get_youtube_vids_for_a_channel};
 
 //TODO: Implementing COW (Clone On Write) wherever possible
 
@@ -34,6 +33,7 @@ mod widgets {
     pub mod clock;
     pub mod calendar;
     pub mod header;
+    pub mod youtube;
 }
 
 mod feed {
@@ -61,7 +61,8 @@ async fn render_page(
     config: web::Data<Config>,
     widget_cache: web::Data<Arc<GenericWidgetCache>>,   
 ) -> impl Responder {
-    // Find the requested page in the configuration
+    
+    // Dynamically Render Actix endpint handler 
     let page_name = page_name.into_inner();
     if let Some(page) = config.pages.iter().find(|p| p.name == page_name) {
         let final_html = String::new();
@@ -73,8 +74,6 @@ async fn render_page(
 }
 
 async fn run_actix_server(port: u16, config: Config) -> std::io::Result<()> {
-    let data = get_youtube_vids_for_a_channel("UC9x0AN7BWHpCDHSm9NiJFJQ".to_string()).await;
-    println!("{:#?}",data);
     let ttl = convert_cache_ttl_to_seconds(config.cache.clone().unwrap_or_default());
     let widget_cache = Arc::new(GenericWidgetCache::new(Duration::from_secs(ttl)));
 

@@ -55,6 +55,21 @@ body::-webkit-scrollbar {
   transform: translateY(20px); /* Starts 20px lower */
 }
 
+.scrollWrapper {
+  width: auto;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  height: 25rem;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.scrollWrapper .scrollContainer {
+  display: inline-flex;
+}
+
 .widget-shadow {
   box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
 }
@@ -68,7 +83,7 @@ body::-webkit-scrollbar {
   border-bottom-width: 2px;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
-  color: white;
+  color: black;
 }
 
 .weatherContainer {
