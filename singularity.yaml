@@ -49,11 +49,12 @@ pages:
     columns:
       - size: small
         widgets:
-          - type: youtube
-            channels:
-              - UCHnyfMqiRRG1u-2MsSQLbXA
-              - UC9x0AN7BWHpCDHSm9NiJFJQ
-              - UCR-DXc1voovS8nhAvccRZhg
+          - type: clock
+          # - type: youtube
+          #   channels:
+          #     - UCHnyfMqiRRG1u-2MsSQLbXA
+          #     - UC9x0AN7BWHpCDHSm9NiJFJQ
+          #     - UCR-DXc1voovS8nhAvccRZhg
           # - type: rss
           #   feeds:
           #     - url: https://ciechanow.ski/atom.xml
