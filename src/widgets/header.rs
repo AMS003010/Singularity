@@ -55,7 +55,7 @@ pub async fn header_widget_handler(
         // Convert available space to GB and truncate
         let avai_space_gb = disk.available_space as f32 / 1e9; // Use f32 for compatibility
         let avai_space_str = truncate_decimal(avai_space_gb, 2);
-        let avai_space_formatted = format!("{} GB Free", avai_space_str);
+        let avai_space_formatted = format!("{} GB", avai_space_str);
 
         template_data.insert(mount_key, TempData::Text(disk.mount.clone()));
         template_data.insert(avai_space_key, TempData::Text(avai_space_formatted));

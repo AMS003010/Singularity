@@ -1,6 +1,6 @@
 <div class="header-box animated-div preload flex gap-4 py-8">
   <img
-    src="/static/logo32.gif"
+    src="/static/logo66.gif"
     class="w-32 h-auto rounded-lg"
   />
   <div class="{{ widget_theme }} w-[100%] h-[8rem] border-[3px] cursor-pointer rounded-lg p-2" style="border-style: double;border-width: 3px;">
@@ -8,56 +8,56 @@
       <div class="grid grid-rows-2 grid-flow-col gap-4 pb-2">
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount1">{{ mount1 }}</div>
+            <div class="text-xs truncate w-24" id="mount1">{{ mount1 }}</div>
             <div class="text-xs" id="avai_spc1">{{ available_space1 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
         </div>
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount2">{{ mount2 }}</div>
+            <div class="text-xs truncate w-24" id="mount2">{{ mount2 }}</div>
             <div class="text-xs" id="avai_spc2">{{ available_space2 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
         </div>
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount3">{{ mount3 }}</div>
+            <div class="text-xs truncate w-24" id="mount3">{{ mount3 }}</div>
             <div class="text-xs" id="avai_spc3">{{ available_space3 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
         </div>
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount4">{{ mount4 }}</div>
+            <div class="text-xs truncate w-24" id="mount4">{{ mount4 }}</div>
             <div class="text-xs" id="avai_spc4">{{ available_space4 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
         </div>
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount5">{{ mount5 }}</div>
+            <div class="text-xs truncate w-24" id="mount5">{{ mount5 }}</div>
             <div class="text-xs" id="avai_spc5">{{ available_space5 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
         </div>
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount6">{{ mount6 }}</div>
+            <div class="text-xs truncate w-24" id="mount6">{{ mount6 }}</div>
             <div class="text-xs" id="avai_spc6">{{ available_space6 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
         </div>
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount7">{{ mount7 }}</div>
+            <div class="text-xs truncate w-24" id="mount7">{{ mount7 }}</div>
             <div class="text-xs" id="avai_spc7">{{ available_space7 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
         </div>
         <div class="{{ widget_theme }} drive-shadow flex flex-col justify-around w-[15rem] h-12 rounded-lg p-2">
           <div class="flex justify-between items-center">
-            <div class="text-xs" id="mount8">{{ mount8 }}</div>
+            <div class="text-xs truncate w-24" id="mount8">{{ mount8 }}</div>
             <div class="text-xs" id="avai_spc8">{{ available_space8 }}</div>
           </div>
           <div class="w-[100%] h-1 bg-slate-500 rounded-full"></div>
@@ -159,7 +159,7 @@
         data.disks.forEach((disk, index) => {
           if (index < 8) {
             document.getElementById(`mount${index + 1}`).innerText = disk.mount;
-            document.getElementById(`avai_spc${index + 1}`).innerText = `${(disk.available_space / 1e9).toFixed(2)} GB Free`;
+            document.getElementById(`avai_spc${index + 1}`).innerText = `${(disk.available_space / 1e9).toFixed(2)} GB`;
           }
         });
 
