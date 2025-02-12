@@ -1,9 +1,10 @@
 <div class="calendar-box animated-div preload">
   <div class="mb-2" style="color: {{ widgetHeading }};">[ <span class="shuffle cursor-pointer">Calendar</span> ]</div>
-  <div class="calendar widget-shadow {{ widget_theme }} p-4 px-6 border-[1px] rounded-2xl h-max w-max">
+  <div class="calendar {{ widget_theme }} inverted-radius bg-gray-900 relative p-4 px-6 rounded-2xl w-max" style="border: 0;">
     <div class="mb-4 text-sm font-extralight flex">
       {{ dateToday }}<div class="text-gray-500 mx-1">&bull;</div>{{ monthToday }}<div class="text-gray-500 mx-1">&bull;</div>{{ yearToday }}
     </div>
+    <div class="w-[100%] h-10"></div>
     <table>
       <thead>
         <tr>

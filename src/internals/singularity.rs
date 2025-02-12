@@ -1,7 +1,5 @@
 use serde::Deserialize;
-use serde::Deserializer;
 use serde_json::{self};
-use std::fmt;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -102,6 +100,7 @@ pub struct Feed {
 }
 
 impl Widget {
+    #[allow(dead_code)]
     pub fn clock_config(&self) -> Option<ClockConfig> {
         match self {
             Widget::Clock => Some(ClockConfig),
@@ -109,6 +108,7 @@ impl Widget {
         }
     }
 
+    #[allow(dead_code)]
     pub fn calendar_config(&self) -> Option<CalendarConfig> {
         match self {
             Widget::Calendar => Some(CalendarConfig),

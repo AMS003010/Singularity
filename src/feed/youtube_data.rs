@@ -13,13 +13,11 @@ impl From<DeError> for WidgetError {
 #[derive(Debug, Deserialize)]
 #[serde(rename = "feed")]
 pub struct Feed {
-    id: String,
     #[serde(rename = "channelId", default)]
     pub yt_channel_id: Option<String>,
     pub title: String,
     #[serde(rename = "author")]
     pub author: Author,
-    published: String,
     #[serde(default)]
     #[serde(rename = "entry")]
     pub entries: Vec<Entry>,
@@ -32,7 +30,6 @@ pub struct Author {
 
 #[derive(Debug, Deserialize)]
 pub struct Entry {
-    id: String,
     pub title: String,
     pub published: String,
     #[serde(rename = "group")]
@@ -41,54 +38,22 @@ pub struct Entry {
 
 #[derive(Debug, Deserialize)]
 pub struct MediaGroup {
-    #[serde(rename = "title")]
-    title: Option<String>,
     #[serde(rename = "content")]
     pub content: Option<MediaContent>,
     #[serde(rename = "thumbnail")]
     pub thumbnail: Option<MediaThumbnail>,
-    #[serde(rename = "community")]
-    community: Option<MediaCommunity>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MediaContent {
     #[serde(rename = "@url")]
     pub url: String,
-    #[serde(rename = "@width")]
-    width: u32,
-    #[serde(rename = "@height")]
-    height: u32,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MediaThumbnail {
     #[serde(rename = "@url")]
     pub url: String,
-    #[serde(rename = "@width")]
-    width: u32,
-    #[serde(rename = "@height")]
-    height: u32,
-}
-
-#[derive(Debug, Deserialize)]
-struct MediaCommunity {
-    #[serde(rename = "starRating")]
-    star_rating: Option<StarRating>,
-    #[serde(rename = "statistics")]
-    statistics: Option<Statistics>,
-}
-
-#[derive(Debug, Deserialize)]
-struct StarRating {
-    #[serde(rename = "@count")]
-    count: u64,
-}
-
-#[derive(Debug, Deserialize)]
-struct Statistics {
-    #[serde(rename = "@views")]
-    views: u64,
 }
 
 pub async fn get_youtube_vids_for_a_channel(channel_id: String) -> Result<Feed, WidgetError> {

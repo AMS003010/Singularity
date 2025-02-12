@@ -18,7 +18,7 @@ fn final_svg_comp(code: &i32, svg_count: &mut i32) -> Result<String, WidgetError
             if *svg_count == 0 {
                 html = hydrate_val_once(html, "svgSize".to_string(), "32".to_string());
             } else {
-                html = hydrate_val_once(html, "svgSize".to_string(), "12".to_string());
+                html = hydrate_val_once(html, "svgSize".to_string(), "16".to_string());
             }
             *svg_count += 1;
             Ok(html)
@@ -98,7 +98,7 @@ pub async fn weather_widget_handler(
                     template_data.insert("widgetHeading".to_string(), TempData::Text(_widget_theme.to_string()));
                     template_data.insert("place".to_string(), TempData::Text(location.to_string()));
 
-                    let present_weather_code = data.hourly.weather_code[0] as i32;
+                    let present_weather_code = data.current.weather_code as i32;
                     let weather_codes = [
                         data.hourly.weather_code[4] as i32,
                         data.hourly.weather_code[4] as i32,
@@ -137,8 +137,11 @@ pub async fn weather_widget_handler(
                         template_data.insert(temp_key.clone(), TempData::Number(data.hourly.temperature_2m[i * 4] as i32));
                     }
 
-                    template_data.insert("presentTemp".to_string(), TempData::Number(data.hourly.temperature_2m[0] as i32));
+                    template_data.insert("presentTemp".to_string(), TempData::Number(data.current.temperature_2m as i32));
                     template_data.insert("presentWeather".to_string(), TempData::Text(present_weather.to_string()));
+                    template_data.insert("presentWindSpeed".to_string(), TempData::Number(data.current.wind_speed_10m as i32));
+                    template_data.insert("presentRain".to_string(), TempData::Number(data.current.rain as i32));
+                    template_data.insert("presentRelationalHumidity".to_string(), TempData::Number(data.current.relative_humidity_2m as i32));
 
                     let inner_html = render_final_template(temp_inner_html, template_data);
                     match _widget_cache.insert(WIDGET_NAME.to_string(), inner_html.clone()).await {

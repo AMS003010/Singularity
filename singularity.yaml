@@ -2,59 +2,72 @@ theme: neo-noir
 theme_background_color: "black"
 widget_heading: "white"
 footer: "yellow"
-cache: 5m
+cache: 0.2m
 pages:
+  # - name: Home
+  #   header-widget: true
+  #   columns:
+  #     - size: small
+  #       widgets:
+  #         - type: clock
+  #         - type: calendar
+  #     - size: small
+  #       widgets:
+  #         - type: calendar
+  #     - size: small
+  #       widgets:
+  #         - type: weather
+  #           location: Kozhikode
+  #         - type: calendar
+  # - name: Juice
+  #   columns:
+  #     - size: small
+  #       widgets:
+  #         - type: clock
+  #     - size: small
+  #       widgets:
+  #         - type: calendar
+  #     - size: small
+  #       widgets:
+  #         - type: weather
+  #           location: Kozhikode
+  # - name: Bun
+  #   header-widget: true
+  #   columns:
+  #     - size: large
+  #       widgets:
+  #         - type: weather
+  #           location: Bengaluru
+  #         - type: youtube
+  #           channels:
+  #             - UCsBjURrPoezykLs9EqgamOA
+  #             - UCR-DXc1voovS8nhAvccRZhg
+  #     - size: small
+  #       widgets:
+  #         - type: calendar
   - name: Home
     header-widget: true
     columns:
-      - size: small
+      - size: large
         widgets:
-          - type: clock
-          - type: calendar
-      - size: small
-        widgets:
-          - type: calendar
-      - size: small
-        widgets:
-          - type: weather
-            location: Kozhikode
-          - type: calendar
-  - name: Juice
-    columns:
-      - size: small
-        widgets:
-          - type: clock
+        - type: weather
+          location: Kozhikode
+        - type: clock
       - size: small
         widgets:
           - type: calendar
-      - size: small
-        widgets:
-          - type: weather
-            location: Kozhikode
-  - name: Bun
-    header-widget: true
-    columns:
-      - size: small
-        widgets:
-          - type: weather
-            location: Kozhikode
   - name: Stuff
     header-widget: true
     columns:
+      - size: large
+        widgets:
+          - type: youtube
+            channels:
+              - UCHnyfMqiRRG1u-2MsSQLbXA
+              - UCR-DXc1voovS8nhAvccRZhg
       - size: small
         widgets:
           - type: calendar
-  - name: Crème-Brûlée
-    header-widget: true
-    columns:
-      - size: small
-        widgets:
-          - type: clock
-          # - type: youtube
-          #   channels:
-          #     - UCHnyfMqiRRG1u-2MsSQLbXA
-          #     - UC9x0AN7BWHpCDHSm9NiJFJQ
-          #     - UCR-DXc1voovS8nhAvccRZhg
           # - type: rss
           #   feeds:
           #     - url: https://ciechanow.ski/atom.xml

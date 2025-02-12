@@ -162,8 +162,16 @@ pub async fn final_yaml_to_html_render(
 
                             // Injecting each column
                             for (col_index, column) in page.columns.iter().enumerate() {
+                                let mut column_size = 100;
+                                if column.size == "small" {
+                                    column_size = 22;
+                                }
+                                if column.size == "large" {
+                                    column_size = 78;
+                                }
                                 match read_html_file("src/assets/templates/column.html") {
                                     Ok(mut col_html) => {
+                                        col_html = hydrate_val_once(col_html, "columnSize".to_string(), column_size.to_string()); 
                                         if col_index != page.columns.len() - 1 {
                                             col_html = format!("{}{}", col_html, "[[ SURPRISE ]]");
                                         }

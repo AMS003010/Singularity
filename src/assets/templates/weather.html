@@ -1,41 +1,34 @@
-<div class="weather-box animated-div preload">
-  <div class="mb-2" style="color: {{ widgetHeading }};">[ <span class="shuffle cursor-pointer">Weather</span> ]</div>
-  <div class="weather widget-shadow {{ widget_theme }} border-[1px] w-[100%] md:w-max p-4 rounded-2xl">
-    <div class="flex items-center justify-start gap-2">
-      <div style="color: {{ widgetHeading }};">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-        </svg>        
-      </div>
-      <div class="font-semibold text-gray-100" style="color: {{ widgetHeading }};">{{ place }}</div>
-    </div>
-    <div class="flex justify-start items-center hover:invert mr-4">
-      <div class="mix-blend-luminosity">
-        [[ Content ]]
-      </div>
-      <div>
-        <div class="text-3xl text-gray-400 font-medium">{{ presentTemp }} &deg;C</div>
-        <div class="text-base">{{ presentWeather }}</div>
+<div class="weather-box animated-div preload w-[100%]">
+  <div class="mb-2" style="color: {{ widgetHeading }};">[ <span class="shuffle cursor-pointer">Weather</span>&nbsp;|&nbsp;<span class=" {{ widget_theme }} " style="border: 0;">{{ place }}</span> ]</div>
+  <div class="weather {{ widget_theme }} wave-background border-[1px] flex justify-between rounded-2xl mb-2"  style="border-style: double;border-width: 2px;">
+    <div>
+      <div class="flex justify-start items-center hover:invert mr-4 cursor-pointer">
+        <div class="mix-blend-luminosity">
+          [[ Content ]]
+        </div>
+        <div>
+          <div class="text-4xl text-gray-400 font-medium">{{ presentTemp }} &deg;C</div>
+          <div class="text-base">{{ presentWeather }}</div>
+        </div>
       </div>
     </div>
-    <div class="2xl:flex-col md:flex items-center justify-between gap-4">
+    <div class="2xl:flex-col md:flex items-center justify-between gap-2 p-2">
       <div class="flex justify-around md:justify-between md:gap-2">    
-        <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
+        <div class="flex flex-col items-center gap-2 justify-between border-[2px] border-gray-600 w-max h-[100%] rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
           <div class="text-sm">{{ time1 }}</div>
           <div class="mix-blend-luminosity">
             [[ Content ]]
           </div>
           <div class="text-sm">{{ temp1 }} &deg;C</div>
         </div>
-        <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
+        <div class="flex flex-col items-center gap-2 justify-between border-[2px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
           <div class="text-sm">{{ time2 }}</div>
           <div class="mix-blend-luminosity">
             [[ Content ]]
           </div>
           <div class="text-sm">{{ temp2 }} &deg;C</div>
         </div>
-        <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
+        <div class="flex flex-col items-center gap-2 justify-between border-[2px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
           <div class="text-sm">{{ time3 }}</div>
           <div class="mix-blend-luminosity">
             [[ Content ]]
@@ -43,23 +36,22 @@
           <div class="text-sm">{{ temp3 }} &deg;C</div>
         </div> 
       </div>
-      <div class="w-[100%] h-[1rem] lg:hidden md:block"></div>
       <div class="flex justify-around md:justify-between md:gap-2">
-        <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
+        <div class="flex flex-col items-center gap-2 justify-between border-[2px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
           <div class="text-sm">{{ time4 }}</div>
           <div class="mix-blend-luminosity">
             [[ Content ]]
           </div>
           <div class="text-sm">{{ temp4 }} &deg;C</div>
         </div>
-        <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
+        <div class="flex flex-col items-center gap-2 justify-between border-[2px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
           <div class="text-sm">{{ time5 }}</div>
           <div class="mix-blend-luminosity">
             [[ Content ]]
           </div>
           <div class="text-sm">{{ temp5 }} &deg;C</div>
         </div>
-        <div class="flex flex-col items-center justify-between border-[1px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
+        <div class="flex flex-col items-center gap-2 justify-between border-[2px] border-gray-600 w-max rounded-2xl p-2 px-3 md:px-2 hover:invert cursor-pointer">
           <div class="text-sm">{{ time6 }}</div>
           <div class="mix-blend-luminosity">
             [[ Content ]]
@@ -67,6 +59,48 @@
           <div class="text-sm">{{ temp6 }} &deg;C</div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="wave-background {{ widget_theme }} flex justify-between items-center text-center px-4 text-xl w-[100%] h-[20%] rounded-lg opacity-60" style="border: 0;">
+    <div class="flex justify-end items-center text-center">來</div>
+    <div class="flex justify-center items-center gap-2 w-max" style="color: {{ widgetHeading }};">
+      <div class="flex justify-center items-center w-max gap-2">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wind size-5">
+            <path d="M12.8 19.6A2 2 0 1 0 14 16H2"/>
+            <path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/>
+            <path d="M9.8 4.4A2 2 0 1 1 11 8H2"/>
+          </svg>
+        </div>
+        <div class="text-base">{{ presentWindSpeed }}km/h</div>
+      </div>
+      <div>|</div>
+      <div class="flex justify-center items-center w-max gap-2">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-rain size-5">
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+            <path d="M16 14v6"/>
+            <path d="M8 14v6"/>
+            <path d="M12 16v6"/>
+          </svg>
+        </div>
+        <div class="text-base">{{ presentRain }}mm</div>
+      </div>
+      <div>|</div>
+      <div class="flex justify-center items-center w-max gap-2">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-droplet size-5">
+            <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>
+          </svg>
+        </div>
+        <div class="text-base">{{ presentRelationalHumidity }}%</div>
+      </div>
+    </div>
+    <div class="flex justify-end items-center text-center gap-3">
+      <div>點</div>
+      <div>圖</div>
+      <div>龍</div>
+      <div>開</div>
     </div>
   </div>
 </div>

@@ -43,6 +43,23 @@ struct GeoResponse {
     generationtime_ms: f64,
 }
 
+// #[derive(Debug, Deserialize)]
+// #[allow(dead_code)]
+// struct CurrentUnits {
+//     time: String,
+//     temperature_2m: String,
+//     weather_code: String,
+// }
+
+#[derive(Debug, Deserialize)]
+pub struct CurrentDataUnit {
+    pub temperature_2m: f64,
+    pub relative_humidity_2m: f64,
+    pub rain: f64,
+    pub weather_code: u64,
+    pub wind_speed_10m: f64,
+}
+
 #[derive(Debug, Deserialize)]
 #[allow(dead_code)]
 struct HourlyUnits {
@@ -68,6 +85,7 @@ pub struct WeatherForecast {
     timezone: String,
     timezone_abbreviation: String,
     elevation: f64,
+    pub current: CurrentDataUnit,
     hourly_units: HourlyUnits,
     pub hourly: HourlyDataUnit,
 }
@@ -105,7 +123,7 @@ async fn fetch_geocoding(place: String) -> Result<GeoResponse, WidgetError> {
 async fn fetch_weather_forecast(lat: f64, long: f64) -> Result<WeatherForecast, WidgetError> {
     // let start = Instant::now();
     let url = format!(
-        "https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,weather_code&forecast_days=1",
+        "https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,rain,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&forecast_days=1",
         lat, long
     );
     let uri: Uri = url.parse().unwrap();
